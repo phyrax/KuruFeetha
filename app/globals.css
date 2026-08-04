@@ -66,7 +66,6 @@ button { color: inherit; }
 [dir="rtl"] .feed-head h1, [dir="rtl"] .account-panel h2, [dir="rtl"] .account-panel h3 { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif; font-weight: 400; }
 .story-footer { border-top: 1px solid var(--line); margin-top: auto; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .story-footer a { text-decoration: none; color: inherit; }
-.story-footer a span { display: block; color: var(--muted); font-size: 10px; margin-bottom: 3px; }
 .story-footer a strong { color: var(--teal); font-size: 12px; }
 .card-actions { display: flex; gap: 8px; }
 .card-actions button { width: 39px; height: 39px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 16px; box-shadow: 0 5px 16px rgba(20,35,31,.1); }
