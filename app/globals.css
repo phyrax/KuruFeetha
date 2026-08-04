@@ -203,8 +203,11 @@ button { color: inherit; }
   .summary { font-size: 14px; line-height: 1.65; }
   [dir="rtl"] .summary { line-height: 1.75; }
   .story-footer { padding-top: 10px; }
-  .bottom-nav { width: calc(100% - 28px); }
-  .bottom-nav button { flex: 1; min-width: 0; }
+  .bottom-nav { inset: auto 0 0; left: 0; transform: none; width: 100%; min-height: 52px; gap: 0; padding: 5px 12px max(5px, env(safe-area-inset-bottom)); border: 0; border-top: 1px solid var(--line); border-radius: 0; background: rgba(255,254,250,.97); box-shadow: 0 -5px 18px rgba(20,35,31,.08); backdrop-filter: blur(14px); }
+  .bottom-nav button { flex: 1; min-width: 0; height: 42px; border-radius: 10px; color: var(--muted); font-size: 0; }
+  .bottom-nav button.active { background: transparent; color: var(--teal); }
+  .bottom-nav button > span[aria-hidden="true"] { font-size: 15px; line-height: 1; }
+  .bottom-nav .nav-label-text { display: none; }
   .editorial-main { padding: 28px 18px; }
   .desk-header { align-items: start; }
   .desk-header .secondary { display: none; }
