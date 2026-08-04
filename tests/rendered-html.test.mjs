@@ -18,10 +18,12 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(styles,/scroll-snap-type: y mandatory/); assert.match(styles,/\.feed-head \{ display: none; \}/);
   assert.match(styles,/height: calc\(100dvh - 110px\)/); assert.match(styles,/height: 100%; min-height: 100%; max-height: 100%/);
   assert.match(styles,/\.bottom-nav \.nav-label-text \{ display: none; \}/);
+  assert.match(styles,/@font-face \{ font-family: "MV AammuFK"/); assert.match(styles,/@font-face \{ font-family: "MV Typewriter"/);
   assert.match(cards,/requireAdmin/); assert.match(cards,/imageKey/); assert.match(media,/8 \* 1024 \* 1024/);
   assert.match(feed,/t\.published_at/); assert.match(feed,/t\.review_status = 'published'/); assert.doesNotMatch(feed,/review_status = 'approved'|story_clusters/);
   assert.doesNotMatch(schema,/aiRuns|sourceArticles|jobs =/); assert.match(migration,/DROP TABLE `ai_runs`/);
   await access(new URL("../dist/server/index.js",import.meta.url));
+  await Promise.all(["MV_AammuFK_Regular.ttf","MV_Typewriter_Regular.ttf","MV_Typewriter_Bold.ttf"].map(name=>access(new URL(`../public/fonts/${name}`,import.meta.url))));
 });
 
 test("AI ingestion implementation is absent", async()=>{
