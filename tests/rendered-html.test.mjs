@@ -54,8 +54,10 @@ test("ships swipeable bilingual galleries with related story links",async()=>{
   assert.match(shell,/Upload at least 2 photos before saving/);assert.match(shell,/of at least 2 photos uploaded successfully/);assert.match(shell,/upload-error/);
   assert.match(shell,/prepareGalleryImage/);assert.match(shell,/optimizing large photo/);assert.match(shell,/onDrop=/);assert.match(shell,/drag them here/);
   assert.match(shell,/gallery-slide-bg/);assert.match(shell,/gallery-slide-main/);
+  assert.match(shell,/naturalWidth>e\.currentTarget\.naturalHeight/);assert.match(shell,/GallerySlide/);
   assert.match(styles,/scroll-snap-type: x mandatory/);assert.match(styles,/linear-gradient\(to bottom, transparent/);assert.match(styles,/touch-action: pan-x pan-y/);
   assert.match(styles,/\.gallery-slide-bg \{ display: block; object-fit: cover; filter: blur\(26px\)/);assert.match(styles,/\.gallery-slide-main \{ object-fit: contain; \}/);
+  assert.match(styles,/\.gallery-slide\.landscape \.gallery-slide-main \{ top: 0; bottom: auto; height: calc\(100% - 170px\)/);
   assert.match(publicApi,/g\.status='published'/);assert.match(adminApi,/requireAdmin/);assert.match(adminApi,/between 2 and 20 different images/);
   assert.match(schema,/galleryImages/);assert.match(schema,/relatedStoryId/);assert.match(migration,/PRAGMA optimize/);
 });
