@@ -181,6 +181,9 @@ button { color: inherit; }
   .topbar { padding: 0 18px; }
   .search { width: 44px; padding: 0; justify-content: center; border-radius: 50%; }
   .search input { display: none; }
+  .search.open { width: min(280px, 40vw); padding: 0 15px; justify-content: flex-start; border-radius: 30px; border-color: #bfd0ca; box-shadow: 0 5px 18px rgba(20,35,31,.12); }
+  .search.open input { display: block; }
+  .search.open .search-toggle { width: 24px; }
   .category-rail, .feed-head, .story-feed { margin-inline: 18px; }
   .category-rail { padding-inline: 0; }
   .story-card { grid-template-columns: 1fr; }

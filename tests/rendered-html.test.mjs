@@ -28,6 +28,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(styles,/@font-face \{ font-family: "MV AammuFK"/); assert.match(styles,/@font-face \{ font-family: "MV Typewriter"/);
   assert.match(styles,/\.language-label\.dv \{ font-family: "MV Typewriter"/); assert.match(styles,/\.language-switch::before/);
   assert.match(styles,/\.search\.open \{ position: absolute/); assert.match(styles,/\.search\.open input \{ display: block/);
+  assert.match(styles,/width: min\(280px, 40vw\)/);
   assert.match(cards,/requireAdmin/); assert.match(cards,/imageKey/); assert.match(media,/8 \* 1024 \* 1024/);
   assert.match(feed,/t\.published_at/); assert.match(feed,/t\.review_status = 'published'/); assert.doesNotMatch(feed,/review_status = 'approved'|story_clusters/);
   assert.doesNotMatch(schema,/aiRuns|sourceArticles|jobs =/); assert.match(migration,/DROP TABLE `ai_runs`/);
