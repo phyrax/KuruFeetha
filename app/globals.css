@@ -54,7 +54,7 @@ button { color: inherit; }
 [dir="rtl"] .visual-number { left: auto; right: 26px; }
 .visual-watermark { position: absolute; inset: 0; display: grid; place-items: center; color: rgba(255,255,255,.83); font: 700 clamp(46px, 7vw, 86px) "MV AammuFK", "Noto Sans Thaana"; transform: rotate(-7deg); text-shadow: 0 6px 25px rgba(0,0,0,.08); }
 .story-content { padding: clamp(30px, 5vw, 56px); display: flex; flex-direction: column; }
-.story-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 11px; }
+.story-meta { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 11px; }
 .pill { border-radius: 20px; background: #e0ece8; color: var(--teal-dark); padding: 6px 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
 .pill.breaking { background: #ffe2dc; color: #ad321d; }
 .story-content h2 { max-width: 650px; margin: 22px 0 16px; font-size: clamp(26px, 3.2vw, 42px); line-height: 1.07; letter-spacing: -1.4px; }
@@ -69,7 +69,7 @@ button { color: inherit; }
 .story-footer a span { display: block; color: var(--muted); font-size: 10px; margin-bottom: 3px; }
 .story-footer a strong { color: var(--teal); font-size: 12px; }
 .card-actions { display: flex; gap: 8px; }
-.card-actions button { width: 39px; height: 39px; border-radius: 50%; border: 1px solid var(--line); background: transparent; cursor: pointer; }
+.card-actions button { width: 39px; height: 39px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 16px; box-shadow: 0 5px 16px rgba(20,35,31,.1); }
 .card-actions button.selected { background: var(--lime); border-color: #b7d45d; }
 .bottom-nav { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 30; display: flex; gap: 3px; padding: 5px; border: 1px solid rgba(255,255,255,.12); border-radius: 25px; background: rgba(20,35,31,.95); box-shadow: 0 12px 35px rgba(0,0,0,.22); backdrop-filter: blur(16px); }
 .bottom-nav button { min-width: 98px; height: 48px; border: 0; border-radius: 20px; background: transparent; color: #b9c2bf; cursor: pointer; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 7px; }
@@ -204,8 +204,10 @@ button { color: inherit; }
   .story-feed::-webkit-scrollbar { display: none; }
   .story-card { width: 100%; height: 100%; min-height: 100%; max-height: 100%; grid-template-columns: 1fr; grid-template-rows: 32% 68%; border-width: 0 0 1px; border-radius: 0; box-shadow: none; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
   .story-visual, .story-photo { width: 100%; height: 100%; min-height: 0; max-height: none; }
-  .story-content { min-height: 0; overflow: hidden; padding: 16px 18px 78px; }
-  .story-content h2 { margin: 11px 0 8px; font-size: clamp(22px, 6.5vw, 28px); line-height: 1.1; }
+  .story-content { min-height: 0; overflow: hidden; padding: 0 18px 78px; }
+  .story-meta { transform: translateY(-50%); margin-bottom: -10px; }
+  .pill { box-shadow: 0 5px 16px rgba(20,35,31,.1); }
+  .story-content h2 { margin: 0 0 8px; font-size: clamp(22px, 6.5vw, 28px); line-height: 1.1; }
   [dir="rtl"] .story-content h2 { line-height: 1.45; }
   .summary { font-size: 14px; line-height: 1.65; }
   [dir="rtl"] .summary { line-height: 1.75; }
