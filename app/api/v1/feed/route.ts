@@ -20,7 +20,7 @@ export async function GET(request: Request) {
         SELECT 1 FROM category_follows cf WHERE cf.user_id=? AND cf.category_id=c.category_id
       ) THEN 1 ELSE 0 END AS followed
     FROM news_cards c
-    JOIN news_card_translations t ON t.card_id = c.id AND t.language = ? AND t.review_status = 'approved'
+    JOIN news_card_translations t ON t.card_id = c.id AND t.language = ? AND t.review_status = 'published'
     LEFT JOIN categories cat ON cat.id = c.category_id
     WHERE c.status = 'published' AND t.published_at < ?
     ORDER BY followed DESC, t.published_at DESC
