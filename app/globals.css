@@ -31,6 +31,8 @@ button { color: inherit; }
 .brand small { display: block; color: var(--muted); margin-top: 2px; font-size: 11px; }
 .header-actions { display: flex; align-items: center; gap: 10px; }
 .search { height: 42px; width: 280px; border: 1px solid var(--line); border-radius: 30px; display: flex; align-items: center; gap: 8px; padding: 0 15px; background: var(--card); color: var(--muted); }
+.search-toggle { width: 24px; height: 32px; flex: 0 0 auto; padding: 0; border: 0; background: transparent; color: var(--muted); cursor: pointer; font-size: 20px; line-height: 1; }
+.search-toggle:focus-visible { outline: 2px solid rgba(0,109,101,.25); outline-offset: 1px; border-radius: 7px; }
 .search input { min-width: 0; flex: 1; border: 0; outline: none; background: transparent; color: var(--ink); }
 .language-switch, .avatar { height: 42px; min-width: 42px; padding: 0 12px; border: 1px solid var(--line); background: var(--card); font-weight: 700; cursor: pointer; }
 .language-switch { min-width: 54px; display: inline-flex; align-items: center; justify-content: center; gap: 7px; border-color: #bfd0ca; border-radius: 13px; color: var(--teal-dark); background: linear-gradient(180deg, #fffefa 0%, #edf4f1 100%); box-shadow: 0 3px 10px rgba(20,35,31,.08), inset 0 1px rgba(255,255,255,.85); transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease; }
@@ -200,7 +202,12 @@ button { color: inherit; }
   .brand strong { font-size: 16px; }
   .brand small { display: none; }
   .header-actions { gap: 7px; }
-  .search { display: none; }
+  .search { width: 34px; height: 34px; display: flex; justify-content: center; gap: 5px; padding: 0; border-radius: 11px; transition: width .2s ease, inset .2s ease; }
+  .search-toggle { width: 32px; height: 32px; font-size: 19px; }
+  .search.open { position: absolute; inset: 9px 68px auto 12px; z-index: 25; width: auto; padding: 0 10px; justify-content: flex-start; background: var(--card); box-shadow: 0 5px 18px rgba(20,35,31,.14); }
+  [dir="rtl"] .search.open { inset: 9px 12px auto 68px; }
+  .search.open input { display: block; font-family: inherit; }
+  .search.open .search-toggle { width: 24px; }
   .language-switch { height: 34px; min-width: 47px; padding: 0 9px; border-radius: 11px; gap: 6px; }
   .language-switch::before { width: 5px; height: 5px; box-shadow: 0 0 0 2px rgba(0,109,101,.1); }
   .language-label.dv { font-size: 16px; }
