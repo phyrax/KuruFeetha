@@ -1,0 +1,8 @@
+import { env } from "cloudflare:workers";
+import { authErrorResponse, requireAdmin } from "../../../../../../lib/auth";
+export const dynamic = "force-dynamic";
+export async function POST(request:Request,context:{params:Promise<{id:string}>}) { let actor; try{actor=await requireAdmin(request)}catch(error){return authErrorResponse(error)} const {id}=await context.params; const body=await request.json().catch(()=>null) as {language?:"en"|"dv";published?:boolean}|null;
+  if(!body?.language||typeof body.published!=="boolean") return Response.json({error:{code:"INVALID_INPUT"}},{status:400}); const runtime=env as unknown as {DB:D1Database}; const now=Date.now();
+  const translation=await runtime.DB.prepare("SELECT id FROM news_card_translations WHERE card_id=? AND language=? AND headline<>'' AND summary<>''").bind(id,body.language).first(); if(!translation)return Response.json({error:{code:"TRANSLATION_REQUIRED",message:"Complete this language before publishing"}},{status:400});
+  await runtime.DB.prepare("UPDATE news_card_translations SET review_status=?,published_at=?,reviewed_by=?,reviewed_at=?,updated_at=? WHERE card_id=? AND language=?").bind(body.published?"published":"draft",body.published?now:null,actor.id,now,now,id,body.language).run();
+  const count=await runtime.DB.prepare("SELECT COUNT(*) AS count FROM news_card_translations WHERE card_id=? AND review_status='published'").bind(id).first<{count:number}>(); await runtime.DB.prepare("UPDATE news_cards SET status=?,published_at=CASE WHEN ?='published' THEN COALESCE(published_at,?) ELSE NULL END,updated_at=? WHERE id=?").bind(count?.count?"published":"draft",count?.count?"published":"draft",now,now,id).run(); return Response.json({id,language:body.language,published:body.published}); }

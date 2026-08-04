@@ -4,11 +4,11 @@ import * as WebBrowser from "expo-web-browser";
 import * as Linking from "expo-linking";
 import type { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import { authConfigured, supabase } from "../lib/supabase";
 
 type Language = "en" | "dv";
-type Card = { id: string; headline: string; summary: string; source?: string; sourceUrl?: string; category?: string; breaking?: boolean };
+type Card = { id: string; headline: string; summary: string; imageUrl?: string; source?: string; sourceUrl?: string; category?: string };
 const API_URL = String(Constants.expoConfig?.extra?.apiUrl ?? "https://kurufeetha-maldives.hussainfiraz.chatgpt.site");
 
 Notifications.setNotificationHandler({ handleNotification: async () => ({ shouldPlaySound: true, shouldSetBadge: true, shouldShowBanner: true, shouldShowList: true }) });
@@ -49,8 +49,8 @@ export default function Home() {
     <View style={styles.header}><View><Text style={styles.brand}>KuruFeetha</Text><Text style={styles.tag}>Maldives, in brief.</Text></View><View style={styles.headerButtons}><Pressable style={styles.language} onPress={() => setLanguage(language === "en" ? "dv" : "en")}><Text>{language === "en" ? "ދި" : "EN"}</Text></Pressable><Pressable style={styles.language} onPress={() => setAccountOpen(!accountOpen)}><Text>{session ? "●" : "○"}</Text></Pressable></View></View>
     {accountOpen && <View style={styles.account}>{session ? <><Text style={styles.accountTitle}>{session.user.email}</Text><Pressable style={styles.authButton} onPress={() => supabase.auth.signOut()}><Text style={styles.authButtonText}>Sign out</Text></Pressable></> : <><Text style={styles.accountTitle}>Personalize your briefing</Text><Pressable style={styles.authButton} onPress={() => oauth("google")}><Text style={styles.authButtonText}>Continue with Google</Text></Pressable><Pressable style={styles.authButton} onPress={() => oauth("apple")}><Text style={styles.authButtonText}>Continue with Apple</Text></Pressable><TextInput style={styles.email} autoCapitalize="none" keyboardType="email-address" value={email} onChangeText={setEmail} placeholder="you@example.com" /><Pressable style={styles.authButton} onPress={magicLink}><Text style={styles.authButtonText}>Email me a sign-in link</Text></Pressable>{!authConfigured && <Text style={styles.warning}>Authentication awaits Supabase project credentials.</Text>}</>}</View>}
     {loading ? <ActivityIndicator color="#006d65" style={{ flex: 1 }} /> : <FlatList data={cards} keyExtractor={(item) => item.id} contentContainerStyle={styles.list} ListEmptyComponent={<View style={styles.empty}><Text style={styles.emptyMark}>ކ</Text><Text style={styles.emptyText}>No published stories yet.</Text></View>} renderItem={({ item, index }) => <View style={styles.card}>
-      <View style={styles.visual}><Text style={styles.number}>{String(index + 1).padStart(2, "0")}</Text><Text style={styles.mark}>ކުރު</Text></View>
-      <View style={styles.copy}><Text style={styles.meta}>{item.breaking ? "BREAKING · " : ""}{item.category ?? "MALDIVES"}</Text><Text style={[styles.title, language === "dv" && styles.rtl]}>{item.headline}</Text><Text style={[styles.summary, language === "dv" && styles.rtl]}>{item.summary}</Text>{item.sourceUrl && <Pressable onPress={() => Linking.openURL(item.sourceUrl!)}><Text style={styles.link}>Read at {item.source ?? "source"} ↗</Text></Pressable>}</View>
+      {item.imageUrl ? <Image source={{ uri: new URL(item.imageUrl, API_URL).toString() }} style={styles.visual} resizeMode="cover" /> : <View style={styles.visual}><Text style={styles.number}>{String(index + 1).padStart(2, "0")}</Text><Text style={styles.mark}>ކުރު</Text></View>}
+      <View style={styles.copy}><Text style={styles.meta}>{item.category ?? "MALDIVES"}</Text><Text style={[styles.title, language === "dv" && styles.rtl]}>{item.headline}</Text><Text style={[styles.summary, language === "dv" && styles.rtl]}>{item.summary}</Text>{item.sourceUrl && <Pressable onPress={() => Linking.openURL(item.sourceUrl!)}><Text style={styles.link}>Read at {item.source ?? "source"} ↗</Text></Pressable>}</View>
     </View>} />}
   </SafeAreaView>;
 }

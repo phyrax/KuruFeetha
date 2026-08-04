@@ -5,44 +5,6 @@ const timestamps = {
   updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
 };
 
-export const sources = sqliteTable("sources", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  domain: text("domain").notNull().unique(),
-  language: text("language", { enum: ["en", "dv", "both"] }).notNull(),
-  ingestionMethod: text("ingestion_method", { enum: ["rss", "api", "adapter", "manual"] }).notNull(),
-  feedUrl: text("feed_url"),
-  pollMinutes: integer("poll_minutes").notNull().default(15),
-  imageUseAllowed: integer("image_use_allowed", { mode: "boolean" }).notNull().default(false),
-  enabled: integer("enabled", { mode: "boolean" }).notNull().default(false),
-  ...timestamps,
-});
-
-export const sourceArticles = sqliteTable("source_articles", {
-  id: text("id").primaryKey(),
-  sourceId: text("source_id").notNull().references(() => sources.id),
-  canonicalUrl: text("canonical_url").notNull(),
-  title: text("title").notNull(),
-  body: text("body").notNull(),
-  contentHash: text("content_hash").notNull(),
-  publishedAt: integer("published_at", { mode: "timestamp" }),
-  status: text("status", { enum: ["discovered", "extracted", "clustered", "failed"] }).notNull(),
-  ...timestamps,
-}, (table) => [uniqueIndex("source_article_url_idx").on(table.canonicalUrl)]);
-
-export const storyClusters = sqliteTable("story_clusters", {
-  id: text("id").primaryKey(),
-  representativeTitle: text("representative_title").notNull(),
-  status: text("status", { enum: ["open", "merged", "dismissed"] }).notNull().default("open"),
-  similarity: real("similarity"),
-  ...timestamps,
-});
-
-export const clusterArticles = sqliteTable("cluster_articles", {
-  clusterId: text("cluster_id").notNull().references(() => storyClusters.id),
-  articleId: text("article_id").notNull().references(() => sourceArticles.id),
-});
-
 export const categories = sqliteTable("categories", {
   id: text("id").primaryKey(),
   slug: text("slug").notNull().unique(),
@@ -54,12 +16,12 @@ export const categories = sqliteTable("categories", {
 
 export const newsCards = sqliteTable("news_cards", {
   id: text("id").primaryKey(),
-  clusterId: text("cluster_id").references(() => storyClusters.id),
   categoryId: text("category_id").references(() => categories.id),
-  status: text("status", { enum: ["ai_drafting", "needs_review", "approved", "scheduled", "published", "archived"] }).notNull(),
-  breaking: integer("breaking", { mode: "boolean" }).notNull().default(false),
-  boost: integer("boost").notNull().default(0),
+  status: text("status", { enum: ["draft", "published", "archived"] }).notNull().default("draft"),
+  imageKey: text("image_key"),
   imageUrl: text("image_url"),
+  sourceName: text("source_name"),
+  sourceUrl: text("source_url"),
   publishedAt: integer("published_at", { mode: "timestamp" }),
   ...timestamps,
 });
@@ -71,7 +33,8 @@ export const newsCardTranslations = sqliteTable("news_card_translations", {
   headline: text("headline").notNull(),
   summary: text("summary").notNull(),
   wordCount: integer("word_count").notNull(),
-  reviewStatus: text("review_status", { enum: ["draft", "approved", "rejected"] }).notNull().default("draft"),
+  reviewStatus: text("review_status", { enum: ["draft", "published"] }).notNull().default("draft"),
+  publishedAt: integer("published_at", { mode: "timestamp" }),
   reviewedBy: text("reviewed_by"),
   reviewedAt: integer("reviewed_at", { mode: "timestamp" }),
   ...timestamps,
@@ -134,30 +97,6 @@ export const campaignEvents = sqliteTable("campaign_events", {
   campaignId: text("campaign_id").notNull().references(() => campaigns.id),
   anonymousId: text("anonymous_id").notNull(),
   type: text("type", { enum: ["impression", "click"] }).notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-});
-
-export const jobs = sqliteTable("jobs", {
-  id: text("id").primaryKey(),
-  type: text("type", { enum: ["poll", "extract", "cluster", "summarize", "notify"] }).notNull(),
-  status: text("status", { enum: ["queued", "running", "retry", "complete", "failed"] }).notNull(),
-  payload: text("payload", { mode: "json" }).notNull(),
-  attempts: integer("attempts").notNull().default(0),
-  runAfter: integer("run_after", { mode: "timestamp" }).notNull(),
-  lastError: text("last_error"),
-  ...timestamps,
-});
-
-export const aiRuns = sqliteTable("ai_runs", {
-  id: text("id").primaryKey(),
-  articleId: text("article_id").notNull().references(() => sourceArticles.id),
-  provider: text("provider", { enum: ["openai", "gemini"] }).notNull(),
-  model: text("model").notNull(),
-  promptVersion: text("prompt_version").notNull(),
-  confidence: real("confidence"),
-  inputTokens: integer("input_tokens"),
-  outputTokens: integer("output_tokens"),
-  status: text("status", { enum: ["complete", "failed", "rejected"] }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 

@@ -2,28 +2,22 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
-test("ships Supabase identity, protected editorial APIs, and personalized feeds", async () => {
-  const [page, shell, ingestion, feed, auth, users, mobile] = await Promise.all([
-    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/KuruFeethaApp.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/api/v1/admin/ingest/route.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/api/v1/feed/route.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/lib/auth.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/api/v1/admin/users/[id]/route.ts", import.meta.url), "utf8"),
-    readFile(new URL("../mobile/app/index.tsx", import.meta.url), "utf8"),
+test("ships the protected manual bilingual CMS and live feed", async () => {
+  const [shell,cards,media,feed,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/media/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
+    readFile(new URL("../drizzle/0003_equal_misty_knight.sql",import.meta.url),"utf8"),
   ]);
-  assert.match(page, /KuruFeethaApp/);
-  assert.match(shell, /Maldives, in brief/);
-  assert.match(shell, /api\/v1\/admin\/ingest/);
-  assert.match(ingestion, /generateWithFallback/);
-  assert.match(ingestion, /requireAdmin/);
-  assert.match(feed, /review_status = 'approved'/);
-  assert.match(feed, /followed DESC/);
-  assert.match(auth, /status === "suspended"/);
-  assert.match(auth, /OWNER_EMAIL/);
-  assert.match(users, /requireAdmin/);
-  assert.match(users, /PROTECTED_ACCOUNT/);
-  assert.match(mobile, /supabase/);
-  assert.match(mobile, /access_token/);
-  await access(new URL("../dist/server/index.js", import.meta.url));
+  assert.match(shell,/Manual CMS/); assert.match(shell,/Publish this language/); assert.match(shell,/60 words/);
+  assert.match(cards,/requireAdmin/); assert.match(cards,/imageKey/); assert.match(media,/8 \* 1024 \* 1024/);
+  assert.match(feed,/t\.published_at/); assert.doesNotMatch(feed,/story_clusters/);
+  assert.doesNotMatch(schema,/aiRuns|sourceArticles|jobs =/); assert.match(migration,/DROP TABLE `ai_runs`/);
+  await access(new URL("../dist/server/index.js",import.meta.url));
+});
+
+test("AI ingestion implementation is absent", async()=>{
+  for(const path of ["../app/lib/ai-providers.ts","../app/lib/ingestion.ts","../app/api/v1/admin/ingest/route.ts"]){await assert.rejects(access(new URL(path,import.meta.url)))}
 });
