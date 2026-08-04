@@ -51,6 +51,7 @@ test("ships swipeable bilingual galleries with related story links",async()=>{
   ]);
   assert.match(shell,/Photo gallery/);assert.match(shell,/View gallery/);assert.match(shell,/multiple accept=/);assert.match(shell,/gallery-track/);
   assert.match(shell,/Uploading photo/);assert.match(shell,/finally\{setUploading\(false\)/);assert.match(shell,/upload timed out/);
+  assert.match(shell,/Upload at least 2 photos before saving/);assert.match(shell,/of at least 2 photos uploaded successfully/);assert.match(shell,/upload-error/);
   assert.match(styles,/scroll-snap-type: x mandatory/);assert.match(styles,/linear-gradient\(to bottom, transparent/);assert.match(styles,/touch-action: pan-x/);
   assert.match(publicApi,/g\.status='published'/);assert.match(adminApi,/requireAdmin/);assert.match(adminApi,/between 2 and 20 different images/);
   assert.match(schema,/galleryImages/);assert.match(schema,/relatedStoryId/);assert.match(migration,/PRAGMA optimize/);
