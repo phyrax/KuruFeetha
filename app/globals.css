@@ -187,21 +187,23 @@ button { color: inherit; }
 @media (max-width: 620px) {
   html, body { height: 100%; overflow: hidden; }
   .app-shell { height: 100dvh; min-height: 0; padding-bottom: 0; overflow: hidden; display: flex; flex-direction: column; }
-  .topbar { height: 58px; min-height: 58px; padding: 0 12px; }
+  .topbar { height: 52px; min-height: 52px; padding: 0 12px; }
   .brand { gap: 8px; }
-  .brand-mark { width: 36px; height: 36px; border-radius: 11px 11px 11px 4px; font-size: 20px; }
+  .brand-mark { width: 33px; height: 33px; border-radius: 10px 10px 10px 4px; font-size: 19px; }
   .brand strong { font-size: 16px; }
   .brand small { display: none; }
   .header-actions { gap: 7px; }
   .search { display: none; }
   .language-switch { height: 36px; min-width: 36px; padding: 0 9px; }
   .avatar { display: none; }
-  .category-rail { width: 100%; height: 52px; min-height: 52px; margin: 0; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--paper); }
-  .category-rail button { padding: 7px 13px; font-size: 12px; }
+  .category-rail { position: absolute; inset: 52px 0 auto; z-index: 12; width: 100%; height: 48px; margin: 0; padding: 8px 12px; border: 0; background: transparent; }
+  .category-rail button, .category-rail button.active { padding: 7px 11px 5px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: rgba(255,255,255,.82); font-size: 12px; text-shadow: 0 1px 5px rgba(0,0,0,.55); }
+  .category-rail button.active { border-bottom-color: white; color: white; }
   .feed-head { display: none; }
-  .story-feed { width: 100%; max-width: none; height: calc(100dvh - 110px); flex: none; min-height: 0; margin: 0; display: block; overflow-y: auto; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; scroll-padding-block: 0; scrollbar-width: none; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
+  .story-feed { width: 100%; max-width: none; height: calc(100dvh - 52px); flex: none; min-height: 0; margin: 0; display: block; overflow-y: auto; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; scroll-padding-block: 0; scrollbar-width: none; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
   .story-feed::-webkit-scrollbar { display: none; }
   .story-card { position: relative; width: 100%; height: 100%; min-height: 100%; max-height: 100%; grid-template-columns: 1fr; grid-template-rows: 32% 68%; border-width: 0 0 1px; border-radius: 0; box-shadow: none; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
+  .story-card::before { content: ""; position: absolute; inset: 0 0 auto; z-index: 2; height: 104px; pointer-events: none; background: linear-gradient(to bottom, rgba(8,18,15,.62), rgba(8,18,15,0)); }
   .story-visual, .story-photo { width: 100%; height: 100%; min-height: 0; max-height: none; }
   .story-content { min-height: 0; overflow: hidden; padding: 27px 18px 78px; }
   .story-meta { position: absolute; inset-inline: 18px; top: 32%; transform: translateY(-50%); margin: 0; }

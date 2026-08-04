@@ -18,7 +18,8 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/navigator\.share/); assert.match(shell,/kurufeetha-bookmarks/); assert.match(shell,/\/api\/v1\/me\/bookmarks/);
   assert.doesNotMatch(shell,/<span>\{s\.source\}<\/span>/);
   assert.match(styles,/scroll-snap-type: y mandatory/); assert.match(styles,/\.feed-head \{ display: none; \}/);
-  assert.match(styles,/height: calc\(100dvh - 110px\)/); assert.match(styles,/height: 100%; min-height: 100%; max-height: 100%/);
+  assert.match(styles,/height: calc\(100dvh - 52px\)/); assert.match(styles,/height: 100%; min-height: 100%; max-height: 100%/);
+  assert.match(styles,/\.category-rail \{ position: absolute; inset: 52px 0 auto/); assert.match(styles,/linear-gradient\(to bottom, rgba\(8,18,15,\.62\)/);
   assert.match(styles,/\.bottom-nav \.nav-label-text \{ display: none; \}/);
   assert.match(styles,/\.story-meta \{ position: absolute; inset-inline: 18px; top: 32%; transform: translateY\(-50%\)/);
   assert.match(styles,/@font-face \{ font-family: "MV AammuFK"/); assert.match(styles,/@font-face \{ font-family: "MV Typewriter"/);
