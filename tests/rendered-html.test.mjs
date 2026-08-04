@@ -3,8 +3,9 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("ships the protected manual bilingual CMS and live feed", async () => {
-  const [shell,cards,media,feed,schema,migration]=await Promise.all([
+  const [shell,styles,cards,media,feed,schema,migration]=await Promise.all([
     readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/globals.css",import.meta.url),"utf8"),
     readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
     readFile(new URL("../app/api/v1/admin/media/route.ts",import.meta.url),"utf8"),
     readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
@@ -13,6 +14,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   ]);
   assert.match(shell,/Manual CMS/); assert.match(shell,/Publish this language/); assert.match(shell,/60 words/);
   assert.match(shell,/onClick=\{\(\)=>setSelectedCategory\(c\.slug\)\}/); assert.match(shell,/aria-pressed=\{selectedCategory===c\.slug\}/);
+  assert.match(styles,/scroll-snap-type: y mandatory/); assert.match(styles,/\.feed-head \{ display: none; \}/);
   assert.match(cards,/requireAdmin/); assert.match(cards,/imageKey/); assert.match(media,/8 \* 1024 \* 1024/);
   assert.match(feed,/t\.published_at/); assert.match(feed,/t\.review_status = 'published'/); assert.doesNotMatch(feed,/review_status = 'approved'|story_clusters/);
   assert.doesNotMatch(schema,/aiRuns|sourceArticles|jobs =/); assert.match(migration,/DROP TABLE `ai_runs`/);
