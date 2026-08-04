@@ -50,6 +50,7 @@ test("ships swipeable bilingual galleries with related story links",async()=>{
     readFile(new URL("../drizzle/0005_ordinary_odin.sql",import.meta.url),"utf8"),
   ]);
   assert.match(shell,/Photo gallery/);assert.match(shell,/View gallery/);assert.match(shell,/multiple accept=/);assert.match(shell,/gallery-track/);
+  assert.match(shell,/Uploading photo/);assert.match(shell,/finally\{setUploading\(false\)/);assert.match(shell,/upload timed out/);
   assert.match(styles,/scroll-snap-type: x mandatory/);assert.match(styles,/linear-gradient\(to bottom, transparent/);assert.match(styles,/touch-action: pan-x/);
   assert.match(publicApi,/g\.status='published'/);assert.match(adminApi,/requireAdmin/);assert.match(adminApi,/between 2 and 20 different images/);
   assert.match(schema,/galleryImages/);assert.match(schema,/relatedStoryId/);assert.match(migration,/PRAGMA optimize/);
