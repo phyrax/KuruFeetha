@@ -79,12 +79,22 @@ export const newsCardTranslations = sqliteTable("news_card_translations", {
 
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),
+  authSubject: text("auth_subject").unique(),
   email: text("email").notNull().unique(),
   displayName: text("display_name"),
-  role: text("role", { enum: ["reader", "reviewer", "editor", "admin"] }).notNull().default("reader"),
+  role: text("role", { enum: ["reader", "admin", "owner"] }).notNull().default("reader"),
+  status: text("status", { enum: ["active", "suspended"] }).notNull().default("active"),
   preferredLanguage: text("preferred_language", { enum: ["en", "dv"] }).notNull().default("en"),
+  onboardingCompletedAt: integer("onboarding_completed_at", { mode: "timestamp" }),
+  lastActiveAt: integer("last_active_at", { mode: "timestamp" }).notNull().default(0),
   ...timestamps,
 });
+
+export const categoryFollows = sqliteTable("category_follows", {
+  userId: text("user_id").notNull().references(() => users.id),
+  categoryId: text("category_id").notNull().references(() => categories.id),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+}, (table) => [uniqueIndex("category_follow_user_category_idx").on(table.userId, table.categoryId)]);
 
 export const bookmarks = sqliteTable("bookmarks", {
   userId: text("user_id").notNull().references(() => users.id),

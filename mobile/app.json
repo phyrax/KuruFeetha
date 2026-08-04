@@ -21,6 +21,8 @@
     },
     "extra": {
       "apiUrl": "https://kurufeetha-maldives.hussainfiraz.chatgpt.site",
+      "supabaseUrl": "",
+      "supabaseAnonKey": "",
       "eas": { "projectId": "REPLACE_WITH_EAS_PROJECT_ID" }
     }
   }

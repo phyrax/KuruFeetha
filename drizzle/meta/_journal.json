@@ -15,6 +15,13 @@
       "when": 1785867854525,
       "tag": "0001_noisy_deadpool",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785869402687,
+      "tag": "0002_conscious_kang",
+      "breakpoints": true
     }
   ]
 }

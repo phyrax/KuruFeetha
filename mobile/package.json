@@ -11,6 +11,7 @@
     "build:production": "eas build --platform all --profile production"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.57.4",
     "expo": "~57.0.10",
     "expo-constants": "~57.0.9",
     "expo-linking": "~57.0.5",
@@ -18,6 +19,8 @@
     "expo-router": "~57.0.10",
     "expo-secure-store": "~57.0.1",
     "expo-status-bar": "~57.0.1",
+    "expo-web-browser": "~57.0.2",
+    "react-native-url-polyfill": "^3.0.0",
     "react": "19.2.3",
     "react-native": "0.86.2",
     "react-native-safe-area-context": "5.8.1",

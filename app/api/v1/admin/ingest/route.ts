@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { getChatGPTUser } from "../../../../chatgpt-auth";
+import { authErrorResponse, requireAdmin } from "../../../../lib/auth";
 import { extractArticle } from "../../../../lib/ingestion";
 import { generateWithFallback } from "../../../../lib/ai-providers";
 import { countWords } from "../../../../lib/news";
@@ -9,10 +9,12 @@ export const dynamic = "force-dynamic";
 type RuntimeEnv = Record<string, string | undefined> & { DB: D1Database };
 
 export async function POST(request: Request) {
-  const user = await getChatGPTUser();
   const runtime = env as unknown as RuntimeEnv;
   const trustedWorker = Boolean(runtime.INGESTION_SECRET && request.headers.get("x-ingestion-secret") === runtime.INGESTION_SECRET);
-  if (!user && !trustedWorker) return Response.json({ error: { code: "AUTH_REQUIRED", message: "Sign in to use the editorial desk" } }, { status: 401 });
+  let actor: { id: string; email: string } | null = null;
+  if (!trustedWorker) {
+    try { actor = await requireAdmin(request); } catch (error) { return authErrorResponse(error); }
+  }
   const idempotencyKey = request.headers.get("idempotency-key")?.slice(0, 120);
   const input = await request.json().catch(() => null) as { url?: string } | null;
   if (!input?.url) return Response.json({ error: { code: "URL_REQUIRED", message: "Article URL is required" } }, { status: 400 });
@@ -44,7 +46,7 @@ export async function POST(request: Request) {
       runtime.DB.prepare("INSERT INTO ai_runs (id,article_id,provider,model,prompt_version,confidence,status,created_at) VALUES (?,?,?,?,?,?,?,?)")
         .bind(crypto.randomUUID(), articleId, generated.provider, generated.provider === "openai" ? runtime.OPENAI_MODEL || "gpt-5.6-sol" : runtime.GEMINI_MODEL || "gemini-2.5-flash", "news-card-v1", generated.draft.confidence, "complete", now),
       runtime.DB.prepare("INSERT INTO audit_events (id,actor_id,action,entity_type,entity_id,after,created_at) VALUES (?,?,?,?,?,?,?)")
-        .bind(crypto.randomUUID(), null, "article.ingested", "news_card", cardId, JSON.stringify({ articleId, idempotencyKey, provider: generated.provider, editor: user?.email ?? "scheduled-worker" }), now),
+        .bind(crypto.randomUUID(), actor?.id ?? null, "article.ingested", "news_card", cardId, JSON.stringify({ articleId, idempotencyKey, provider: generated.provider, editor: actor?.email ?? "scheduled-worker" }), now),
     ]);
     return Response.json({ articleId, cardId, status: "needs_review", provider: generated.provider, draft: generated.draft }, { status: 201 });
   } catch (error) {
