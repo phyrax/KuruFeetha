@@ -79,6 +79,7 @@ button { color: inherit; }
 .card-actions { display: flex; gap: 8px; }
 .card-actions button { width: 39px; height: 39px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 16px; box-shadow: 0 5px 16px rgba(20,35,31,.1); }
 .card-actions button.selected { background: var(--lime); border-color: #b7d45d; }
+.card-actions button.like-selected { color: #a52838; background: #ffe4e8; border-color: #efb8c0; }
 .gallery-link { border: 0; padding: 0; background: transparent; color: var(--teal); cursor: pointer; font-size: 12px; font-weight: 800; }
 .gallery-card { position: relative; display: block; height: min(72vh, 660px); min-height: 520px; background: #101715; }
 .gallery-track { position: absolute; inset: 0; z-index: 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; touch-action: pan-x pan-y; }
@@ -88,6 +89,10 @@ button { color: inherit; }
 .gallery-slide-bg { display: none; }
 .gallery-slide-main { z-index: 1; object-fit: cover; }
 .gallery-overlay { position: absolute; inset: auto 0 0; z-index: 2; padding: 110px clamp(22px,5vw,52px) 34px; color: white; pointer-events: none; background: linear-gradient(to bottom, transparent, rgba(5,12,10,.85)); }
+.gallery-topline { position: absolute; inset: 22px 24px auto; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.gallery-topline .pill { box-shadow: 0 5px 18px rgba(0,0,0,.18); }
+.gallery-topline .card-actions button { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.92); }
+.gallery-topline .card-actions button.like-selected { color: #a52838; background: #ffe4e8; }
 .gallery-overlay h2 { max-width: 760px; margin: 10px 0 16px; font-size: clamp(27px,4.5vw,52px); line-height: 1.1; letter-spacing: -1.2px; }
 .gallery-card[dir="rtl"] .gallery-overlay { font-family: "MV Typewriter", "Noto Sans Thaana", sans-serif; }
 .gallery-card[dir="rtl"] .gallery-overlay h2 { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif; font-weight: 400; line-height: 1.55; letter-spacing: 0; }
@@ -258,6 +263,7 @@ button { color: inherit; }
   .gallery-slide-main { object-fit: contain; }
   .gallery-slide.landscape .gallery-slide-main { top: 0; bottom: auto; height: calc(100% - 170px); object-position: center 42%; }
   .gallery-overlay { padding: 130px 18px 78px; }
+  .gallery-topline { inset: 58px 18px auto; }
   .gallery-overlay h2 { margin-bottom: 12px; font-size: clamp(25px,7.5vw,35px); }
   .story-visual, .story-photo { width: 100%; height: 100%; min-height: 0; max-height: none; }
   .story-content { min-height: 0; overflow: hidden; padding: 27px 18px 78px; }

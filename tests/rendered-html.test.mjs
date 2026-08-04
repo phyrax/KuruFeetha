@@ -61,3 +61,19 @@ test("ships swipeable bilingual galleries with related story links",async()=>{
   assert.match(publicApi,/g\.status='published'/);assert.match(adminApi,/requireAdmin/);assert.match(adminApi,/between 2 and 20 different images/);
   assert.match(schema,/galleryImages/);assert.match(schema,/relatedStoryId/);assert.match(migration,/PRAGMA optimize/);
 });
+
+test("ships likes, gallery categories, and category-affinity ranking",async()=>{
+  const[shell,feed,galleries,likes,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/galleries/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/me/likes/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
+    readFile(new URL("../drizzle/0006_sour_leopardon.sql",import.meta.url),"utf8"),
+  ]);
+  assert.match(shell,/toggleLike/);assert.match(shell,/Like story/);assert.match(shell,/Like gallery/);assert.match(shell,/kurufeetha-likes/);
+  assert.match(shell,/categoryLikes/);assert.match(shell,/gallery-topline/);assert.match(shell,/Choose a category/);
+  assert.match(feed,/content_likes/);assert.match(feed,/ORDER BY followed DESC, affinity DESC/);
+  assert.match(galleries,/categoryName/);assert.match(galleries,/ORDER BY affinity DESC/);assert.match(likes,/requireUser/);
+  assert.match(schema,/contentLikes/);assert.match(schema,/content_like_user_content_idx/);assert.match(migration,/ALTER TABLE `galleries` ADD `category_id`/);assert.match(migration,/PRAGMA optimize/);
+});

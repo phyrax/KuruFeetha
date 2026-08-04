@@ -44,6 +44,7 @@ export const galleries = sqliteTable("galleries", {
   id: text("id").primaryKey(),
   topic: text("topic").notNull(),
   language: text("language", { enum: ["en", "dv"] }).notNull(),
+  categoryId: text("category_id").references(() => categories.id),
   relatedStoryId: text("related_story_id").references(() => newsCards.id),
   status: text("status", { enum: ["draft", "published", "archived"] }).notNull().default("draft"),
   publishedAt: integer("published_at", { mode: "timestamp" }),
@@ -83,6 +84,17 @@ export const bookmarks = sqliteTable("bookmarks", {
   cardId: text("card_id").notNull().references(() => newsCards.id),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 }, (table) => [uniqueIndex("bookmark_user_card_idx").on(table.userId, table.cardId)]);
+
+export const contentLikes = sqliteTable("content_likes", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").notNull().references(() => users.id),
+  contentType: text("content_type", { enum: ["story", "gallery"] }).notNull(),
+  contentId: text("content_id").notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+}, (table) => [
+  uniqueIndex("content_like_user_content_idx").on(table.userId, table.contentType, table.contentId),
+  index("idx_content_likes_user_type").on(table.userId, table.contentType),
+]);
 
 export const devices = sqliteTable("devices", {
   id: text("id").primaryKey(),

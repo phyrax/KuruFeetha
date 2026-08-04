@@ -17,6 +17,8 @@ export async function GET(request: Request) {
       c.source_name AS source, c.source_url AS sourceUrl, cat.slug AS category,
       CASE WHEN ?='dv' THEN cat.name_dv ELSE cat.name_en END AS categoryName,
       (SELECT g.id FROM galleries g WHERE g.related_story_id=c.id AND g.status='published' AND g.language=? ORDER BY g.published_at DESC LIMIT 1) AS relatedGalleryId,
+      ((SELECT COUNT(*) FROM content_likes l JOIN news_cards lc ON lc.id=l.content_id WHERE l.user_id=? AND l.content_type='story' AND lc.category_id=c.category_id) +
+       (SELECT COUNT(*) FROM content_likes l JOIN galleries lg ON lg.id=l.content_id WHERE l.user_id=? AND l.content_type='gallery' AND lg.category_id=c.category_id)) AS affinity,
       CASE WHEN ? IS NOT NULL AND EXISTS (
         SELECT 1 FROM category_follows cf WHERE cf.user_id=? AND cf.category_id=c.category_id
       ) THEN 1 ELSE 0 END AS followed
@@ -24,9 +26,9 @@ export async function GET(request: Request) {
     JOIN news_card_translations t ON t.card_id = c.id AND t.language = ? AND t.review_status = 'published'
     LEFT JOIN categories cat ON cat.id = c.category_id
     WHERE c.status = 'published' AND t.published_at < ?
-    ORDER BY followed DESC, t.published_at DESC
+    ORDER BY followed DESC, affinity DESC, t.published_at DESC
     LIMIT ?
-  `).bind(language, language, user?.id ?? null, user?.id ?? null, language, cursor, limit + 1).all();
+  `).bind(language, language, user?.id ?? null, user?.id ?? null, user?.id ?? null, user?.id ?? null, language, cursor, limit + 1).all();
   const rows = result.results as Array<Record<string, unknown>>;
   const hasMore = rows.length > limit;
   const items = rows.slice(0, limit);
