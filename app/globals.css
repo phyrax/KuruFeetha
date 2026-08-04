@@ -204,10 +204,10 @@ button { color: inherit; }
   .story-feed::-webkit-scrollbar { display: none; }
   .story-card { position: relative; width: 100%; height: 100%; min-height: 100%; max-height: 100%; grid-template-columns: 1fr; grid-template-rows: 32% 68%; border-width: 0 0 1px; border-radius: 0; box-shadow: none; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
   .story-visual, .story-photo { width: 100%; height: 100%; min-height: 0; max-height: none; }
-  .story-content { min-height: 0; overflow: hidden; padding: 0 18px 78px; }
-  .story-meta { position: absolute; inset-inline: 18px; top: calc(32% - 49px); transform: none; margin: 0; }
+  .story-content { min-height: 0; overflow: hidden; padding: 27px 18px 78px; }
+  .story-meta { position: absolute; inset-inline: 18px; top: 32%; transform: translateY(-50%); margin: 0; }
   .pill { box-shadow: 0 5px 16px rgba(20,35,31,.1); }
-  .story-content h2 { margin: 0 0 8px; font-size: clamp(22px, 6.5vw, 28px); line-height: 1.1; }
+  .story-content h2 { margin: 0 0 8px; font-size: clamp(20px, 5.9vw, 26px); line-height: 1.12; }
   [dir="rtl"] .story-content h2 { line-height: 1.45; }
   .summary { font-size: 14px; line-height: 1.65; }
   [dir="rtl"] .summary { line-height: 1.75; }
