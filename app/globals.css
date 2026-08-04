@@ -190,18 +190,19 @@ button { color: inherit; }
   .search { display: none; }
   .language-switch { height: 36px; min-width: 36px; padding: 0 9px; }
   .avatar { display: none; }
-  .category-rail { width: 100%; min-height: 52px; margin: 0; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--paper); }
+  .category-rail { width: 100%; height: 52px; min-height: 52px; margin: 0; padding: 8px 12px; border-bottom: 1px solid var(--line); background: var(--paper); }
   .category-rail button { padding: 7px 13px; font-size: 12px; }
   .feed-head { display: none; }
-  .story-feed { width: 100%; max-width: none; flex: 1; min-height: 0; margin: 0; display: block; overflow-y: auto; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; scrollbar-width: none; touch-action: pan-y; }
+  .story-feed { width: 100%; max-width: none; height: calc(100dvh - 110px); flex: none; min-height: 0; margin: 0; display: block; overflow-y: auto; overscroll-behavior-y: contain; scroll-snap-type: y mandatory; scroll-padding-block: 0; scrollbar-width: none; touch-action: pan-y; -webkit-overflow-scrolling: touch; }
   .story-feed::-webkit-scrollbar { display: none; }
-  .story-card { min-height: calc(100dvh - 110px); grid-template-columns: 1fr; grid-template-rows: minmax(210px, 38dvh) 1fr; border-width: 0 0 1px; border-radius: 0; box-shadow: none; scroll-snap-align: start; scroll-snap-stop: always; }
-  .story-visual, .story-photo { width: 100%; height: 100%; min-height: 210px; max-height: none; }
-  .story-content { min-height: 0; padding: 22px 20px 94px; }
-  .story-content h2 { margin: 15px 0 10px; font-size: clamp(24px, 7.2vw, 30px); line-height: 1.12; }
+  .story-card { width: 100%; height: 100%; min-height: 100%; max-height: 100%; grid-template-columns: 1fr; grid-template-rows: 32% 68%; border-width: 0 0 1px; border-radius: 0; box-shadow: none; overflow: hidden; scroll-snap-align: start; scroll-snap-stop: always; }
+  .story-visual, .story-photo { width: 100%; height: 100%; min-height: 0; max-height: none; }
+  .story-content { min-height: 0; overflow: hidden; padding: 16px 18px 78px; }
+  .story-content h2 { margin: 11px 0 8px; font-size: clamp(22px, 6.5vw, 28px); line-height: 1.1; }
+  [dir="rtl"] .story-content h2 { line-height: 1.45; }
   .summary { font-size: 14px; line-height: 1.65; }
-  [dir="rtl"] .summary { line-height: 1.9; }
-  .story-footer { padding-top: 14px; }
+  [dir="rtl"] .summary { line-height: 1.75; }
+  .story-footer { padding-top: 10px; }
   .bottom-nav { width: calc(100% - 28px); }
   .bottom-nav button { flex: 1; min-width: 0; }
   .editorial-main { padding: 28px 18px; }
