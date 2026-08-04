@@ -92,6 +92,17 @@ export const bookmarks = sqliteTable("bookmarks", {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 }, (table) => [uniqueIndex("bookmark_user_card_idx").on(table.userId, table.cardId)]);
 
+export const devices = sqliteTable("devices", {
+  id: text("id").primaryKey(),
+  userId: text("user_id").references(() => users.id),
+  platform: text("platform", { enum: ["web", "ios", "android"] }).notNull(),
+  pushToken: text("push_token").notNull().unique(),
+  language: text("language", { enum: ["en", "dv"] }).notNull().default("en"),
+  topics: text("topics", { mode: "json" }).notNull(),
+  enabled: integer("enabled", { mode: "boolean" }).notNull().default(true),
+  ...timestamps,
+});
+
 export const campaigns = sqliteTable("campaigns", {
   id: text("id").primaryKey(),
   sponsorName: text("sponsor_name").notNull(),

@@ -3,8 +3,23 @@ allowBuilds:
   sharp: set this to true or false
   unrs-resolver: set this to true or false
   workerd: set this to true or false
+packages:
+  - "."
+  - "mobile"
+
 onlyBuiltDependencies:
   - esbuild
   - sharp
   - unrs-resolver
   - workerd
+
+minimumReleaseAgeExclude:
+  - '@expo/cli@57.0.12'
+  - '@expo/router-server@57.0.5'
+  - '@expo/ui@57.0.9'
+  - expo-constants@57.0.9
+  - expo-linking@57.0.5
+  - expo-modules-core@57.0.9
+  - expo-router@57.0.10
+  - expo@57.0.10
+  - react-native-safe-area-context@5.8.1

@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "KuruFeetha",
+    "slug": "kurufeetha",
+    "scheme": "kurufeetha",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": [
+      "expo-router",
+      ["expo-notifications", { "color": "#006d65", "defaultChannel": "breaking-news" }],
+      "expo-secure-store"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "mv.kurufeetha.app"
+    },
+    "android": {
+      "package": "mv.kurufeetha.app",
+      "adaptiveIcon": { "backgroundColor": "#F5F3EC" }
+    },
+    "extra": {
+      "apiUrl": "https://kurufeetha-maldives.hussainfiraz.chatgpt.site",
+      "eas": { "projectId": "REPLACE_WITH_EAS_PROJECT_ID" }
+    }
+  }
+}

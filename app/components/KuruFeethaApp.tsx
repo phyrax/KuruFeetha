@@ -117,7 +117,7 @@ export function KuruFeethaApp() {
         <div className="header-actions">
           <label className="search"><span>⌕</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.search} /></label>
           <button className="language-switch" onClick={() => setLanguage(rtl ? "en" : "dv")}>{rtl ? "EN" : "ދި"}</button>
-          <button className="avatar" onClick={() => notify("Account sign-in is ready to connect")}>HF</button>
+          <button className="avatar" onClick={() => { window.location.href = "/signin-with-chatgpt?return_to=/"; }} aria-label="Sign in">HF</button>
         </div>
       </header>
 
@@ -169,8 +169,31 @@ export function KuruFeethaApp() {
 
 function EditorialDesk({ language, onBack }: { language: Language; onBack: () => void }) {
   const [url, setUrl] = useState("");
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "working" | "done" | "error">("idle");
+  const [message, setMessage] = useState("");
   const rtl = language === "dv";
+  async function submit(event: React.FormEvent) {
+    event.preventDefault();
+    setStatus("working");
+    setMessage("Extracting article and generating bilingual drafts…");
+    const response = await fetch("/api/v1/admin/ingest", {
+      method: "POST",
+      headers: { "content-type": "application/json", "idempotency-key": crypto.randomUUID() },
+      body: JSON.stringify({ url }),
+    });
+    const result = await response.json() as { status?: string; duplicate?: boolean; error?: { message?: string } };
+    if (response.status === 401) {
+      window.location.href = "/signin-with-chatgpt?return_to=/";
+      return;
+    }
+    if (!response.ok) {
+      setStatus("error");
+      setMessage(result.error?.message ?? "Could not ingest this article");
+      return;
+    }
+    setStatus("done");
+    setMessage(result.duplicate ? "This article is already in the newsroom." : "Bilingual draft created and added to the review queue.");
+  }
   return (
     <main className="editorial-shell" dir={rtl ? "rtl" : "ltr"}>
       <aside className="editorial-nav">
@@ -187,10 +210,11 @@ function EditorialDesk({ language, onBack }: { language: Language; onBack: () =>
         <header className="desk-header"><div><p className="eyebrow">EDITORIAL WORKSPACE</p><h1>Review queue</h1></div><button className="secondary" onClick={onBack}>View live site ↗</button></header>
         <section className="ingest-panel">
           <div><span className="spark">✦</span><div><h2>Turn an article into a news card</h2><p>Paste a URL. Kuru AI will extract, cluster and prepare both language drafts.</p></div></div>
-          <form onSubmit={(event) => { event.preventDefault(); if (url) setSubmitted(true); }}>
-            <input type="url" required value={url} onChange={(event) => { setUrl(event.target.value); setSubmitted(false); }} placeholder="https://news-source.mv/article…" />
-            <button type="submit">{submitted ? "Added to queue ✓" : "Generate draft"}</button>
+          <form onSubmit={submit}>
+            <input type="url" required value={url} onChange={(event) => { setUrl(event.target.value); setStatus("idle"); setMessage(""); }} placeholder="https://news-source.mv/article…" />
+            <button type="submit" disabled={status === "working"}>{status === "working" ? "Generating…" : status === "done" ? "Added to queue ✓" : "Generate draft"}</button>
           </form>
+          {message && <p className={`ingest-status ${status}`}>{message}</p>}
         </section>
         <div className="queue-toolbar"><div className="tabs"><button className="active">Needs review <span>12</span></button><button>In progress <span>4</span></button><button>Scheduled</button></div><button className="filter">☷ Filters</button></div>
         <div className="queue-list">

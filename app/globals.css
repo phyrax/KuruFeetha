@@ -97,6 +97,10 @@ button { color: inherit; }
 .ingest-panel form { display: flex; gap: 9px; margin-top: 20px; }
 .ingest-panel input { height: 46px; flex: 1; border: 1px solid #b5d0ca; border-radius: 10px; padding: 0 15px; outline: none; background: white; }
 .ingest-panel button { border: 0; border-radius: 10px; padding: 0 22px; background: var(--teal); color: white; font-weight: 700; cursor: pointer; }
+.ingest-panel button:disabled { cursor: wait; opacity: .7; }
+.ingest-panel .ingest-status { margin: 12px 2px 0; font-size: 11px; font-weight: 600; }
+.ingest-panel .ingest-status.error { color: #a33120; }
+.ingest-panel .ingest-status.done { color: #17694d; }
 .queue-toolbar { margin-top: 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .tabs { display: flex; gap: 24px; }
 .tabs button { border: 0; border-bottom: 2px solid transparent; background: transparent; padding: 0 0 14px; color: var(--muted); font-size: 11px; cursor: pointer; }
