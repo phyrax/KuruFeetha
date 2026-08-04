@@ -16,6 +16,7 @@ export async function GET(request: Request) {
       t.headline, t.summary, t.word_count AS wordCount,
       c.source_name AS source, c.source_url AS sourceUrl, cat.slug AS category,
       CASE WHEN ?='dv' THEN cat.name_dv ELSE cat.name_en END AS categoryName,
+      (SELECT g.id FROM galleries g WHERE g.related_story_id=c.id AND g.status='published' AND g.language=? ORDER BY g.published_at DESC LIMIT 1) AS relatedGalleryId,
       CASE WHEN ? IS NOT NULL AND EXISTS (
         SELECT 1 FROM category_follows cf WHERE cf.user_id=? AND cf.category_id=c.category_id
       ) THEN 1 ELSE 0 END AS followed
@@ -25,7 +26,7 @@ export async function GET(request: Request) {
     WHERE c.status = 'published' AND t.published_at < ?
     ORDER BY followed DESC, t.published_at DESC
     LIMIT ?
-  `).bind(language, user?.id ?? null, user?.id ?? null, language, cursor, limit + 1).all();
+  `).bind(language, language, user?.id ?? null, user?.id ?? null, language, cursor, limit + 1).all();
   const rows = result.results as Array<Record<string, unknown>>;
   const hasMore = rows.length > limit;
   const items = rows.slice(0, limit);

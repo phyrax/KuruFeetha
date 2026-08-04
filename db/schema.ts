@@ -1,4 +1,4 @@
-import { integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { index, integer, real, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 const timestamps = {
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
@@ -39,6 +39,25 @@ export const newsCardTranslations = sqliteTable("news_card_translations", {
   reviewedAt: integer("reviewed_at", { mode: "timestamp" }),
   ...timestamps,
 }, (table) => [uniqueIndex("card_language_idx").on(table.cardId, table.language)]);
+
+export const galleries = sqliteTable("galleries", {
+  id: text("id").primaryKey(),
+  topic: text("topic").notNull(),
+  language: text("language", { enum: ["en", "dv"] }).notNull(),
+  relatedStoryId: text("related_story_id").references(() => newsCards.id),
+  status: text("status", { enum: ["draft", "published", "archived"] }).notNull().default("draft"),
+  publishedAt: integer("published_at", { mode: "timestamp" }),
+  ...timestamps,
+}, (table) => [index("idx_galleries_language_status_published").on(table.language, table.status, table.publishedAt)]);
+
+export const galleryImages = sqliteTable("gallery_images", {
+  id: text("id").primaryKey(),
+  galleryId: text("gallery_id").notNull().references(() => galleries.id),
+  imageKey: text("image_key").notNull(),
+  imageUrl: text("image_url").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+}, (table) => [index("idx_gallery_images_gallery_order").on(table.galleryId, table.sortOrder)]);
 
 export const users = sqliteTable("users", {
   id: text("id").primaryKey(),

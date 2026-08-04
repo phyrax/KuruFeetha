@@ -29,6 +29,20 @@
       "when": 1785870395617,
       "tag": "0003_equal_misty_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1785883570591,
+      "tag": "0004_magenta_bromley",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1785883584260,
+      "tag": "0005_ordinary_odin",
+      "breakpoints": true
     }
   ]
 }

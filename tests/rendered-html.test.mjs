@@ -39,3 +39,18 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
 test("AI ingestion implementation is absent", async()=>{
   for(const path of ["../app/lib/ai-providers.ts","../app/lib/ingestion.ts","../app/api/v1/admin/ingest/route.ts"]){await assert.rejects(access(new URL(path,import.meta.url)))}
 });
+
+test("ships swipeable bilingual galleries with related story links",async()=>{
+  const[shell,styles,publicApi,adminApi,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/globals.css",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/galleries/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/galleries/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
+    readFile(new URL("../drizzle/0005_ordinary_odin.sql",import.meta.url),"utf8"),
+  ]);
+  assert.match(shell,/Photo gallery/);assert.match(shell,/View gallery/);assert.match(shell,/multiple accept=/);assert.match(shell,/gallery-track/);
+  assert.match(styles,/scroll-snap-type: x mandatory/);assert.match(styles,/linear-gradient\(to bottom, transparent/);assert.match(styles,/touch-action: pan-x/);
+  assert.match(publicApi,/g\.status='published'/);assert.match(adminApi,/requireAdmin/);assert.match(adminApi,/between 2 and 20 different images/);
+  assert.match(schema,/galleryImages/);assert.match(schema,/relatedStoryId/);assert.match(migration,/PRAGMA optimize/);
+});
