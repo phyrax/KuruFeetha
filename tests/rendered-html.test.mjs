@@ -16,7 +16,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/CmsDateControls/); assert.match(shell,/Last 7 days/); assert.match(shell,/This month/); assert.match(shell,/type="month"/);
   assert.match(shell,/cmsDateLabel/); assert.match(shell,/matchesCmsDate/); assert.match(shell,/Published \$\{cmsDateLabel/);
   assert.match(shell,/onClick=\{\(\)=>setSelectedCategory\(c\.slug\)\}/); assert.match(shell,/aria-pressed=\{selectedCategory===c\.slug\}/);
-  assert.match(shell,/className="nav-label-text"/); assert.match(shell,/aria-label=\{profile\?"Account":"Sign in"\}/);
+  assert.match(shell,/className="nav-label-text"/); assert.match(shell,/aria-current=\{view==="feed"\?"page":undefined\}/); assert.match(shell,/aria-current=\{accountOpen\?"page":undefined\}/);
   assert.match(shell,/language-label/); assert.match(shell,/Switch to English/);
   assert.match(shell,/Welcome back/); assert.match(shell,/Continue with Google/); assert.match(shell,/Send sign-in link/); assert.match(shell,/password-free link/);
   assert.match(shell,/dir=\{profile\?undefined:"ltr"\}/);
@@ -39,7 +39,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(styles,/scroll-snap-type: y mandatory/); assert.match(styles,/\.feed-head \{ display: none; \}/);
   assert.match(styles,/height: calc\(100dvh - 52px\)/); assert.match(styles,/height: 100%; min-height: 100%; max-height: 100%/);
   assert.match(styles,/\.category-rail \{ position: absolute; inset: 52px 0 auto/); assert.match(styles,/linear-gradient\(to bottom, rgba\(8,18,15,\.62\)/);
-  assert.match(styles,/\.bottom-nav \.nav-label-text \{ display: none; \}/);
+  assert.match(styles,/\.bottom-nav \.nav-label-text \{ display: block;/); assert.match(styles,/\.bottom-nav button\.active::before/);
   assert.match(styles,/\.story-meta \{ position: absolute; inset-inline: 18px; top: 32%; transform: translateY\(-50%\)/);
   assert.match(styles,/@font-face \{ font-family: "MV AammuFK"/); assert.match(styles,/@font-face \{ font-family: "MV Typewriter"/);
   assert.match(styles,/\.language-label\.dv \{ font-family: "MV Typewriter"/); assert.match(styles,/\.language-switch::before/);
