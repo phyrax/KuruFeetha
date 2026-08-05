@@ -32,8 +32,9 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/setView\("latest"\)/); assert.match(shell,/view==="saved"\|\|view==="latest"\?b\.publishedAt-a\.publishedAt/); assert.match(shell,/Latest/);
   assert.match(shell,/matchMedia\("\(max-width: 760px\)"\)/); assert.match(shell,/scrollTo\(\{top:0,behavior:"auto"\}\)/);
   assert.match(shell,/New stories are available/); assert.match(shell,/newContentAvailable/); assert.match(shell,/setInterval\(check,60_000\)/);
+  assert.match(shell,/cache:"no-store"/); assert.match(shell,/setFeedRenderKey\(key=>key\+1\)/); assert.match(shell,/className="story-feed" key=\{feedRenderKey\}/);
   assert.match(shell,/kurufeetha-seen-content/); assert.match(shell,/IntersectionObserver/); assert.match(shell,/data-content-key/);
-  assert.match(styles,/\.new-content-alert/); assert.match(styles,/\.new-content-alert button/);
+  assert.match(styles,/\.new-content-alert/); assert.match(styles,/\.new-content-alert button/); assert.match(styles,/\[dir="rtl"\] \.new-content-alert[\s\S]*font-family: "MV AammuFK"/);
   assert.doesNotMatch(shell,/<span>\{s\.source\}<\/span>/);
   assert.match(styles,/scroll-snap-type: y mandatory/); assert.match(styles,/\.feed-head \{ display: none; \}/);
   assert.match(styles,/height: calc\(100dvh - 52px\)/); assert.match(styles,/height: 100%; min-height: 100%; max-height: 100%/);
