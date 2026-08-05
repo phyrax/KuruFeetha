@@ -114,6 +114,19 @@ button { color: inherit; }
 .new-content-alert button { min-height: 32px; padding: 0 13px; border: 0; border-radius: 16px; background: var(--lime); color: var(--ink); cursor: pointer; font-size: 10px; font-weight: 850; }
 .new-content-alert button:disabled { cursor: wait; opacity: .72; }
 [dir="rtl"] .new-content-alert, [dir="rtl"] .new-content-alert span, [dir="rtl"] .new-content-alert button { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif !important; font-weight: 400; letter-spacing: 0; line-height: 1.55; }
+.breaking-news-alert { position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%); z-index: 48; display: grid; grid-template-columns: auto minmax(0,1fr) auto; align-items: center; gap: 11px; width: min(620px,calc(100vw - 32px)); padding: 10px 11px; border: 1px solid rgba(255,255,255,.3); border-radius: 20px; background: #b71927; color: white; box-shadow: 0 14px 38px rgba(119,8,20,.38); }
+.breaking-news-alert div { display: grid; gap: 2px; min-width: 0; }
+.breaking-news-alert strong { font-size: 10px; letter-spacing: .13em; }
+.breaking-news-alert span { overflow: hidden; font-size: 13px; font-weight: 750; line-height: 1.35; text-overflow: ellipsis; white-space: nowrap; }
+.breaking-news-alert button { border: 0; color: white; cursor: pointer; }
+.breaking-close { width: 28px; height: 28px; border-radius: 50%; background: rgba(0,0,0,.15); font-size: 18px; }
+.breaking-open { min-height: 34px; padding: 0 14px; border-radius: 17px; background: white !important; color: #8d0e1a !important; font-size: 10px; font-weight: 850; }
+[dir="rtl"] .breaking-news-alert, [dir="rtl"] .breaking-news-alert button { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif; letter-spacing: 0; }
+.breaking-check { display: flex !important; flex-direction: row !important; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid #efb5bb; border-radius: 12px; background: #fff5f6; color: #8d0e1a !important; }
+.breaking-check input { width: 18px; height: 18px; accent-color: #b71927; }
+.breaking-check span { display: grid; gap: 2px; }
+.breaking-check small { color: #76545a; font-weight: 500; }
+.breaking-badge { padding: 3px 7px; border-radius: 10px; background: #b71927; color: white; font-size: 9px; font-weight: 800; text-transform: uppercase; }
 .empty-state { min-height: 360px; display: grid; place-content: center; text-align: center; color: var(--muted); }
 .empty-state span { font: 700 60px "Noto Sans Thaana"; color: #cad5d1; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgba(10,25,21,.62); backdrop-filter: blur(8px); }
@@ -313,6 +326,7 @@ button { color: inherit; }
   .bottom-nav button > span[aria-hidden="true"] { font-size: 15px; line-height: 1; }
   .bottom-nav .nav-label-text { display: none; }
   .new-content-alert { bottom: calc(65px + env(safe-area-inset-bottom)); }
+  .breaking-news-alert { bottom: calc(65px + env(safe-area-inset-bottom)); width: calc(100vw - 24px); }
   .editorial-main { padding: 28px 18px; }
   .desk-header { align-items: start; }
   .desk-header .secondary { display: none; }

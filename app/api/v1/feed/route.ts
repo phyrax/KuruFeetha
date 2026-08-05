@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   let user = null;
   try { user = await optionalUser(request); } catch (error) { return authErrorResponse(error); }
   const result = await runtime.DB.prepare(`
-    SELECT c.id, c.image_url AS imageUrl, t.published_at AS publishedAt,
+    SELECT c.id, c.image_url AS imageUrl, c.is_breaking AS breaking, c.updated_at AS updatedAt, t.published_at AS publishedAt,
       t.headline, t.summary, t.word_count AS wordCount,
       c.source_name AS source, c.source_url AS sourceUrl, cat.slug AS category,
       CASE WHEN ?='dv' THEN cat.name_dv ELSE cat.name_en END AS categoryName,

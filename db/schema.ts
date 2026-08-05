@@ -22,6 +22,7 @@ export const newsCards = sqliteTable("news_cards", {
   imageUrl: text("image_url"),
   sourceName: text("source_name"),
   sourceUrl: text("source_url"),
+  isBreaking: integer("is_breaking", { mode: "boolean" }).notNull().default(false),
   publishedAt: integer("published_at", { mode: "timestamp" }),
   ...timestamps,
 });

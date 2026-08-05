@@ -31,7 +31,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/randomizedCardOrder/); assert.match(shell,/feedSeed/);
   assert.match(shell,/setView\("latest"\)/); assert.match(shell,/view==="saved"\|\|view==="latest"\?b\.publishedAt-a\.publishedAt/); assert.match(shell,/Latest/);
   assert.match(shell,/matchMedia\("\(max-width: 760px\)"\)/); assert.match(shell,/scrollTo\(\{top:0,behavior:"auto"\}\)/);
-  assert.match(shell,/New stories are available/); assert.match(shell,/newContentAvailable/); assert.match(shell,/setInterval\(check,60_000\)/);
+  assert.match(shell,/New stories are available/); assert.match(shell,/newContentAvailable/); assert.match(shell,/setInterval\(check,15_000\)/);
   assert.match(shell,/cache:"no-store"/); assert.match(shell,/setFeedRenderKey\(key=>key\+1\)/); assert.match(shell,/className="story-feed" key=\{feedRenderKey\}/);
   assert.match(shell,/kurufeetha-seen-content/); assert.match(shell,/IntersectionObserver/); assert.match(shell,/data-content-key/);
   assert.match(styles,/\.new-content-alert/); assert.match(styles,/\.new-content-alert button/); assert.match(styles,/\[dir="rtl"\] \.new-content-alert[\s\S]*font-family: "MV AammuFK"/);
@@ -99,4 +99,22 @@ test("ships likes, gallery categories, and category-affinity ranking",async()=>{
   assert.match(feed,/content_likes/);assert.match(feed,/ORDER BY followed DESC, affinity DESC/);
   assert.match(galleries,/categoryName/);assert.match(galleries,/ORDER BY affinity DESC/);assert.match(likes,/requireUser/);
   assert.match(schema,/contentLikes/);assert.match(schema,/content_like_user_content_idx/);assert.match(migration,/ALTER TABLE `galleries` ADD `category_id`/);assert.match(migration,/PRAGMA optimize/);
+});
+
+test("ships CMS-tagged breaking news alerts",async()=>{
+  const[shell,styles,feed,adminCreate,adminUpdate,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/globals.css",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/[id]/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
+    readFile(new URL("../drizzle/0008_cynical_jimmy_woo.sql",import.meta.url),"utf8"),
+  ]);
+  assert.match(shell,/Breaking News/);assert.match(shell,/BREAKING NEWS/);assert.match(shell,/ކުއްލި ޚަބަރު/);
+  assert.match(shell,/breakingAlert\.headline/);assert.match(shell,/setInterval\(check,15_000\)/);assert.match(shell,/story\.id}:\$\{story\.updatedAt/);
+  assert.match(styles,/\.breaking-news-alert/);assert.match(styles,/background: #b71927/);assert.match(styles,/\.breaking-check/);
+  assert.match(feed,/c\.is_breaking AS breaking/);assert.match(feed,/c\.updated_at AS updatedAt/);
+  assert.match(adminCreate,/is_breaking/);assert.match(adminUpdate,/is_breaking/);assert.match(schema,/isBreaking: integer\("is_breaking"/);
+  assert.match(migration,/ALTER TABLE `news_cards` ADD `is_breaking`/);
 });
