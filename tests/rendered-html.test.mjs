@@ -141,3 +141,11 @@ test("ships professional profile controls and separately subscribed important al
   assert.match(schema,/isImportant: integer\("is_important"/);assert.match(schema,/notifyBreaking: integer\("notify_breaking"/);
   assert.match(migration,/ADD `is_important`/);assert.match(migration,/ADD `notify_breaking`/);assert.match(migration,/ADD `notify_important`/);
 });
+
+test("refresh alert opens the exact newly detected For You card",async()=>{
+  const shell=await readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8");
+  assert.match(shell,/newContentTargetRef/);
+  assert.match(shell,/newItems\[0\]/);
+  assert.match(shell,/card\.dataset\.contentKey===targetKey/);
+  assert.match(shell,/target\.scrollIntoView\(\{behavior:"smooth",block:"start"\}\)/);
+});
