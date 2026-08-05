@@ -16,6 +16,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/onClick=\{\(\)=>setSelectedCategory\(c\.slug\)\}/); assert.match(shell,/aria-pressed=\{selectedCategory===c\.slug\}/);
   assert.match(shell,/className="nav-label-text"/); assert.match(shell,/aria-label=\{profile\?"Account":"Sign in"\}/);
   assert.match(shell,/language-label/); assert.match(shell,/Switch to English/);
+  assert.match(shell,/kurufeetha-language/); assert.match(shell,/languageReady/); assert.match(shell,/localStorage\.setItem\("kurufeetha-language",language\)/);
   assert.match(shell,/searchOpen/); assert.match(shell,/aria-expanded=\{searchOpen\}/); assert.match(shell,/Search stories/);
   assert.match(shell,/navigator\.share/); assert.match(shell,/kurufeetha-bookmarks/); assert.match(shell,/\/api\/v1\/me\/bookmarks/);
   assert.match(shell,/publicationTime/); assert.match(shell,/Intl\.RelativeTimeFormat/); assert.match(shell,/<time dateTime=/);
