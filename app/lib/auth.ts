@@ -9,6 +9,8 @@ export type AppUser = {
   role: AppRole;
   status: "active" | "suspended";
   preferredLanguage: "en" | "dv";
+  notifyBreaking: boolean;
+  notifyImportant: boolean;
   onboardingCompletedAt: number | null;
 };
 
@@ -61,7 +63,8 @@ export async function optionalUser(request: Request): Promise<AppUser | null> {
       role=CASE WHEN users.role='owner' THEN 'owner' ELSE users.role END, last_active_at=excluded.last_active_at, updated_at=excluded.updated_at`)
     .bind(identity.id, identity.id, identity.email.toLowerCase(), displayName, role, now, now, now).run();
   const user = await runtime.DB.prepare(`SELECT id, auth_subject AS authSubject, email, display_name AS displayName, role, status,
-    preferred_language AS preferredLanguage, onboarding_completed_at AS onboardingCompletedAt FROM users WHERE auth_subject=?`)
+    preferred_language AS preferredLanguage, notify_breaking AS notifyBreaking, notify_important AS notifyImportant,
+    onboarding_completed_at AS onboardingCompletedAt FROM users WHERE auth_subject=?`)
     .bind(identity.id).first<AppUser>();
   if (!user) throw new AuthError(401, "PROFILE_UNAVAILABLE", "Could not load your profile");
   if (user.status === "suspended") throw new AuthError(403, "ACCOUNT_SUSPENDED", "This account is suspended");

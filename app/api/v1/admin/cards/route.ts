@@ -2,13 +2,13 @@ import { env } from "cloudflare:workers";
 import { authErrorResponse, requireAdmin } from "../../../../lib/auth";
 import { validHttpUrl, validateTranslation, wordCount, type TranslationInput } from "../../../../lib/cms";
 export const dynamic = "force-dynamic";
-type Body = { categoryId?: string; imageKey?: string; sourceName?: string; sourceUrl?: string; isBreaking?: boolean; translations?: { en?: TranslationInput; dv?: TranslationInput } };
+type Body = { categoryId?: string; imageKey?: string; sourceName?: string; sourceUrl?: string; isBreaking?: boolean; isImportant?: boolean; translations?: { en?: TranslationInput; dv?: TranslationInput } };
 
 export async function GET(request: Request) {
   try { await requireAdmin(request); } catch (error) { return authErrorResponse(error); }
   const runtime = env as unknown as { DB: D1Database };
   const url = new URL(request.url), status = url.searchParams.get("status"), search = `%${(url.searchParams.get("search") ?? "").slice(0,80)}%`;
-  const rows = await runtime.DB.prepare(`SELECT c.id,c.status,c.image_key AS imageKey,c.source_name AS sourceName,c.source_url AS sourceUrl,c.is_breaking AS isBreaking,c.published_at AS publishedAt,
+  const rows = await runtime.DB.prepare(`SELECT c.id,c.status,c.image_key AS imageKey,c.source_name AS sourceName,c.source_url AS sourceUrl,c.is_breaking AS isBreaking,c.is_important AS isImportant,c.published_at AS publishedAt,
     cat.id AS categoryId,cat.name_en AS categoryEn,cat.name_dv AS categoryDv,
     json_group_array(json_object('language',t.language,'headline',t.headline,'summary',t.summary,'status',t.review_status)) AS translations
     FROM news_cards c LEFT JOIN categories cat ON cat.id=c.category_id LEFT JOIN news_card_translations t ON t.card_id=c.id
@@ -31,10 +31,10 @@ export async function POST(request: Request) {
   const id = crypto.randomUUID(), now = Date.now();
   const published = present.some((language) => body.translations?.[language]?.published);
   await runtime.DB.batch([
-    runtime.DB.prepare("INSERT INTO news_cards (id,category_id,status,image_key,image_url,source_name,source_url,is_breaking,published_at,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?)")
-      .bind(id,body.categoryId,published?"published":"draft",body.imageKey,`/api/v1/media/${body.imageKey}`,body.sourceName?.trim().slice(0,100)||null,body.sourceUrl?.trim()||null,body.isBreaking?1:0,published?now:null,now,now),
+    runtime.DB.prepare("INSERT INTO news_cards (id,category_id,status,image_key,image_url,source_name,source_url,is_breaking,is_important,published_at,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")
+      .bind(id,body.categoryId,published?"published":"draft",body.imageKey,`/api/v1/media/${body.imageKey}`,body.sourceName?.trim().slice(0,100)||null,body.sourceUrl?.trim()||null,body.isBreaking?1:0,body.isImportant?1:0,published?now:null,now,now),
     ...present.map((language) => { const t=body.translations![language]!; return runtime.DB.prepare("INSERT INTO news_card_translations (id,card_id,language,headline,summary,word_count,review_status,published_at,created_at,updated_at) VALUES (?,?,?,?,?,?,?,?,?,?)").bind(crypto.randomUUID(),id,language,t.headline!.trim(),t.summary!.trim(),wordCount(t.summary!),t.published?"published":"draft",t.published?now:null,now,now); }),
-    runtime.DB.prepare("INSERT INTO audit_events (id,actor_id,action,entity_type,entity_id,after,created_at) VALUES (?,?,?,?,?,?,?)").bind(crypto.randomUUID(),actor.id,"card.created","news_card",id,JSON.stringify({languages:present,isBreaking:!!body.isBreaking}),now),
+    runtime.DB.prepare("INSERT INTO audit_events (id,actor_id,action,entity_type,entity_id,after,created_at) VALUES (?,?,?,?,?,?,?)").bind(crypto.randomUUID(),actor.id,"card.created","news_card",id,JSON.stringify({languages:present,isBreaking:!!body.isBreaking,isImportant:!!body.isImportant}),now),
   ]);
   return Response.json({ id }, { status: 201 });
 }

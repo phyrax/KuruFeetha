@@ -23,6 +23,7 @@ export const newsCards = sqliteTable("news_cards", {
   sourceName: text("source_name"),
   sourceUrl: text("source_url"),
   isBreaking: integer("is_breaking", { mode: "boolean" }).notNull().default(false),
+  isImportant: integer("is_important", { mode: "boolean" }).notNull().default(false),
   publishedAt: integer("published_at", { mode: "timestamp" }),
   ...timestamps,
 });
@@ -75,6 +76,8 @@ export const users = sqliteTable("users", {
   role: text("role", { enum: ["reader", "admin", "owner"] }).notNull().default("reader"),
   status: text("status", { enum: ["active", "suspended"] }).notNull().default("active"),
   preferredLanguage: text("preferred_language", { enum: ["en", "dv"] }).notNull().default("en"),
+  notifyBreaking: integer("notify_breaking", { mode: "boolean" }).notNull().default(true),
+  notifyImportant: integer("notify_important", { mode: "boolean" }).notNull().default(false),
   onboardingCompletedAt: integer("onboarding_completed_at", { mode: "timestamp" }),
   lastActiveAt: integer("last_active_at", { mode: "timestamp" }).notNull().default(0),
   ...timestamps,

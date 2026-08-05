@@ -16,13 +16,14 @@ export async function GET(request: Request) {
 export async function PATCH(request: Request) {
   let user;
   try { user = await requireUser(request); } catch (error) { return authErrorResponse(error); }
-  const body = await request.json().catch(() => ({})) as { preferredLanguage?: "en" | "dv"; displayName?: string; onboardingComplete?: boolean };
+  const body = await request.json().catch(() => ({})) as { preferredLanguage?: "en" | "dv"; displayName?: string; onboardingComplete?: boolean; notifyBreaking?: boolean; notifyImportant?: boolean };
   if (body.preferredLanguage && !["en", "dv"].includes(body.preferredLanguage)) return Response.json({ error: { code: "INVALID_LANGUAGE" } }, { status: 400 });
   const runtime = env as unknown as RuntimeEnv;
   const now = Date.now();
   await runtime.DB.prepare(`UPDATE users SET preferred_language=COALESCE(?,preferred_language), display_name=COALESCE(?,display_name),
+    notify_breaking=COALESCE(?,notify_breaking), notify_important=COALESCE(?,notify_important),
     onboarding_completed_at=CASE WHEN ?=1 THEN COALESCE(onboarding_completed_at,?) ELSE onboarding_completed_at END, updated_at=? WHERE id=?`)
-    .bind(body.preferredLanguage ?? null, body.displayName?.trim().slice(0, 80) || null, body.onboardingComplete ? 1 : 0, now, now, user.id).run();
+    .bind(body.preferredLanguage ?? null, body.displayName?.trim().slice(0, 80) || null,typeof body.notifyBreaking==="boolean"?(body.notifyBreaking?1:0):null,typeof body.notifyImportant==="boolean"?(body.notifyImportant?1:0):null,body.onboardingComplete ? 1 : 0, now, now, user.id).run();
   return GET(request);
 }
 

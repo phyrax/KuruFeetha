@@ -120,3 +120,24 @@ test("ships CMS-tagged breaking news alerts",async()=>{
   assert.match(adminCreate,/is_breaking/);assert.match(adminUpdate,/is_breaking/);assert.match(schema,/isBreaking: integer\("is_breaking"/);
   assert.match(migration,/ALTER TABLE `news_cards` ADD `is_breaking`/);
 });
+
+test("ships professional profile controls and separately subscribed important alerts",async()=>{
+  const[shell,styles,feed,me,adminCreate,adminUpdate,auth,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/globals.css",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/me/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/[id]/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/lib/auth.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
+    readFile(new URL("../drizzle/0009_stiff_hellcat.sql",import.meta.url),"utf8"),
+  ]);
+  assert.match(shell,/Important Stories/);assert.match(shell,/Important Story/);assert.match(shell,/importantAlert\.headline/);
+  assert.match(shell,/kurufeetha-text-size/);assert.match(shell,/Extra large/);assert.match(shell,/notifyBreaking/);assert.match(shell,/notifyImportant/);
+  assert.match(styles,/\.profile-hero/);assert.match(styles,/\.text-size-xlarge \.summary/);assert.match(styles,/\.important-news-alert/);assert.match(styles,/\.switch-control/);
+  assert.match(feed,/c\.is_important AS important/);assert.match(me,/notify_breaking/);assert.match(me,/notify_important/);
+  assert.match(adminCreate,/is_important/);assert.match(adminUpdate,/is_important/);assert.match(auth,/notifyImportant/);
+  assert.match(schema,/isImportant: integer\("is_important"/);assert.match(schema,/notifyBreaking: integer\("notify_breaking"/);
+  assert.match(migration,/ADD `is_important`/);assert.match(migration,/ADD `notify_breaking`/);assert.match(migration,/ADD `notify_important`/);
+});
