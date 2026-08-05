@@ -149,3 +149,9 @@ test("refresh alert opens the exact newly detected For You card",async()=>{
   assert.match(shell,/card\.dataset\.contentKey===targetKey/);
   assert.match(shell,/target\.scrollIntoView\(\{behavior:"smooth",block:"start"\}\)/);
 });
+
+test("places story timestamps above the footer divider",async()=>{
+  const[shell,styles]=await Promise.all([readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/globals.css",import.meta.url),"utf8")]);
+  assert.match(shell,/className="summary"[\s\S]*className="story-timestamp"[\s\S]*className="story-footer"/);
+  assert.match(styles,/\.story-timestamp/);
+});
