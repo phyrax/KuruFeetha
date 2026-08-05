@@ -28,6 +28,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/މިނިޓް/); assert.match(shell,/ގަޑިއިރު/); assert.match(shell,/ދުވަސް/); assert.match(shell,/ހަފްތާ/); assert.match(shell,/ކުރިން/);
   assert.match(styles,/\.publication-details time/); assert.match(styles,/\.gallery-details time/);
   assert.match(shell,/view==="saved"/); assert.match(shell,/No saved stories yet/); assert.match(shell,/setView\("saved"\)/);
+  assert.match(shell,/randomizedCardOrder/); assert.match(shell,/feedSeed/); assert.match(shell,/view==="saved"\?b\.publishedAt-a\.publishedAt/);
   assert.doesNotMatch(shell,/<span>\{s\.source\}<\/span>/);
   assert.match(styles,/scroll-snap-type: y mandatory/); assert.match(styles,/\.feed-head \{ display: none; \}/);
   assert.match(styles,/height: calc\(100dvh - 52px\)/); assert.match(styles,/height: 100%; min-height: 100%; max-height: 100%/);
