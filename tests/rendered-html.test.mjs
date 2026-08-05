@@ -19,6 +19,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/searchOpen/); assert.match(shell,/aria-expanded=\{searchOpen\}/); assert.match(shell,/Search stories/);
   assert.match(shell,/navigator\.share/); assert.match(shell,/kurufeetha-bookmarks/); assert.match(shell,/\/api\/v1\/me\/bookmarks/);
   assert.match(shell,/publicationTime/); assert.match(shell,/Intl\.RelativeTimeFormat/); assert.match(shell,/<time dateTime=/);
+  assert.match(shell,/މިނިޓް/); assert.match(shell,/ގަޑިއިރު/); assert.match(shell,/ދުވަސް/); assert.match(shell,/ހަފްތާ/); assert.match(shell,/ކުރިން/);
   assert.match(styles,/\.publication-details time/); assert.match(styles,/\.gallery-details time/);
   assert.match(shell,/view==="saved"/); assert.match(shell,/No saved stories yet/); assert.match(shell,/setView\("saved"\)/);
   assert.doesNotMatch(shell,/<span>\{s\.source\}<\/span>/);
