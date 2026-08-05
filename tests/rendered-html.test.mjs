@@ -19,7 +19,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(shell,/className="nav-label-text"/); assert.match(shell,/aria-current=\{view==="feed"\?"page":undefined\}/); assert.match(shell,/aria-current=\{accountOpen\?"page":undefined\}/);
   assert.match(shell,/language-label/); assert.match(shell,/Switch to English/);
   assert.match(shell,/Welcome back/); assert.match(shell,/Continue with Google/); assert.match(shell,/Send sign-in link/); assert.match(shell,/password-free link/);
-  assert.match(shell,/dir=\{profile\?undefined:"ltr"\}/);
+  assert.match(shell,/account-panel[\s\S]*dir="ltr"/);
   assert.match(styles,/\.auth-panel/); assert.match(styles,/\.google-signin/); assert.match(styles,/\.auth-divider/); assert.match(styles,/\.email-signin input:focus/);
   assert.match(shell,/kurufeetha-language/); assert.match(shell,/languageReady/); assert.match(shell,/localStorage\.setItem\("kurufeetha-language",language\)/);
   assert.match(shell,/searchOpen/); assert.match(shell,/aria-expanded=\{searchOpen\}/); assert.match(shell,/Search stories/);
@@ -133,7 +133,7 @@ test("ships professional profile controls and separately subscribed important al
     readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
     readFile(new URL("../drizzle/0009_stiff_hellcat.sql",import.meta.url),"utf8"),
   ]);
-  assert.match(shell,/Important Stories/);assert.match(shell,/Important Story/);assert.match(shell,/importantAlert\.headline/);
+  assert.match(shell,/Important Stories/);assert.match(shell,/Important Story/);assert.match(shell,/importantAlert\.headline/);assert.match(shell,/account-panel[\s\S]*dir="ltr"/);
   assert.match(shell,/kurufeetha-text-size/);assert.match(shell,/Extra large/);assert.match(shell,/notifyBreaking/);assert.match(shell,/notifyImportant/);
   assert.match(styles,/\.profile-hero/);assert.match(styles,/\.text-size-xlarge \.summary/);assert.match(styles,/\.important-news-alert/);assert.match(styles,/\.switch-control/);
   assert.match(feed,/c\.is_important AS important/);assert.match(me,/notify_breaking/);assert.match(me,/notify_important/);
