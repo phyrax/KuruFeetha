@@ -76,6 +76,8 @@ button { color: inherit; }
 .story-footer { border-top: 1px solid var(--line); margin-top: auto; padding-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
 .story-footer a { text-decoration: none; color: inherit; }
 .story-footer a strong { color: var(--teal); font-size: 12px; }
+.publication-details { display: flex; align-items: flex-start; flex-direction: column; gap: 6px; }
+.publication-details time { color: var(--muted); font-size: 11px; font-weight: 650; }
 .card-actions { display: flex; gap: 8px; }
 .card-actions button { width: 39px; height: 39px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); cursor: pointer; font-size: 16px; box-shadow: 0 5px 16px rgba(20,35,31,.1); }
 .card-actions button.selected { background: var(--lime); border-color: #b7d45d; }
@@ -98,6 +100,8 @@ button { color: inherit; }
 .gallery-card[dir="rtl"] .gallery-overlay { font-family: "MV Typewriter", "Noto Sans Thaana", sans-serif; }
 .gallery-card[dir="rtl"] .gallery-overlay h2 { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif; font-weight: 400; line-height: 1.55; letter-spacing: 0; }
 .gallery-count { padding: 5px 9px; border: 1px solid rgba(255,255,255,.5); border-radius: 20px; background: rgba(6,15,12,.3); font-size: 11px; }
+.gallery-details { display: flex; align-items: center; gap: 10px; }
+.gallery-details time { color: rgba(255,255,255,.88); font-size: 11px; font-weight: 700; text-shadow: 0 1px 5px rgba(0,0,0,.5); }
 .gallery-dots { display: flex; gap: 6px; }
 .gallery-dots i { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.45); }
 .gallery-dots i.active { width: 20px; border-radius: 8px; background: white; }
