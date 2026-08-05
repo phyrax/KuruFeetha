@@ -13,6 +13,8 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
     readFile(new URL("../drizzle/0003_equal_misty_knight.sql",import.meta.url),"utf8"),
   ]);
   assert.match(shell,/Manual CMS/); assert.match(shell,/Publish this language/); assert.match(shell,/60 words/);
+  assert.match(shell,/CmsDateControls/); assert.match(shell,/Last 7 days/); assert.match(shell,/This month/); assert.match(shell,/type="month"/);
+  assert.match(shell,/cmsDateLabel/); assert.match(shell,/matchesCmsDate/); assert.match(shell,/Published \$\{cmsDateLabel/);
   assert.match(shell,/onClick=\{\(\)=>setSelectedCategory\(c\.slug\)\}/); assert.match(shell,/aria-pressed=\{selectedCategory===c\.slug\}/);
   assert.match(shell,/className="nav-label-text"/); assert.match(shell,/aria-label=\{profile\?"Account":"Sign in"\}/);
   assert.match(shell,/language-label/); assert.match(shell,/Switch to English/);
