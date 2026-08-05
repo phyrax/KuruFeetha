@@ -113,7 +113,9 @@ test("ships CMS-tagged breaking news alerts",async()=>{
   ]);
   assert.match(shell,/Breaking News/);assert.match(shell,/BREAKING NEWS/);assert.match(shell,/ކުއްލި ޚަބަރު/);
   assert.match(shell,/breakingAlert\.headline/);assert.match(shell,/setInterval\(check,15_000\)/);assert.match(shell,/story\.id}:\$\{story\.updatedAt/);
+  assert.match(shell,/isRecentlyBreaking/);assert.match(shell,/30\*60_000/);assert.match(shell,/breaking-card-tag/);
   assert.match(styles,/\.breaking-news-alert/);assert.match(styles,/background: #b71927/);assert.match(styles,/\.breaking-check/);
+  assert.match(styles,/\.breaking-card-tag/);assert.match(styles,/inset-inline-start: calc\(100% \+ 7px\)/);
   assert.match(feed,/c\.is_breaking AS breaking/);assert.match(feed,/c\.updated_at AS updatedAt/);
   assert.match(adminCreate,/is_breaking/);assert.match(adminUpdate,/is_breaking/);assert.match(schema,/isBreaking: integer\("is_breaking"/);
   assert.match(migration,/ALTER TABLE `news_cards` ADD `is_breaking`/);

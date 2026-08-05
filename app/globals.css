@@ -66,6 +66,9 @@ button { color: inherit; }
 .story-meta { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 11px; }
 .pill { border-radius: 20px; background: #e0ece8; color: var(--teal-dark); padding: 6px 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px; }
 .pill.breaking { background: #ffe2dc; color: #ad321d; }
+.pill-with-breaking { position: relative; }
+.breaking-card-tag { position: absolute; inset-inline-start: calc(100% + 7px); top: 50%; transform: translateY(-50%); width: max-content; border-radius: 20px; background: #b71927; color: white; padding: 6px 10px; font-size: 10px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; box-shadow: 0 5px 16px rgba(119,8,20,.25); }
+[dir="rtl"] .breaking-card-tag { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif; font-weight: 400; letter-spacing: 0; }
 .story-content h2 { max-width: 650px; margin: 22px 0 16px; font-size: clamp(26px, 3.2vw, 42px); line-height: 1.07; letter-spacing: -1.4px; }
 [dir="rtl"] .story-content { font-family: "MV Typewriter", "Noto Sans Thaana", sans-serif; }
 [dir="rtl"] .story-content h2 { font-family: "MV AammuFK", "Noto Sans Thaana", sans-serif; font-weight: 400; line-height: 1.65; letter-spacing: 0; }
