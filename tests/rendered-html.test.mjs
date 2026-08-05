@@ -49,9 +49,10 @@ test("AI ingestion implementation is absent", async()=>{
 });
 
 test("forces the reader shell to revalidate after deployments",async()=>{
-  const headers=await readFile(new URL("../public/_headers",import.meta.url),"utf8");
+  const [headers,worker]=await Promise.all([readFile(new URL("../public/_headers",import.meta.url),"utf8"),readFile(new URL("../worker/index.ts",import.meta.url),"utf8")]);
   assert.match(headers,/Cache-Control: no-cache, no-store, must-revalidate/);
   assert.match(headers,/\/assets\/\*/);assert.match(headers,/immutable/);
+  assert.match(worker,/acceptsHtml/);assert.match(worker,/headers\.set\("Cache-Control", "no-cache, no-store, must-revalidate"\)/);
 });
 
 test("ships swipeable bilingual galleries with related story links",async()=>{
