@@ -48,6 +48,12 @@ test("AI ingestion implementation is absent", async()=>{
   for(const path of ["../app/lib/ai-providers.ts","../app/lib/ingestion.ts","../app/api/v1/admin/ingest/route.ts"]){await assert.rejects(access(new URL(path,import.meta.url)))}
 });
 
+test("forces the reader shell to revalidate after deployments",async()=>{
+  const headers=await readFile(new URL("../public/_headers",import.meta.url),"utf8");
+  assert.match(headers,/Cache-Control: no-cache, no-store, must-revalidate/);
+  assert.match(headers,/\/assets\/\*/);assert.match(headers,/immutable/);
+});
+
 test("ships swipeable bilingual galleries with related story links",async()=>{
   const[shell,styles,publicApi,adminApi,schema,migration]=await Promise.all([
     readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
