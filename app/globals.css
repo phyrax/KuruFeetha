@@ -90,7 +90,8 @@ button { color: inherit; }
 .gallery-slide-main { z-index: 1; object-fit: cover; }
 .gallery-overlay { position: absolute; inset: auto 0 0; z-index: 2; padding: 110px clamp(22px,5vw,52px) 34px; color: white; pointer-events: none; background: linear-gradient(to bottom, transparent, rgba(5,12,10,.85)); }
 .gallery-topline { position: absolute; inset: 22px 24px auto; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.gallery-topline .pill { box-shadow: 0 5px 18px rgba(0,0,0,.18); }
+.gallery-topline .pill { box-shadow: 0 5px 18px rgba(0,0,0,.18); font-family: "Inter", ui-sans-serif, system-ui, sans-serif; font-weight: 700; letter-spacing: .01em; }
+.gallery-card[dir="rtl"] .gallery-topline .pill { font-family: "MV Typewriter", "Noto Sans Thaana", sans-serif; font-weight: 700; line-height: 1.45; letter-spacing: 0; }
 .gallery-topline .card-actions button { border-color: rgba(255,255,255,.55); background: rgba(255,255,255,.92); }
 .gallery-topline .card-actions button.like-selected { color: #a52838; background: #ffe4e8; }
 .gallery-overlay h2 { max-width: 760px; margin: 10px 0 16px; font-size: clamp(27px,4.5vw,52px); line-height: 1.1; letter-spacing: -1.2px; }
