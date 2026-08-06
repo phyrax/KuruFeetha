@@ -12,7 +12,7 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
     readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
     readFile(new URL("../drizzle/0003_equal_misty_knight.sql",import.meta.url),"utf8"),
   ]);
-  assert.match(shell,/Manual CMS/); assert.match(shell,/Publish this language/); assert.match(shell,/60 words/);
+  assert.match(shell,/Manual CMS/); assert.match(shell,/Publish this card language/); assert.match(shell,/60 words/);
   assert.match(shell,/CmsDateControls/); assert.match(shell,/Last 7 days/); assert.match(shell,/This month/); assert.match(shell,/type="month"/);
   assert.match(shell,/cmsDateLabel/); assert.match(shell,/matchesCmsDate/); assert.match(shell,/Published \$\{cmsDateLabel/);
   assert.match(shell,/onClick=\{\(\)=>setSelectedCategory\(c\.slug\)\}/); assert.match(shell,/aria-pressed=\{selectedCategory===c\.slug\}/);
@@ -154,4 +154,22 @@ test("places story timestamps above the footer divider",async()=>{
   const[shell,styles]=await Promise.all([readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/globals.css",import.meta.url),"utf8")]);
   assert.match(shell,/className="summary"[\s\S]*className="story-timestamp"[\s\S]*className="story-footer"/);
   assert.match(styles,/\.story-timestamp/);
+});
+
+test("ships independently published bilingual detailed articles",async()=>{
+  const[shell,reader,articleApi,adminPublish,feed,schema,migration,styles]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/components/ArticleReader.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/articles/[id]/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/[id]/article/publish/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),
+    readFile(new URL("../drizzle/0010_many_trauma.sql",import.meta.url),"utf8"),
+    readFile(new URL("../app/globals.css",import.meta.url),"utf8"),
+  ]);
+  assert.match(shell,/Detailed article/);assert.match(shell,/RichTextEditor/);assert.match(shell,/Publish detailed article/);assert.match(shell,/Read full article/);
+  assert.doesNotMatch(shell,/href=\{item\.sourceUrl\}/);assert.match(feed,/article_status='published'/);assert.match(feed,/articleUrl/);
+  assert.match(reader,/article-body/);assert.match(reader,/article-gallery/);assert.match(reader,/kurufeetha-bookmarks/);assert.match(reader,/kurufeetha-likes/);
+  assert.match(articleApi,/getPublicArticle/);assert.match(adminPublish,/requireAdmin/);assert.match(adminPublish,/article\.published/);
+  assert.match(schema,/articleContent/);assert.match(schema,/articlePublishedAt/);assert.match(migration,/ADD `article_content`/);assert.match(styles,/\.article-page\[dir="rtl"\]/);
 });

@@ -1,0 +1,1 @@
+export default function ArticleNotFound(){return <main className="article-not-found" dir="ltr"><a className="article-brand" href="/"><span>ކ</span><strong>KuruFeetha</strong></a><div><p>404</p><h1>Article unavailable</h1><p>This article is unpublished, archived, or unavailable in this language.</p><a href="/">Return to the news feed</a></div></main>}

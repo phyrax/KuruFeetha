@@ -14,8 +14,10 @@ export async function GET(request: Request) {
   const result = await runtime.DB.prepare(`
     SELECT c.id, c.image_url AS imageUrl, c.is_breaking AS breaking, c.is_important AS important, c.updated_at AS updatedAt, t.published_at AS publishedAt,
       t.headline, t.summary, t.word_count AS wordCount,
-      c.source_name AS source, c.source_url AS sourceUrl, cat.slug AS category,
+      cat.slug AS category,
       CASE WHEN ?='dv' THEN cat.name_dv ELSE cat.name_en END AS categoryName,
+      CASE WHEN t.article_status='published' AND t.article_content IS NOT NULL THEN 1 ELSE 0 END AS hasArticle,
+      CASE WHEN t.article_status='published' AND t.article_content IS NOT NULL THEN '/'||?||'/article/'||c.id ELSE NULL END AS articleUrl,
       (SELECT g.id FROM galleries g WHERE (CASE WHEN ?='dv' THEN g.related_story_dv_id ELSE g.related_story_en_id END)=c.id AND g.status='published' AND (CASE WHEN ?='dv' THEN g.published_dv=1 ELSE g.published_en=1 END) ORDER BY g.published_at DESC LIMIT 1) AS relatedGalleryId,
       ((SELECT COUNT(*) FROM content_likes l JOIN news_cards lc ON lc.id=l.content_id WHERE l.user_id=? AND l.content_type='story' AND lc.category_id=c.category_id) +
        (SELECT COUNT(*) FROM content_likes l JOIN galleries lg ON lg.id=l.content_id WHERE l.user_id=? AND l.content_type='gallery' AND lg.category_id=c.category_id)) AS affinity,
@@ -28,7 +30,7 @@ export async function GET(request: Request) {
     WHERE c.status = 'published' AND t.published_at < ?
     ORDER BY followed DESC, affinity DESC, t.published_at DESC
     LIMIT ?
-  `).bind(language, language, language, user?.id ?? null, user?.id ?? null, user?.id ?? null, user?.id ?? null, language, cursor, limit + 1).all();
+  `).bind(language, language, language, language, user?.id ?? null, user?.id ?? null, user?.id ?? null, user?.id ?? null, language, cursor, limit + 1).all();
   const rows = result.results as Array<Record<string, unknown>>;
   const hasMore = rows.length > limit;
   const items = rows.slice(0, limit);
