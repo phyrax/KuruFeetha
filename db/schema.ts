@@ -120,10 +120,27 @@ export const devices = sqliteTable("devices", {
   ...timestamps,
 });
 
+export const advertisers = sqliteTable("advertisers", {
+  id: text("id").primaryKey(), legalName: text("legal_name").notNull(), displayName: text("display_name").notNull(),
+  billingEmail: text("billing_email").notNull(), billingPhone: text("billing_phone"), industry: text("industry"),
+  verificationStatus: text("verification_status", { enum: ["pending", "verified", "rejected"] }).notNull().default("pending"),
+  tourismLicence: text("tourism_licence"), agreementReference: text("agreement_reference"),
+  politicalPurchaserName: text("political_purchaser_name"), politicalFundingEntity: text("political_funding_entity"), notes: text("notes"), ...timestamps,
+});
+
 export const campaigns = sqliteTable("campaigns", {
   id: text("id").primaryKey(),
+  advertiserId: text("advertiser_id").references(() => advertisers.id),
   sponsorName: text("sponsor_name").notNull(),
-  status: text("status", { enum: ["draft", "active", "paused", "completed"] }).notNull(),
+  paidForBy: text("paid_for_by").notNull().default(""),
+  status: text("status", { enum: ["draft", "internal_review", "advertiser_review", "approved", "active", "paused", "completed", "archived"] }).notNull(),
+  package: text("package", { enum: ["starter", "growth", "category_partner", "custom"] }).notNull().default("starter"),
+  creativeType: text("creative_type", { enum: ["card", "article", "gallery", "category_partner"] }).notNull().default("card"),
+  categoryId: text("category_id").references(() => categories.id),
+  placement: text("placement", { enum: ["feed", "category", "both"] }).notNull().default("feed"),
+  platform: text("platform", { enum: ["all", "web", "mobile"] }).notNull().default("all"),
+  isPolitical: integer("is_political", { mode: "boolean" }).notNull().default(false),
+  ownerApprovedAt: integer("owner_approved_at", { mode: "timestamp" }),
   startsAt: integer("starts_at", { mode: "timestamp" }).notNull(),
   endsAt: integer("ends_at", { mode: "timestamp" }).notNull(),
   frequencyCap: integer("frequency_cap").notNull().default(3),
@@ -132,17 +149,40 @@ export const campaigns = sqliteTable("campaigns", {
   headlineDv: text("headline_dv").notNull(),
   summaryEn: text("summary_en").notNull(),
   summaryDv: text("summary_dv").notNull(),
+  imageKey: text("image_key"),
+  imageUrl: text("image_url"),
   destinationUrl: text("destination_url").notNull(),
+  invoiceNumber: text("invoice_number"),
+  invoiceAmount: integer("invoice_amount"),
+  invoiceDueAt: integer("invoice_due_at", { mode: "timestamp" }),
+  paymentStatus: text("payment_status", { enum: ["unbilled", "invoiced", "paid", "overdue", "waived"] }).notNull().default("unbilled"),
+  internalNotes: text("internal_notes"),
   ...timestamps,
-});
+}, (table) => [index("idx_campaigns_delivery").on(table.status, table.startsAt, table.endsAt, table.language)]);
 
 export const campaignEvents = sqliteTable("campaign_events", {
   id: text("id").primaryKey(),
   campaignId: text("campaign_id").notNull().references(() => campaigns.id),
   anonymousId: text("anonymous_id").notNull(),
   type: text("type", { enum: ["impression", "click"] }).notNull(),
+  eventKey: text("event_key").notNull().unique(),
+  placement: text("placement").notNull().default("feed"),
+  language: text("language", { enum: ["en", "dv"] }).notNull().default("en"),
+  platform: text("platform", { enum: ["web", "mobile"] }).notNull().default("web"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
-});
+}, (table) => [index("idx_campaign_events_report").on(table.campaignId, table.type, table.createdAt)]);
+
+export const contentEvents = sqliteTable("content_events", {
+  id: text("id").primaryKey(),
+  eventKey: text("event_key").notNull().unique(),
+  anonymousId: text("anonymous_id").notNull(),
+  contentType: text("content_type", { enum: ["story", "gallery", "article"] }).notNull(),
+  contentId: text("content_id").notNull(),
+  type: text("type", { enum: ["view", "complete", "open", "engage"] }).notNull(),
+  language: text("language", { enum: ["en", "dv"] }).notNull(),
+  platform: text("platform", { enum: ["web", "mobile"] }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+}, (table) => [index("idx_content_events_report").on(table.contentType, table.contentId, table.type, table.createdAt)]);
 
 export const auditEvents = sqliteTable("audit_events", {
   id: text("id").primaryKey(),

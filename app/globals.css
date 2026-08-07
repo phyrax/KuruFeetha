@@ -355,6 +355,21 @@ button { color: inherit; }
 .danger-action { border: 0; background: transparent; color: #a33120; cursor: pointer; }
 .category-create { display: grid; grid-template-columns: 1fr 1fr auto; gap: 9px; margin-bottom: 18px; }
 .category-create button { border: 0; border-radius: 10px; padding: 0 18px; color: white; background: var(--teal); font-weight: 700; cursor: pointer; }
+.sponsored-card { border-color: #c9a84e; background: #fffdf7; }
+.sponsored-visual { display: grid; place-items: center; color: #fff; background: linear-gradient(135deg,#153b32,#b8963d); font-size: 12px; font-weight: 900; letter-spacing: .18em; }
+.sponsor-disclosure { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin-bottom: 18px; }
+.sponsor-disclosure strong { padding: 5px 9px; border-radius: 7px; color: #6d4f08; background: #f4e2a5; font-size: 9px; letter-spacing: .07em; text-transform: uppercase; }
+.sponsor-disclosure span { color: #746b55; font-size: 10px; font-weight: 700; }
+.sponsor-footer button { border: 0; border-radius: 9px; padding: 10px 14px; color: #fff; background: #8d6c19; cursor: pointer; font-weight: 800; }
+.revenue-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 22px; }
+.revenue-stats div { padding: 20px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+.revenue-stats span,.revenue-stats strong { display: block; }.revenue-stats span { color: var(--muted); font-size: 10px; text-transform: uppercase; }.revenue-stats strong { margin-top: 8px; font-size: 24px; }
+.campaign-workspace { display: grid; gap: 18px; margin-bottom: 25px; }.campaign-workspace h2 { margin: 0; font-size: 18px; }.campaign-list .queue-actions { display: flex; gap: 6px; align-items: center; }.report-link { padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--teal); text-decoration: none; font-size: 10px; font-weight: 800; }.source-token.political { color: #fff; background: #b71927; }
+.commercial-page,.policy-page { min-height: 100vh; color: #16251f; background: #f4f7f5; }.commercial-page>header { height: 72px; padding: 0 max(24px,calc((100vw - 1120px)/2)); display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); background: #fff; }.commercial-page>header>a:last-child { padding: 11px 16px; border-radius: 9px; color: #fff; background: var(--teal); text-decoration: none; font-size: 11px; font-weight: 800; }
+.commercial-hero { padding: 100px max(24px,calc((100vw - 1060px)/2)) 70px; text-align: center; }.commercial-hero h1 { margin: 15px 0 22px; font-size: clamp(50px,8vw,92px); line-height: .95; letter-spacing: -.065em; }.commercial-hero>p:last-child { max-width: 650px; margin: auto; color: var(--muted); font-size: 18px; line-height: 1.7; }
+.package-grid { width: min(1060px,calc(100% - 40px)); margin: 0 auto 80px; display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; }.package-grid article { padding: 30px; border: 1px solid var(--line); border-radius: 20px; background: #fff; }.package-grid article.featured { color: #fff; background: #12372d; transform: translateY(-12px); }.package-grid span,.package-grid strong { display: block; }.package-grid span { color: #8c7b4a; font-size: 10px; font-weight: 900; }.package-grid strong { margin: 18px 0; font-size: 28px; }.package-grid p { color: inherit; opacity: .72; line-height: 1.6; }
+.brand-studio { padding: 70px max(24px,calc((100vw - 900px)/2)); display: grid; grid-template-columns: 1fr 1fr; gap: 60px; color: #fff; background: #006d65; }.brand-studio h2 { margin: 8px 0 0; font-size: 44px; }.brand-studio>p { font-size: 17px; line-height: 1.75; opacity: .8; }.commercial-page>footer { padding: 34px max(24px,calc((100vw - 1060px)/2)); display: flex; justify-content: space-between; background: #102a22; }.commercial-page>footer a { color: #fff; text-decoration: none; }.commercial-page>footer div { display: flex; gap: 20px; }
+.policy-page { padding: 45px max(22px,calc((100vw - 860px)/2)) 100px; }.policy-page>article { margin-top: 75px; padding: 50px; border: 1px solid var(--line); border-radius: 24px; background: #fff; }.policy-page h1 { margin: 10px 0 35px; font-size: clamp(45px,7vw,72px); letter-spacing: -.05em; }.policy-page h2 { margin: 38px 0 10px; }.policy-page p { color: #52635c; line-height: 1.8; }.policy-page small { color: var(--muted); }.archive-list section { margin-top: 25px; padding: 22px; border: 1px solid var(--line); border-radius: 14px; }.archive-list section>span { color: var(--teal); font-size: 10px; font-weight: 900; }
 
 @media (max-width: 900px) {
   .topbar { padding: 0 18px; }
@@ -376,6 +391,7 @@ button { color: inherit; }
 }
 
 @media (max-width: 620px) {
+  .revenue-stats,.form-grid,.package-grid,.brand-studio { grid-template-columns: 1fr; }.editorial-main { padding: 24px 14px; }.package-grid article.featured { transform: none; }.commercial-hero { padding-top: 65px; }.commercial-hero h1 { font-size: 49px; }.brand-studio { gap: 15px; }.policy-page>article { margin-top: 40px; padding: 24px; }.commercial-page>footer { gap: 20px; flex-direction: column; }
   html, body { height: 100%; overflow: hidden; }
   .article-page { height: 100dvh; min-height: 0; overflow-y: auto; }
   .article-header { height: 54px; padding: 0 15px; }
