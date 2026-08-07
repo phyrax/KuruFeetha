@@ -208,3 +208,5 @@ test("campaign CMS lists editable advertisers and preserves revenue navigation",
 });
 
 test("campaign validation identifies the exact invalid field",async()=>{const[manager,route]=await Promise.all([readFile(new URL("../app/components/CampaignManager.tsx",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/campaigns/route.ts",import.meta.url),"utf8")]);assert.match(manager,/destinationUrl=\/\^https/);assert.match(manager,/end date and time later than the start/);assert.match(route,/ADVERTISER_REQUIRED/);assert.match(route,/DESTINATION_REQUIRED/);assert.match(route,/START_DATE_REQUIRED/);assert.match(route,/END_DATE_INVALID/);assert.doesNotMatch(route,/Choose an advertiser, valid destination, and valid campaign dates/)});
+
+test("sponsored cards render reliably on mobile with placement-level frequency caps",async()=>{const shell=await readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8");assert.match(shell,/deliveryCounts=new Map/);assert.match(shell,/Math\.min\(2,campaign\.frequencyCap/);assert.doesNotMatch(shell,/sessionStorage\.getItem\(`kurufeetha-campaign/);assert.match(shell,/data-campaign-id/)});
