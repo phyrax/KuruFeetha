@@ -135,7 +135,7 @@ export const campaigns = sqliteTable("campaigns", {
   paidForBy: text("paid_for_by").notNull().default(""),
   status: text("status", { enum: ["draft", "internal_review", "advertiser_review", "approved", "active", "paused", "completed", "archived"] }).notNull(),
   package: text("package", { enum: ["starter", "growth", "category_partner", "custom"] }).notNull().default("starter"),
-  creativeType: text("creative_type", { enum: ["card", "article", "gallery", "category_partner"] }).notNull().default("card"),
+  creativeType: text("creative_type", { enum: ["card", "full_image", "article", "gallery", "category_partner"] }).notNull().default("card"),
   categoryId: text("category_id").references(() => categories.id),
   placement: text("placement", { enum: ["feed", "category", "both"] }).notNull().default("feed"),
   platform: text("platform", { enum: ["all", "web", "mobile"] }).notNull().default("all"),
