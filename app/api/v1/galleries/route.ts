@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { authErrorResponse, optionalUser } from "../../../lib/auth";
+import { AuthError, authErrorResponse, optionalUser } from "../../../lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -7,7 +7,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const language = url.searchParams.get("language") === "dv" ? "dv" : "en";
   const runtime = env as unknown as { DB: D1Database };
-  let user=null;try{user=await optionalUser(request)}catch(error){return authErrorResponse(error)}
+  let user=null;try{user=await optionalUser(request)}catch(error){if(!(error instanceof AuthError&&error.status===401))return authErrorResponse(error)}
   const result = await runtime.DB.prepare(`
     SELECT g.id,CASE WHEN ?='dv' THEN g.topic_dv ELSE g.topic_en END AS topic,? AS language,
       CASE WHEN ?='dv' THEN g.related_story_dv_id ELSE g.related_story_en_id END AS relatedStoryId,g.published_at AS publishedAt,cat.slug AS category,

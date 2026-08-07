@@ -173,3 +173,14 @@ test("ships independently published bilingual detailed articles",async()=>{
   assert.match(articleApi,/getPublicArticle/);assert.match(adminPublish,/requireAdmin/);assert.match(adminPublish,/article\.published/);
   assert.match(schema,/articleContent/);assert.match(schema,/articlePublishedAt/);assert.match(migration,/ADD `article_content`/);assert.match(styles,/\.article-page\[dir="rtl"\]/);
 });
+
+test("new story saves complete without redundant publish requests and recover from expired sessions",async()=>{
+  const[shell,feed,galleries]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/galleries/route.ts",import.meta.url),"utf8"),
+  ]);
+  assert.match(shell,/freshAccessToken/);assert.match(shell,/client\.auth\.refreshSession/);assert.match(shell,/if\(!story\.id\)\{notify\("Story saved"\);onDone\(\);return\}/);
+  assert.match(shell,/finally\{setBusy\(false\)\}/);assert.match(shell,/Could not save story \(\$\{response\.status\}\)/);
+  assert.match(feed,/error instanceof AuthError&&error\.status===401/);assert.match(galleries,/error instanceof AuthError&&error\.status===401/);
+});

@@ -1,5 +1,5 @@
 import { env } from "cloudflare:workers";
-import { authErrorResponse, optionalUser } from "../../../lib/auth";
+import { AuthError, authErrorResponse, optionalUser } from "../../../lib/auth";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const cursor = Number(url.searchParams.get("cursor")) || Date.now();
   const runtime = env as unknown as { DB: D1Database };
   let user = null;
-  try { user = await optionalUser(request); } catch (error) { return authErrorResponse(error); }
+  try { user = await optionalUser(request); } catch (error) { if(!(error instanceof AuthError&&error.status===401))return authErrorResponse(error); }
   const result = await runtime.DB.prepare(`
     SELECT c.id, c.image_url AS imageUrl, c.is_breaking AS breaking, c.is_important AS important, c.updated_at AS updatedAt, t.published_at AS publishedAt,
       t.headline, t.summary, t.word_count AS wordCount,
