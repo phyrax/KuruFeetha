@@ -192,9 +192,17 @@ test("ships the protected revenue studio and transparent sponsored feed",async()
     readFile(new URL("../app/api/v1/admin/campaigns/route.ts",import.meta.url),"utf8"),readFile(new URL("../app/advertising-policy/page.tsx",import.meta.url),"utf8"),
     readFile(new URL("../app/political-ads/page.tsx",import.meta.url),"utf8"),readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),readFile(new URL("../drizzle/0011_unusual_arclight.sql",import.meta.url),"utf8")]);
   assert.match(shell,/SponsoredCard/);assert.match(shell,/Paid for by/);assert.match(shell,/data-campaign-id/);assert.match(shell,/Math\.floor\(index\/7\)/);
-  assert.match(manager,/MVR 4,900/);assert.match(manager,/Mark paid/);assert.match(manager,/Activate/);assert.match(manager,/Political advertisement/);
+  assert.match(manager,/MVR 4,900/);assert.match(manager,/Mark paid/);assert.match(manager,/Publish to feed/);assert.match(manager,/Political advertisement/);
   assert.match(publicCampaigns,/owner_approved_at IS NOT NULL/);assert.match(publicCampaigns,/payment_status='paid'/);assert.match(events,/INSERT OR IGNORE/);
   assert.match(adminCampaigns,/requireAdmin/);assert.match(adminCampaigns,/OWNER_APPROVAL_REQUIRED/);assert.match(adminCampaigns,/POLITICAL_VERIFICATION_REQUIRED/);
   assert.match(policy,/Advertising policy/);assert.match(policy,/Payment never gives an advertiser control/);assert.match(archive,/Political ad archive/);
   assert.match(schema,/contentEvents/);assert.match(schema,/idx_campaigns_delivery/);assert.match(migration,/UPDATE `campaign_events` SET `event_key`=`id`/);
+});
+
+test("campaign CMS lists editable advertisers and preserves revenue navigation",async()=>{
+  const[shell,manager,advertiserUpdate]=await Promise.all([readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/components/CampaignManager.tsx",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/advertisers/[id]/route.ts",import.meta.url),"utf8")]);
+  assert.match(shell,/revenue-nav-item/);assert.match(shell,/button\.textContent="\$ Campaigns"/);
+  assert.match(manager,/Advertiser directory/);assert.match(manager,/Edit advertiser/);assert.match(manager,/Campaign saved as draft/);assert.match(manager,/Mark the invoice paid, then activate/);
+  assert.match(manager,/new Date\(start\.getTime\(\)\+30\*86400_000\)/);assert.match(manager,/Could not complete that action/);
+  assert.match(advertiserUpdate,/requireAdmin/);assert.match(advertiserUpdate,/advertiser\.updated/);assert.match(advertiserUpdate,/UPDATE campaigns SET sponsor_name/);
 });
