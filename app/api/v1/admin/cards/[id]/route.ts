@@ -31,6 +31,21 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
 }
 
 export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
-  try { await requireAdmin(request); } catch (error) { return authErrorResponse(error); } const {id}=await context.params; const now=Date.now();
-  await (env as unknown as {DB:D1Database}).DB.prepare("UPDATE news_cards SET status='archived',updated_at=? WHERE id=?").bind(now,id).run(); return Response.json({id,status:"archived"});
+  let actor; try { actor=await requireAdmin(request); } catch (error) { return authErrorResponse(error); } const {id}=await context.params,now=Date.now(),runtime=env as unknown as {DB:D1Database;MEDIA:R2Bucket};
+  const card=await runtime.DB.prepare("SELECT image_key AS imageKey,status FROM news_cards WHERE id=?").bind(id).first<{imageKey:string|null;status:string}>();
+  if(!card)return Response.json({error:{code:"NOT_FOUND"}},{status:404});
+  if(new URL(request.url).searchParams.get("permanent")!=="true"){await runtime.DB.batch([runtime.DB.prepare("UPDATE news_cards SET status='archived',updated_at=? WHERE id=?").bind(now,id),runtime.DB.prepare("INSERT INTO audit_events(id,actor_id,action,entity_type,entity_id,created_at) VALUES(?,?,?,?,?,?)").bind(crypto.randomUUID(),actor.id,"card.archived","news_card",id,now)]);return Response.json({id,status:"archived"});}
+  await runtime.DB.batch([
+    runtime.DB.prepare("UPDATE galleries SET related_story_id=NULL WHERE related_story_id=?").bind(id),
+    runtime.DB.prepare("UPDATE galleries SET related_story_en_id=NULL WHERE related_story_en_id=?").bind(id),
+    runtime.DB.prepare("UPDATE galleries SET related_story_dv_id=NULL WHERE related_story_dv_id=?").bind(id),
+    runtime.DB.prepare("DELETE FROM bookmarks WHERE card_id=?").bind(id),
+    runtime.DB.prepare("DELETE FROM content_likes WHERE content_type='story' AND content_id=?").bind(id),
+    runtime.DB.prepare("DELETE FROM content_events WHERE content_type IN ('story','article') AND content_id=?").bind(id),
+    runtime.DB.prepare("DELETE FROM news_card_translations WHERE card_id=?").bind(id),
+    runtime.DB.prepare("DELETE FROM news_cards WHERE id=?").bind(id),
+    runtime.DB.prepare("INSERT INTO audit_events(id,actor_id,action,entity_type,entity_id,before,created_at) VALUES(?,?,?,?,?,?,?)").bind(crypto.randomUUID(),actor.id,"card.deleted","news_card",id,JSON.stringify({status:card.status}),now),
+  ]);
+  if(card.imageKey){const reference=await runtime.DB.prepare("SELECT 1 FROM news_cards WHERE image_key=? UNION ALL SELECT 1 FROM gallery_images WHERE image_key=? UNION ALL SELECT 1 FROM campaigns WHERE image_key=? OR mobile_image_key=? OR desktop_image_key=? LIMIT 1").bind(card.imageKey,card.imageKey,card.imageKey,card.imageKey,card.imageKey).first();if(!reference)await runtime.MEDIA.delete(card.imageKey)}
+  return Response.json({id,deleted:true});
 }

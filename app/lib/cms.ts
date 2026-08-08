@@ -13,7 +13,7 @@ export function validateTranslation(value: TranslationInput | undefined, languag
   if (!headline && !summary) return null;
   if (!headline || !summary) throw new Error(`${language.toUpperCase()} title and summary are both required`);
   if (headline.length > 180) throw new Error(`${language.toUpperCase()} title is too long`);
-  if (wordCount(summary) > 60) throw new Error(`${language.toUpperCase()} summary exceeds 60 words`);
+  if (wordCount(summary) > 70) throw new Error(`${language.toUpperCase()} summary exceeds 70 words`);
   return summary;
 }
 
