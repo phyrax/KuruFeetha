@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import {freshnessGroup,maldivesDay} from "../app/lib/feed-ranking.ts";
+import {detectSupportedImage} from "../app/lib/images.ts";
 import {youtubeVideoId} from "../app/lib/youtube.ts";
 
 test("ships the protected manual bilingual CMS and live feed", async () => {
@@ -47,11 +48,20 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(styles,/\.language-label\.dv \{ font-family: "MV Typewriter"/); assert.match(styles,/\.language-switch::before/);
   assert.match(styles,/\.search\.open \{ position: absolute/); assert.match(styles,/\.search\.open input \{ display: block/);
   assert.match(styles,/width: min\(280px, 40vw\)/);
-  assert.match(cards,/requireAdmin/); assert.match(cards,/imageKey/); assert.match(media,/8 \* 1024 \* 1024/);
+  assert.match(cards,/requireAdmin/); assert.match(cards,/imageKey/); assert.match(media,/8 \* 1024 \* 1024/); assert.match(media,/image\.contentType/);
   assert.match(feed,/t\.published_at/); assert.match(feed,/t\.review_status = 'published'/); assert.doesNotMatch(feed,/review_status = 'approved'|story_clusters/);
   assert.doesNotMatch(schema,/aiRuns|sourceArticles|jobs =/); assert.match(migration,/DROP TABLE `ai_runs`/);
   await access(new URL("../dist/server/index.js",import.meta.url));
   await Promise.all(["MV_AammuFK_Regular.ttf","MV_Typewriter_Regular.ttf","MV_Typewriter_Bold.ttf"].map(name=>access(new URL(`../public/fonts/${name}`,import.meta.url))));
+});
+
+test("accepts genuine AVIF uploads throughout the CMS",async()=>{
+  const[shell,campaigns,media]=await Promise.all([readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/components/CampaignManager.tsx",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/media/route.ts",import.meta.url),"utf8")]);
+  const avif=new Uint8Array([0,0,0,24,102,116,121,112,97,118,105,102,0,0,0,0,97,118,105,102,109,105,102,49]);
+  const disguised=new Uint8Array([0,0,0,16,102,116,121,112,104,101,105,99,0,0,0,0]);
+  assert.deepEqual(detectSupportedImage(avif),{contentType:"image/avif",extension:"avif"});assert.equal(detectSupportedImage(disguised),null);
+  assert.match(shell,/image\/avif/);assert.match(shell,/\.avif/);assert.match(shell,/WebP or AVIF/);assert.match(campaigns,/image\/avif/);
+  assert.match(media,/detectSupportedImage/);assert.match(media,/JPEG, PNG, WebP, or AVIF/);
 });
 
 test("AI ingestion implementation is absent", async()=>{
