@@ -216,11 +216,11 @@ test("For You ranks fresh Maldives-day content before expired time-sensitive sto
   const[shell,ranking,feed,admin,schema,migration,backfill]=await Promise.all([
     readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/lib/feed-ranking.ts",import.meta.url),"utf8"),
     readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
-    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),readFile(new URL("../drizzle/0013_friendly_shen.sql",import.meta.url),"utf8"),readFile(new URL("../drizzle/0014_backfill_weather_time_sensitive.sql",import.meta.url),"utf8")]);
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),readFile(new URL("../drizzle/0013_friendly_shen.sql",import.meta.url),"utf8"),readFile(new URL("../drizzle/0015_correct_weather_time_sensitive_backfill.sql",import.meta.url),"utf8")]);
   assert.match(ranking,/\+ 5 \* 60 \* 60_000/);assert.match(ranking,/age >= 24 \* 60 \* 60_000/);assert.match(ranking,/return 0/);
   assert.match(shell,/freshnessGroup\(b,timeNow\)-freshnessGroup\(a,timeNow\)/);assert.match(shell,/view==="saved"\|\|view==="latest"\?b\.publishedAt-a\.publishedAt/);
   assert.match(shell,/Time-sensitive story/);assert.match(feed,/is_time_sensitive AS timeSensitive/);assert.match(admin,/isTimeSensitive/);assert.match(schema,/isTimeSensitive/);assert.match(migration,/is_time_sensitive/);
-  assert.match(backfill,/lower\(`slug`\) = 'weather'/);assert.match(shell,/time-sensitive-badge/);
+  assert.match(backfill,/lower\(`name_en`\) = 'weather'/);assert.match(backfill,/lower\(`slug`\) LIKE 'weather%'/);assert.match(shell,/time-sensitive-badge/);
   const now=Date.UTC(2026,7,8,4),today=Date.UTC(2026,7,7,19,30),yesterday=Date.UTC(2026,7,7,18,30);
   assert.equal(maldivesDay(today),maldivesDay(now));assert.notEqual(maldivesDay(yesterday),maldivesDay(now));
   assert.equal(freshnessGroup({kind:"story",publishedAt:now-24*60*60_000,timeSensitive:true},now),0);
