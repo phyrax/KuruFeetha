@@ -1,0 +1,1 @@
+ALTER TABLE `news_cards` ADD `youtube_video_id` text;

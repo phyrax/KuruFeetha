@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 import {freshnessGroup,maldivesDay} from "../app/lib/feed-ranking.ts";
+import {youtubeVideoId} from "../app/lib/youtube.ts";
 
 test("ships the protected manual bilingual CMS and live feed", async () => {
   const [shell,styles,cards,media,feed,schema,migration]=await Promise.all([
@@ -55,6 +56,19 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
 
 test("AI ingestion implementation is absent", async()=>{
   for(const path of ["../app/lib/ai-providers.ts","../app/lib/ingestion.ts","../app/api/v1/admin/ingest/route.ts"]){await assert.rejects(access(new URL(path,import.meta.url)))}
+});
+
+test("supports safe YouTube videos as card visuals",async()=>{
+  const[shell,styles,feed,admin,update,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/globals.css",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/cards/[id]/route.ts",import.meta.url),"utf8"),readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),readFile(new URL("../drizzle/0016_add_youtube_card_visual.sql",import.meta.url),"utf8")]);
+  assert.equal(youtubeVideoId("https://youtu.be/dQw4w9WgXcQ"),"dQw4w9WgXcQ");
+  assert.equal(youtubeVideoId("https://www.youtube.com/shorts/dQw4w9WgXcQ"),"dQw4w9WgXcQ");
+  assert.equal(youtubeVideoId("https://example.com/watch?v=dQw4w9WgXcQ"),null);
+  assert.match(shell,/YouTube video URL/);assert.match(shell,/YouTubeCardVisual/);assert.match(shell,/youtubeVideoId\?<YouTubeCardVisual/);
+  assert.match(styles,/\.story-youtube iframe/);assert.match(feed,/youtube_video_id AS youtubeVideoId/);
+  assert.match(admin,/INVALID_YOUTUBE_URL/);assert.match(update,/youtube_video_id=CASE/);assert.match(schema,/youtubeVideoId/);assert.match(migration,/ADD `youtube_video_id` text/);
 });
 
 test("forces the reader shell to revalidate after deployments",async()=>{

@@ -20,6 +20,7 @@ export const newsCards = sqliteTable("news_cards", {
   status: text("status", { enum: ["draft", "published", "archived"] }).notNull().default("draft"),
   imageKey: text("image_key"),
   imageUrl: text("image_url"),
+  youtubeVideoId: text("youtube_video_id"),
   sourceName: text("source_name"),
   sourceUrl: text("source_url"),
   isBreaking: integer("is_breaking", { mode: "boolean" }).notNull().default(false),
