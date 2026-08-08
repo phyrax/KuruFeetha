@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import {freshnessGroup,maldivesDay} from "../app/lib/feed-ranking.ts";
 
 test("ships the protected manual bilingual CMS and live feed", async () => {
   const [shell,styles,cards,media,feed,schema,migration]=await Promise.all([
@@ -210,3 +211,18 @@ test("campaign CMS lists editable advertisers and preserves revenue navigation",
 test("campaign validation identifies the exact invalid field",async()=>{const[manager,route]=await Promise.all([readFile(new URL("../app/components/CampaignManager.tsx",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/campaigns/route.ts",import.meta.url),"utf8")]);assert.match(manager,/destinationUrl=\/\^https/);assert.match(manager,/end date and time later than the start/);assert.match(route,/ADVERTISER_REQUIRED/);assert.match(route,/DESTINATION_REQUIRED/);assert.match(route,/START_DATE_REQUIRED/);assert.match(route,/END_DATE_INVALID/);assert.doesNotMatch(route,/Choose an advertiser, valid destination, and valid campaign dates/)});
 
 test("sponsored cards render reliably on mobile with placement-level frequency caps",async()=>{const[shell,delivery]=await Promise.all([readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/placements/route.ts",import.meta.url),"utf8")]);assert.match(shell,/deliveryCounts=new Map/);assert.match(shell,/Math\.min\(2,campaign\.frequencyCap/);assert.doesNotMatch(shell,/sessionStorage\.getItem\(`kurufeetha-campaign/);assert.match(shell,/data-campaign-id/);assert.match(shell,/\/api\/v1\/placements/);assert.doesNotMatch(shell,/fetch\([`"]\/api\/v1\/campaigns/);assert.match(delivery,/campaigns\/route/)});
+
+test("For You ranks fresh Maldives-day content before expired time-sensitive stories",async()=>{
+  const[shell,ranking,feed,admin,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/lib/feed-ranking.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/feed/route.ts",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/cards/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),readFile(new URL("../drizzle/0013_friendly_shen.sql",import.meta.url),"utf8")]);
+  assert.match(ranking,/\+ 5 \* 60 \* 60_000/);assert.match(ranking,/age >= 24 \* 60 \* 60_000/);assert.match(ranking,/return 0/);
+  assert.match(shell,/freshnessGroup\(b,timeNow\)-freshnessGroup\(a,timeNow\)/);assert.match(shell,/view==="saved"\|\|view==="latest"\?b\.publishedAt-a\.publishedAt/);
+  assert.match(shell,/Time-sensitive story/);assert.match(feed,/is_time_sensitive AS timeSensitive/);assert.match(admin,/isTimeSensitive/);assert.match(schema,/isTimeSensitive/);assert.match(migration,/is_time_sensitive/);
+  const now=Date.UTC(2026,7,8,4),today=Date.UTC(2026,7,7,19,30),yesterday=Date.UTC(2026,7,7,18,30);
+  assert.equal(maldivesDay(today),maldivesDay(now));assert.notEqual(maldivesDay(yesterday),maldivesDay(now));
+  assert.equal(freshnessGroup({kind:"story",publishedAt:now-24*60*60_000,timeSensitive:true},now),0);
+  assert.equal(freshnessGroup({kind:"story",publishedAt:now-24*60*60_000+1,timeSensitive:true},now),2);
+  assert.equal(freshnessGroup({kind:"story",publishedAt:now-30*24*60*60_000,timeSensitive:false},now),1);
+});

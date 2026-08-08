@@ -24,6 +24,7 @@ export const newsCards = sqliteTable("news_cards", {
   sourceUrl: text("source_url"),
   isBreaking: integer("is_breaking", { mode: "boolean" }).notNull().default(false),
   isImportant: integer("is_important", { mode: "boolean" }).notNull().default(false),
+  isTimeSensitive: integer("is_time_sensitive", { mode: "boolean" }).notNull().default(false),
   publishedAt: integer("published_at", { mode: "timestamp" }),
   ...timestamps,
 });

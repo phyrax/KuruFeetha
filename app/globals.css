@@ -143,6 +143,10 @@ button { color: inherit; }
 .important-check input { width: 18px; height: 18px; accent-color: #9a6508; }
 .important-check span { display: grid; gap: 2px; }
 .important-check small { color: #746548; font-weight: 500; }
+.time-sensitive-check { display: flex !important; flex-direction: row !important; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid #a9c9d8; border-radius: 12px; background: #f2f9fc; color: #1f5c76 !important; }
+.time-sensitive-check input { width: 18px; height: 18px; accent-color: #26799b; }
+.time-sensitive-check span { display: grid; gap: 2px; }
+.time-sensitive-check small { color: #58727d; font-weight: 500; }
 .important-badge { padding: 3px 7px; border-radius: 10px; background: #9a6508; color: white; font-size: 9px; font-weight: 800; text-transform: uppercase; }
 .empty-state { min-height: 360px; display: grid; place-content: center; text-align: center; color: var(--muted); }
 .empty-state span { font: 700 60px "Noto Sans Thaana"; color: #cad5d1; }

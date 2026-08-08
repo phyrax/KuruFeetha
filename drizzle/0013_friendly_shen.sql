@@ -1,0 +1,1 @@
+ALTER TABLE `news_cards` ADD `is_time_sensitive` integer DEFAULT false NOT NULL;
