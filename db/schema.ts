@@ -88,6 +88,21 @@ export const users = sqliteTable("users", {
   ...timestamps,
 });
 
+export const staffInvitations = sqliteTable("staff_invitations", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull(),
+  status: text("status", { enum: ["pending", "accepted", "revoked", "delivery_failed"] }).notNull().default("pending"),
+  invitedBy: text("invited_by").notNull().references(() => users.id),
+  deliveredAt: integer("delivered_at", { mode: "timestamp" }),
+  acceptedAt: integer("accepted_at", { mode: "timestamp" }),
+  revokedAt: integer("revoked_at", { mode: "timestamp" }),
+  deliveryError: text("delivery_error"),
+  ...timestamps,
+}, (table) => [
+  uniqueIndex("staff_invitation_email_idx").on(table.email),
+  index("idx_staff_invitations_status_created").on(table.status, table.createdAt),
+]);
+
 export const categoryFollows = sqliteTable("category_follows", {
   userId: text("user_id").notNull().references(() => users.id),
   categoryId: text("category_id").notNull().references(() => categories.id),

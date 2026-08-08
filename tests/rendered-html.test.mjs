@@ -78,6 +78,22 @@ test("forces the reader shell to revalidate after deployments",async()=>{
   assert.match(worker,/acceptsHtml/);assert.match(worker,/headers\.set\("Cache-Control", "no-cache, no-store, must-revalidate"\)/);
 });
 
+test("ships owner-controlled administrator invitations and staff access management",async()=>{
+  const[shell,manager,auth,invite,resend,userUpdate,userList,helper,schema,migration]=await Promise.all([
+    readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),readFile(new URL("../app/components/UserAccessManager.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../app/lib/auth.ts",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/users/invitations/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/users/invitations/[id]/route.ts",import.meta.url),"utf8"),readFile(new URL("../app/api/v1/admin/users/[id]/route.ts",import.meta.url),"utf8"),
+    readFile(new URL("../app/api/v1/admin/users/route.ts",import.meta.url),"utf8"),readFile(new URL("../app/lib/staff-invitations.ts",import.meta.url),"utf8"),
+    readFile(new URL("../db/schema.ts",import.meta.url),"utf8"),readFile(new URL("../drizzle/0017_add_staff_invitations.sql",import.meta.url),"utf8")]);
+  assert.match(shell,/Users &amp; Access/);assert.match(shell,/UserAccessManager token/);
+  assert.match(manager,/Invite administrator/);assert.match(manager,/Make admin/);assert.match(manager,/Remove admin/);assert.match(manager,/Resend/);assert.match(manager,/Revoke/);
+  assert.match(invite,/requireOwner/);assert.match(invite,/promoted_existing/);assert.match(invite,/already_admin/);assert.match(invite,/delivery_failed/);
+  assert.match(resend,/requireOwner/);assert.match(resend,/staff\.invitation_revoked/);assert.match(userUpdate,/OWNER_REQUIRED/);assert.match(userUpdate,/PROTECTED_ACCOUNT/);
+  assert.match(userList,/requireAdmin/);assert.match(userList,/staff_invitations/);assert.match(helper,/SUPABASE_SERVICE_ROLE_KEY/);assert.match(helper,/inviteUserByEmail/);assert.doesNotMatch(helper,/user_metadata/);
+  assert.match(auth,/EMAIL_NOT_VERIFIED/);assert.match(auth,/status='pending'/);assert.match(auth,/staff\.invitation_accepted/);assert.match(auth,/user\.role="admin"/);
+  assert.match(schema,/staffInvitations/);assert.match(migration,/CREATE TABLE `staff_invitations`/);assert.match(migration,/UNIQUE INDEX `staff_invitation_email_idx`/);
+});
+
 test("ships swipeable bilingual galleries with related story links",async()=>{
   const[shell,styles,publicApi,adminApi,schema,migration]=await Promise.all([
     readFile(new URL("../app/components/KuruFeethaApp.tsx",import.meta.url),"utf8"),

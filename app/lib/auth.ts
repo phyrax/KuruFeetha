@@ -21,7 +21,7 @@ type RuntimeEnv = {
   OWNER_EMAIL?: string;
 };
 
-type SupabaseIdentity = { id: string; email?: string; user_metadata?: { full_name?: string; name?: string } };
+type SupabaseIdentity = { id: string; email?: string; email_confirmed_at?: string | null; user_metadata?: { full_name?: string; name?: string } };
 
 export class AuthError extends Error {
   constructor(public status: 401 | 403 | 503, public code: string, message: string) { super(message); }
@@ -53,6 +53,7 @@ export async function optionalUser(request: Request): Promise<AppUser | null> {
   const identity = await verifySupabaseToken(request, runtime);
   if (!identity) return null;
   if (!identity.email) throw new AuthError(403, "EMAIL_REQUIRED", "A verified email address is required");
+  if (!identity.email_confirmed_at) throw new AuthError(403, "EMAIL_NOT_VERIFIED", "Verify your email address before signing in");
   const now = Date.now();
   const ownerEmail = (runtime.OWNER_EMAIL || "hussainfiraz@gmail.com").toLowerCase();
   const role: AppRole = identity.email.toLowerCase() === ownerEmail ? "owner" : "reader";
@@ -68,6 +69,17 @@ export async function optionalUser(request: Request): Promise<AppUser | null> {
     .bind(identity.id).first<AppUser>();
   if (!user) throw new AuthError(401, "PROFILE_UNAVAILABLE", "Could not load your profile");
   if (user.status === "suspended") throw new AuthError(403, "ACCOUNT_SUSPENDED", "This account is suspended");
+  if(user.role==="reader"){
+    const invitation=await runtime.DB.prepare("SELECT id,invited_by AS invitedBy FROM staff_invitations WHERE email=? AND status='pending' LIMIT 1").bind(user.email.toLowerCase()).first<{id:string;invitedBy:string}>();
+    if(invitation){
+      await runtime.DB.batch([
+        runtime.DB.prepare("UPDATE users SET role='admin',updated_at=? WHERE id=? AND role='reader' AND status='active'").bind(now,user.id),
+        runtime.DB.prepare("UPDATE staff_invitations SET status='accepted',accepted_at=?,updated_at=? WHERE id=? AND status='pending'").bind(now,now,invitation.id),
+        runtime.DB.prepare("INSERT INTO audit_events(id,actor_id,action,entity_type,entity_id,after,created_at) VALUES(?,?,?,?,?,?,?)").bind(crypto.randomUUID(),invitation.invitedBy,"staff.invitation_accepted","user",user.id,JSON.stringify({email:user.email,role:"admin"}),now),
+      ]);
+      user.role="admin";
+    }
+  }
   return user;
 }
 

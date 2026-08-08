@@ -336,6 +336,25 @@ button { color: inherit; }
 .user-row strong, .user-row small { display: block; }
 .user-row small { margin-top: 5px; color: var(--muted); font-size: 10px; }
 .user-row > div:last-child { display: flex; gap: 7px; }
+.staff-invite-card { display: flex; align-items: center; justify-content: space-between; gap: 28px; margin-bottom: 24px; padding: 22px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(135deg,#fff,#f2f8f5); }
+.staff-invite-card h2, .staff-section-head h2 { margin: 0; font-size: 20px; }
+.staff-invite-card p { max-width: 520px; margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+.staff-invite-card form { display: flex; min-width: 390px; gap: 8px; }
+.staff-invite-card input, .user-toolbar select { min-width: 0; height: 44px; padding: 0 13px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.staff-invite-card input { flex: 1; }
+.user-toolbar select { min-width: 145px; }
+.staff-section { margin-top: 25px; }
+.staff-section-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 10px; }
+.staff-section-head .eyebrow { margin-bottom: 5px; }
+.staff-section-head > span { min-width: 29px; padding: 5px 8px; border-radius: 999px; background: #edf3f0; color: var(--teal-dark); text-align: center; font-size: 11px; font-weight: 800; }
+.role-chip.owner { background: #162f27; color: #fff; }
+.role-chip.admin { background: #dcece7; color: var(--teal-dark); }
+.role-chip.reader { background: #eef1ef; color: #56635f; }
+.access-status { display: inline-flex; padding: 5px 8px; border-radius: 999px; font-size: 9px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.access-status.active { background: #e1f1e7; color: #17613d; }
+.access-status.suspended, .access-status.delivery_failed { background: #fbe6e2; color: #a33627; }
+.access-status.pending { background: #fff0c8; color: #7e5a00; }
+.user-row button.danger-text { color: #a33627; }
 .primary-action.compact { width: auto; padding-inline: 22px; }
 .cms-form { display: grid; gap: 20px; padding: 26px; background: white; border: 1px solid var(--line); border-radius: 18px; }
 .cms-form label { display: grid; gap: 7px; color: var(--muted); font-size: 11px; font-weight: 600; }
@@ -531,4 +550,13 @@ button { color: inherit; }
   .auth-intro h2 { font-size: 30px; }
   .email-signin > div { display: grid; }
   .email-signin button { width: 100%; }
+  .staff-invite-card { align-items: stretch; flex-direction: column; gap: 15px; padding: 18px; }
+  .staff-invite-card form { min-width: 0; flex-direction: column; }
+  .user-toolbar { display: grid; grid-template-columns: 1fr 1fr; }
+  .user-toolbar input { grid-column: 1 / -1; }
+  .user-toolbar button { grid-column: 1 / -1; }
+  .user-toolbar select { min-width: 0; width: 100%; }
+  .user-row { align-items: flex-start; flex-direction: column; }
+  .user-row > div:last-child { width: 100%; flex-wrap: wrap; }
+  .user-row > div:last-child button { flex: 1; }
 }

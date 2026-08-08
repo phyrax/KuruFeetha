@@ -19,10 +19,12 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
   if (body.role && !["reader", "admin"].includes(body.role)) return Response.json({ error: { code: "INVALID_ROLE" } }, { status: 400 });
   const now = Date.now();
   const next = { role: body.role ?? target.role, status: body.status ?? target.status };
-  await runtime.DB.batch([
+  const statements = [
     runtime.DB.prepare("UPDATE users SET role=?,status=?,updated_at=? WHERE id=?").bind(next.role, next.status, now, id),
     runtime.DB.prepare("INSERT INTO audit_events (id,actor_id,action,entity_type,entity_id,before,after,created_at) VALUES (?,?,?,?,?,?,?,?)")
       .bind(crypto.randomUUID(), actor.id, "user.access_updated", "user", id, JSON.stringify({ role: target.role, status: target.status }), JSON.stringify(next), now),
-  ]);
+  ];
+  if (body.role === "admin") statements.push(runtime.DB.prepare("UPDATE staff_invitations SET status='accepted',accepted_at=?,updated_at=? WHERE email=? AND status='pending'").bind(now,now,target.email));
+  await runtime.DB.batch(statements);
   return Response.json({ id, ...next });
 }
