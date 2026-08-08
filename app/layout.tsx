@@ -4,7 +4,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "KuruFeetha — Maldives, in brief",
   description: "Bilingual, editor-reviewed news from across the Maldives in 60 words or fewer.",
-  icons: { icon: "/favicon.svg" },
+  icons: {
+    icon: [{ url: "/kurufeetha-icon.svg", type: "image/svg+xml" }],
+    shortcut: "/kurufeetha-icon.svg",
+  },
   openGraph: {
     title: "KuruFeetha — Maldives, in brief",
     description: "Bilingual, editor-reviewed news from across the Maldives in 60 words or fewer.",
