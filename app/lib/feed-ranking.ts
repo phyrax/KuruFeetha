@@ -9,7 +9,7 @@ export function maldivesDay(value: number): number {
 export function freshnessGroup(item: FreshnessItem, now: number): number {
   const published = timestampMs(item.publishedAt), age = Math.max(0, now - published);
   if (item.kind === "story" && item.timeSensitive && age >= 24 * 60 * 60_000) return 0;
-  if (maldivesDay(published) === maldivesDay(now)) return 3;
-  if (age < 7 * 24 * 60 * 60_000) return 2;
+  const dayAge = Math.max(0, maldivesDay(now) - maldivesDay(published));
+  if (dayAge < 7) return 10 - dayAge;
   return 1;
 }

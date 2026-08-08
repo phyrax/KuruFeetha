@@ -148,6 +148,7 @@ button { color: inherit; }
 .time-sensitive-check span { display: grid; gap: 2px; }
 .time-sensitive-check small { color: #58727d; font-weight: 500; }
 .important-badge { padding: 3px 7px; border-radius: 10px; background: #9a6508; color: white; font-size: 9px; font-weight: 800; text-transform: uppercase; }
+.time-sensitive-badge { padding: 3px 7px; border-radius: 10px; background: #26799b; color: white; font-size: 9px; font-weight: 800; text-transform: uppercase; }
 .empty-state { min-height: 360px; display: grid; place-content: center; text-align: center; color: var(--muted); }
 .empty-state span { font: 700 60px "Noto Sans Thaana"; color: #cad5d1; }
 .modal-backdrop { position: fixed; inset: 0; z-index: 80; display: grid; place-items: center; padding: 20px; background: rgba(10,25,21,.62); backdrop-filter: blur(8px); }
