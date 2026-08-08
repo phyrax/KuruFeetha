@@ -184,9 +184,10 @@ test("ships independently published bilingual detailed articles",async()=>{
   ]);
   assert.match(shell,/Detailed article/);assert.match(shell,/RichTextEditor/);assert.match(shell,/Publish detailed article/);assert.match(shell,/Read full article/);
   assert.doesNotMatch(shell,/href=\{item\.sourceUrl\}/);assert.match(feed,/article_status='published'/);assert.match(feed,/articleUrl/);
-  assert.match(reader,/article-body/);assert.match(reader,/article-gallery/);assert.match(reader,/kurufeetha-bookmarks/);assert.match(reader,/kurufeetha-likes/);
+  assert.match(reader,/article-body/);assert.match(reader,/article-gallery/);assert.match(reader,/article-publish-meta/);assert.match(reader,/alt=\{article\.headline\}/);assert.match(reader,/kurufeetha-bookmarks/);assert.match(reader,/kurufeetha-likes/);
   assert.match(articleApi,/getPublicArticle/);assert.match(adminPublish,/requireAdmin/);assert.match(adminPublish,/article\.published/);
   assert.match(schema,/articleContent/);assert.match(schema,/articlePublishedAt/);assert.match(migration,/ADD `article_content`/);assert.match(styles,/\.article-page\[dir="rtl"\]/);
+  assert.match(styles,/\.article-page \{[^}]*font-family: Inter/);assert.match(styles,/\.article-body \{[^}]*font-family: Inter[^}]*line-height: 1\.82/);assert.match(styles,/text-wrap: balance/);
 });
 
 test("new story saves complete without redundant publish requests and recover from expired sessions",async()=>{
