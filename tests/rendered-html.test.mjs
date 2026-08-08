@@ -82,11 +82,12 @@ test("supports safe YouTube videos as card visuals",async()=>{
 });
 
 test("forces the reader shell to revalidate after deployments",async()=>{
-  const [headers,worker,layout,icon]=await Promise.all([readFile(new URL("../public/_headers",import.meta.url),"utf8"),readFile(new URL("../worker/index.ts",import.meta.url),"utf8"),readFile(new URL("../app/layout.tsx",import.meta.url),"utf8"),readFile(new URL("../public/kurufeetha-icon.svg",import.meta.url),"utf8")]);
+  const [headers,worker,layout,icon,vite]=await Promise.all([readFile(new URL("../public/_headers",import.meta.url),"utf8"),readFile(new URL("../worker/index.ts",import.meta.url),"utf8"),readFile(new URL("../app/layout.tsx",import.meta.url),"utf8"),readFile(new URL("../public/kurufeetha-icon.svg",import.meta.url),"utf8"),readFile(new URL("../vite.config.ts",import.meta.url),"utf8")]);
   assert.match(headers,/Cache-Control: no-cache, no-store, must-revalidate/);
   assert.match(headers,/\/assets\/\*/);assert.match(headers,/immutable/);
   assert.match(worker,/acceptsHtml/);assert.match(worker,/headers\.set\("Cache-Control", "no-cache, no-store, must-revalidate"\)/);
   assert.match(layout,/kurufeetha-icon\.svg/);assert.match(icon,/#006d65/);assert.match(icon,/ކ/);
+  assert.match(vite,/keep_vars: true/);
 });
 
 test("ships owner-controlled administrator invitations and staff access management",async()=>{
