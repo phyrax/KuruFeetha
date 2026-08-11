@@ -45,6 +45,9 @@ test("ships the protected manual bilingual CMS and live feed", async () => {
   assert.match(styles,/\.bottom-nav \.nav-label-text \{ display: block;/); assert.match(styles,/\.bottom-nav button\.active::before/);
   assert.match(styles,/\.story-meta \{ position: absolute; inset-inline: 18px; top: 32%; transform: translateY\(-50%\)/);
   assert.match(styles,/@font-face \{ font-family: "MV AammuFK"/); assert.match(styles,/@font-face \{ font-family: "MV Typewriter"/);
+  assert.match(styles,/\[dir="rtl"\] \.topbar \.brand small \{ font-family: "MV Typewriter"/);
+  assert.match(styles,/\[dir="rtl"\] \.search input::placeholder \{ font-family: "MV Typewriter"/);
+  assert.match(styles,/\.cms-form fieldset\[dir="rtl"\] \.rich-canvas,[\s\S]*font-family: "MV Typewriter"/);
   assert.match(styles,/\.language-label\.dv \{ font-family: "MV Typewriter"/); assert.match(styles,/\.language-switch::before/);
   assert.match(styles,/\.search\.open \{ position: absolute/); assert.match(styles,/\.search\.open input \{ display: block/);
   assert.match(styles,/width: min\(280px, 40vw\)/);
