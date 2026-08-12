@@ -229,6 +229,12 @@ button { color: inherit; }
 .public-category-directory div { display: flex; flex-wrap: wrap; gap: 8px; }
 .public-category-directory a { border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; color: var(--teal-dark); text-decoration: none; font-size: 11px; }
 .public-category-directory a[lang="dv"] { font-family: "MV Typewriter", "Noto Sans Thaana", sans-serif; }
+.public-transparency-footer,.transparency-links { display: flex; flex-wrap: wrap; gap: 14px; }
+.public-transparency-footer { max-width: 1100px; margin: 0 auto; padding: 0 24px 42px; }
+.public-transparency-footer a,.transparency-links a { color: var(--teal-dark); font-size: 11px; font-weight: 750; text-decoration: none; }
+.article-site-footer .transparency-links { justify-content: flex-end; max-width: 520px; }
+.article-site-footer .transparency-links a { color: #d9e6e1; }
+.transparency-page address { color: #52635c; font-style: normal; line-height: 1.8; }
 .category-page { min-height: 100vh; background: var(--paper); color: var(--ink); }
 .category-page-header { max-width: 1040px; margin: auto; padding: 24px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .category-page-header > a:last-child { color: var(--teal-dark); font-size: 12px; text-decoration: none; }

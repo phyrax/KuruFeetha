@@ -32,9 +32,9 @@ export async function sitemapIndex(db:SeoDatabase){
 
 export async function publicSitemap(db:SeoDatabase){
   const categories=await db.prepare("SELECT DISTINCT slug FROM categories WHERE enabled=1 AND slug IS NOT NULL AND trim(slug)<>'' ORDER BY sort_order,slug").all<CategoryRow>().catch(()=>({results:[] as CategoryRow[]}));
-  const entries=[urlEntry(CANONICAL_ORIGIN),urlEntry(`${CANONICAL_ORIGIN}/advertise`),urlEntry(`${CANONICAL_ORIGIN}/advertising-policy`),urlEntry(`${CANONICAL_ORIGIN}/political-ads`)];
+  const entries=[urlEntry(CANONICAL_ORIGIN),urlEntry(`${CANONICAL_ORIGIN}/advertise`),urlEntry(`${CANONICAL_ORIGIN}/advertising-policy`),urlEntry(`${CANONICAL_ORIGIN}/political-ads`),...['about','contact','editorial-standards','corrections'].map(page=>urlEntry(`${CANONICAL_ORIGIN}/en/${page}`))];
   for(const category of categories.results){for(const language of ["en","dv"] as const)entries.push(urlEntry(`${CANONICAL_ORIGIN}/${language}/category/${encodeURIComponent(category.slug)}`))}
-  return xmlResponse(urlSet(entries),entries.length,`homepage:1,static:3,categories:${categories.results.length*2}`);
+  return xmlResponse(urlSet(entries),entries.length,`homepage:1,static:7,categories:${categories.results.length*2}`);
 }
 
 export async function articleSitemap(db:SeoDatabase,chunk:number){
