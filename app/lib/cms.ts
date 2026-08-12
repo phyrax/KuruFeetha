@@ -2,7 +2,7 @@ export type Language = "en" | "dv";
 export type RichTextMark = { type: "bold" | "italic" | "link"; href?: string };
 export type RichTextNode = { type: "doc" | "paragraph" | "heading" | "bulletList" | "orderedList" | "listItem" | "blockquote" | "text" | "hardBreak"; level?: 2 | 3; text?: string; marks?: RichTextMark[]; content?: RichTextNode[] };
 export type RichTextDocument = RichTextNode & { type: "doc" };
-export type TranslationInput = { headline?: string; summary?: string; published?: boolean; articleContent?: RichTextDocument | null; articlePublished?: boolean };
+export type TranslationInput = { headline?: string; summary?: string; published?: boolean; articleContent?: RichTextDocument | null; articlePublished?: boolean; contentType?: string|null; authorIds?: string[] };
 
 export function wordCount(value: string): number { return value.trim() ? value.trim().split(/\s+/u).length : 0; }
 

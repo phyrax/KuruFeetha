@@ -40,12 +40,38 @@ export const newsCardTranslations = sqliteTable("news_card_translations", {
   articleContent: text("article_content", { mode: "json" }),
   articleStatus: text("article_status", { enum: ["draft", "published"] }).notNull().default("draft"),
   articlePublishedAt: integer("article_published_at", { mode: "timestamp" }),
+  contentType: text("content_type", { enum: ["news", "opinion", "editorial", "press_release"] }),
   reviewStatus: text("review_status", { enum: ["draft", "published"] }).notNull().default("draft"),
   publishedAt: integer("published_at", { mode: "timestamp" }),
   reviewedBy: text("reviewed_by"),
   reviewedAt: integer("reviewed_at", { mode: "timestamp" }),
   ...timestamps,
 }, (table) => [uniqueIndex("card_language_idx").on(table.cardId, table.language)]);
+
+export const authors = sqliteTable("authors", {
+  id: text("id").primaryKey(),
+  kind: text("kind", { enum: ["person", "organization"] }).notNull(),
+  slug: text("slug").unique(),
+  status: text("status", { enum: ["active", "inactive"] }).notNull().default("active"),
+  nameEn: text("name_en"),
+  nameDv: text("name_dv"),
+  bioEn: text("bio_en"),
+  bioDv: text("bio_dv"),
+  publicProfileEnabled: integer("public_profile_enabled", { mode: "boolean" }).notNull().default(false),
+  ...timestamps,
+}, (table) => [index("idx_authors_status_kind").on(table.status, table.kind)]);
+
+export const articleCredits = sqliteTable("article_credits", {
+  id: text("id").primaryKey(),
+  translationId: text("translation_id").notNull().references(() => newsCardTranslations.id),
+  authorId: text("author_id").notNull().references(() => authors.id),
+  role: text("role", { enum: ["author"] }).notNull().default("author"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+}, (table) => [
+  uniqueIndex("article_credit_translation_author_role_idx").on(table.translationId, table.authorId, table.role),
+  index("idx_article_credits_translation_order").on(table.translationId, table.sortOrder),
+]);
 
 export const galleries = sqliteTable("galleries", {
   id: text("id").primaryKey(),
