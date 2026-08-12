@@ -1,6 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
+import {documentLanguageForPath} from "../app/lib/document-language";
 import {articleSitemap,newsSitemap,publicSitemap,robotsResponse,sitemapIndex} from "./seo-sitemaps";
 
 interface Env {
@@ -70,7 +71,12 @@ const worker = {
       headers.set("Cache-Control", "no-cache, no-store, must-revalidate");
       headers.set("Pragma", "no-cache");
       headers.set("Expires", "0");
-      return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+      const htmlResponse = new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+      const documentLanguage=documentLanguageForPath(url.pathname);
+      if (documentLanguage && headers.get("content-type")?.includes("text/html")) {
+        return new HTMLRewriter().on("html", { element(element) { element.setAttribute("lang",documentLanguage.language);element.setAttribute("dir",documentLanguage.direction); } }).transform(htmlResponse);
+      }
+      return htmlResponse;
     }
     return response;
   },
