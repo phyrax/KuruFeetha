@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import type { PublicArticle } from "./articles";
+import { publicAuthorName } from "./public-authorship.ts";
 import { absoluteUrl, SITE_NAME, SITE_URL, timestampToIso } from "./seo.ts";
 
 export function articleCanonical(language:"en"|"dv",id:string){
@@ -22,7 +23,8 @@ export function articleMetadata(article:PublicArticle):Metadata{
 
 export function articleJsonLd(article:PublicArticle){
   const canonical=articleCanonical(article.language,article.id);
-  return {"@context":"https://schema.org","@type":"NewsArticle",headline:article.headline,description:article.summary,image:article.imageUrl?[absoluteUrl(article.imageUrl)]:undefined,datePublished:timestampToIso(article.articlePublishedAt),inLanguage:article.language,articleSection:article.categoryName,isAccessibleForFree:true,mainEntityOfPage:{"@type":"WebPage","@id":canonical},url:canonical,publisher:{"@type":"Organization",name:SITE_NAME,url:SITE_URL}};
+  const authors=article.authors.map(author=>({"@type":author.kind==="person"?"Person":"Organization",name:publicAuthorName(author,article.language)})).filter(author=>author.name);
+  return {"@context":"https://schema.org","@type":"NewsArticle",headline:article.headline,description:article.summary,image:article.imageUrl?[absoluteUrl(article.imageUrl)]:undefined,datePublished:timestampToIso(article.articlePublishedAt),inLanguage:article.language,articleSection:article.categoryName,isAccessibleForFree:true,mainEntityOfPage:{"@type":"WebPage","@id":canonical},url:canonical,publisher:{"@type":"Organization",name:SITE_NAME,url:SITE_URL},author:authors.length?authors:undefined};
 }
 
 export function safeJsonLd(value:unknown){return JSON.stringify(value).replace(/</g,"\\u003c")}
