@@ -1,7 +1,7 @@
 /** Cloudflare Worker entry point for the vinext-starter template. */
 import { handleImageOptimization, DEFAULT_DEVICE_SIZES, DEFAULT_IMAGE_SIZES } from "vinext/server/image-optimization";
 import handler from "vinext/server/app-router-entry";
-import {articleSitemap,publicSitemap,robotsResponse,sitemapIndex} from "./seo-sitemaps";
+import {articleSitemap,newsSitemap,publicSitemap,robotsResponse,sitemapIndex} from "./seo-sitemaps";
 
 interface Env {
   ASSETS: Fetcher;
@@ -32,6 +32,10 @@ const worker = {
 
     if ((request.method === "GET" || request.method === "HEAD") && url.pathname === "/sitemap.xml") {
       const response=await sitemapIndex(env.DB);
+      return request.method === "HEAD" ? new Response(null,{status:response.status,headers:response.headers}) : response;
+    }
+    if ((request.method === "GET" || request.method === "HEAD") && url.pathname === "/news-sitemap.xml") {
+      const response=await newsSitemap(env.DB);
       return request.method === "HEAD" ? new Response(null,{status:response.status,headers:response.headers}) : response;
     }
     if ((request.method === "GET" || request.method === "HEAD") && url.pathname === "/sitemaps/public.xml") {

@@ -4,7 +4,7 @@ import test from "node:test";
 import {freshnessGroup,maldivesDay} from "../app/lib/feed-ranking.ts";
 import {detectSupportedImage} from "../app/lib/images.ts";
 import {youtubeVideoId} from "../app/lib/youtube.ts";
-import {articleSitemap,escapeXml,publicSitemap,robotsResponse,sitemapIndex,sitemapSettings} from "../worker/seo-sitemaps.ts";
+import {articleSitemap,escapeXml,newsSitemap,publicSitemap,robotsResponse,sitemapIndex,sitemapSettings} from "../worker/seo-sitemaps.ts";
 
 test("serves canonical scalable production sitemaps and robots directives",async()=>{
   const fakeDb={prepare(sql){const statement={bind(){return statement},async first(){return sql.includes("COUNT(*)")?{count:2}:null},async all(){if(sql.includes("FROM categories"))return{results:[{slug:"politics & law"}]};if(sql.includes("SELECT DISTINCT c.id"))return{results:[{id:"article-1",language:"en",modifiedAt:1723352400000},{id:"article-2",language:"dv",modifiedAt:1723352500000}]};return{results:[]}}};return statement}};
@@ -14,6 +14,24 @@ test("serves canonical scalable production sitemaps and robots directives",async
   assert.match(articleBody,/https:\/\/kurufeetha\.com\/en\/article\/article-1/);assert.match(articleBody,/<lastmod>2024-08-11T05:00:00\.000Z<\/lastmod>/);assert.doesNotMatch(articleBody,/draft/);
   assert.equal(escapeXml(`<&>'"`),"&lt;&amp;&gt;&apos;&quot;");assert.equal(sitemapSettings.articleChunkSize,10_000);
   const robotsBody=await robots.text();assert.match(robotsBody,/User-agent: \*/i);assert.match(robotsBody,/Allow: \//);assert.match(robotsBody,/Sitemap: https:\/\/kurufeetha\.com\/sitemap\.xml/);assert.doesNotMatch(robotsBody,/Disallow: \/$/m);
+});
+
+test("serves a fresh, published-only Google News sitemap",async()=>{
+  const now=1_723_600_000_000,boundValues=[];let newsQuery="";
+  const fakeDb={prepare(sql){newsQuery=sql;const statement={bind(...values){boundValues.push(...values);return statement},async all(){return{results:[
+    {id:"english-story",language:"en",headline:"Markets & <weather>",publicationDate:now-60_000},
+    {id:"ދިވެހި",language:"dv",headline:"ރާއްޖޭގެ & ޚަބަރު",publicationDate:now-120_000},
+  ]}}};return statement}};
+  const response=await newsSitemap(fakeDb,now),xml=await response.text();
+  assert.equal(response.status,200);assert.equal(response.headers.get("content-type"),"application/xml; charset=utf-8");
+  assert.match(xml,/xmlns="http:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9"/);assert.match(xml,/xmlns:news="http:\/\/www\.google\.com\/schemas\/sitemap-news\/0\.9"/);
+  assert.match(newsQuery,/c\.status='published'/);assert.match(newsQuery,/t\.review_status='published'/);assert.match(newsQuery,/t\.article_status='published'/);assert.match(newsQuery,/t\.article_content IS NOT NULL/);assert.match(newsQuery,/t\.article_published_at IS NOT NULL/);
+  assert.match(newsQuery,/t\.language IN \('en','dv'\)/);assert.match(newsQuery,/t\.article_published_at>=\?/);assert.match(newsQuery,/t\.article_published_at<=\?/);assert.match(newsQuery,/LIMIT \?/);
+  assert.deepEqual(boundValues,[now-sitemapSettings.newsFreshnessWindowMs,now,sitemapSettings.newsSitemapLimit]);assert.equal(sitemapSettings.newsSitemapLimit,1_000);
+  assert.match(xml,/<loc>https:\/\/kurufeetha\.com\/en\/article\/english-story<\/loc>/);assert.match(xml,/<news:language>en<\/news:language>/);assert.match(xml,/<news:language>dv<\/news:language>/);
+  assert.match(xml,/<news:publication_date>2024-08-14T01:45:40\.000Z<\/news:publication_date>/);assert.match(xml,/<news:title>Markets &amp; &lt;weather&gt;<\/news:title>/);assert.match(xml,/<news:name>Kurufeetha<\/news:name>/);
+  const locations=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match=>match[1]);assert.ok(locations.every(location=>location.startsWith("https://kurufeetha.com/")&&!location.includes("www.")&&!location.includes("workers.dev")&&!location.includes("/api/")&&!location.includes("draft")&&!location.includes("preview")));assert.equal((xml.match(/<url>/g)||[]).length,2);
+  const robots=await robotsResponse().text();assert.match(robots,/Sitemap: https:\/\/kurufeetha\.com\/sitemap\.xml/);assert.match(robots,/Sitemap: https:\/\/kurufeetha\.com\/news-sitemap\.xml/);
 });
 
 test("ships the protected manual bilingual CMS and live feed", async () => {
