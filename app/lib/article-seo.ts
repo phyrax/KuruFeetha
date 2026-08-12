@@ -16,7 +16,7 @@ export function articleMetadata(article:PublicArticle):Metadata{
     alternates:{canonical,languages},
     openGraph:{type:"article",url:canonical,siteName:SITE_NAME,locale:article.language==="dv"?"dv_MV":"en_MV",alternateLocale:article.availableLanguages.filter(language=>language!==article.language).map(language=>language==="dv"?"dv_MV":"en_MV"),title:article.headline,description:article.summary,publishedTime:timestampToIso(article.articlePublishedAt),section:article.categoryName,images:image?[{url:image,alt:article.headline}]:undefined},
     twitter:{card:"summary_large_image",title:article.headline,description:article.summary,images:image?[image]:undefined},
-    other:{"content-language":article.language},
+    other:{"content-language":article.language,"article:section":article.categoryName},
   };
 }
 
