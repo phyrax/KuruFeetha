@@ -446,6 +446,10 @@ button { color: inherit; }
 .cms-form fieldset[dir="rtl"] .article-preview .article-body { font-family: "MV Typewriter", "Noto Sans Thaana", sans-serif; font-weight: 400; text-align: right; line-height: 2; }
 .cms-form small { text-align: end; color: var(--muted); }
 .cms-form small.over { color: #b42d1d; font-weight: 700; }
+.safe-content-type-editor { display: grid; gap: 10px; padding: 14px; border: 1px solid #bfd1cb; border-radius: 14px; background: #f3f8f6; }
+.safe-content-type-editor > div { display: grid; gap: 3px; }
+.safe-content-type-editor label { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.safe-content-type-editor select { min-width: 0; }
 .cms-form .publish-check { display: flex; align-items: center; grid-template-columns: auto 1fr; }
 .cms-form .publish-check input { width: auto; }
 .danger-action { border: 0; background: transparent; color: #a33120; cursor: pointer; }
