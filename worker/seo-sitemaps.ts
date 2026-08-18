@@ -32,7 +32,7 @@ export async function sitemapIndex(db:SeoDatabase){
 
 export async function publicSitemap(db:SeoDatabase){
   const categories=await db.prepare("SELECT DISTINCT slug FROM categories WHERE enabled=1 AND slug IS NOT NULL AND trim(slug)<>'' ORDER BY sort_order,slug").all<CategoryRow>().catch(()=>({results:[] as CategoryRow[]}));
-  const entries=[urlEntry(CANONICAL_ORIGIN),urlEntry(`${CANONICAL_ORIGIN}/advertise`),urlEntry(`${CANONICAL_ORIGIN}/advertising-policy`),urlEntry(`${CANONICAL_ORIGIN}/political-ads`),...['about','contact','editorial-standards','corrections'].map(page=>urlEntry(`${CANONICAL_ORIGIN}/en/${page}`))];
+  const entries=[urlEntry(`${CANONICAL_ORIGIN}/`),urlEntry(`${CANONICAL_ORIGIN}/advertise`),urlEntry(`${CANONICAL_ORIGIN}/advertising-policy`),urlEntry(`${CANONICAL_ORIGIN}/political-ads`),...['about','contact','editorial-standards','corrections'].map(page=>urlEntry(`${CANONICAL_ORIGIN}/en/${page}`))];
   for(const category of categories.results){for(const language of ["en","dv"] as const)entries.push(urlEntry(`${CANONICAL_ORIGIN}/${language}/category/${encodeURIComponent(category.slug)}`))}
   return xmlResponse(urlSet(entries),entries.length,`homepage:1,static:7,categories:${categories.results.length*2}`);
 }
@@ -64,7 +64,7 @@ export async function newsSitemap(db:SeoDatabase,now=Date.now()){
 }
 
 export function robotsResponse(){
-  const body=["User-agent: *","Allow: /","Disallow: /api/","","Sitemap: https://kurufeetha.com/sitemap.xml","Sitemap: https://kurufeetha.com/news-sitemap.xml",""] .join("\n");
+  const body=["User-agent: *","Allow: /","Allow: /api/v1/media/","Disallow: /api/","","Sitemap: https://kurufeetha.com/sitemap.xml","Sitemap: https://kurufeetha.com/news-sitemap.xml",""] .join("\n");
   return new Response(body,{status:200,headers:{"content-type":"text/plain; charset=utf-8","cache-control":"public, max-age=300, s-maxage=300","x-content-type-options":"nosniff"}});
 }
 
