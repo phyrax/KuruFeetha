@@ -87,6 +87,13 @@ or enforce explicit server-side membership or allowlist checks.
 Use SIWC for account pages, user-specific dashboards, saved records, and write
 actions tied to the current ChatGPT user. Leave public content anonymous.
 
+## Editorial Classification Configuration
+
+The admin-only content classification workspace uses these server-side Cloudflare variables:
+
+- `OPENAI_API_KEY` — secret API key; never expose it to the browser.
+- `CONTENT_CLASSIFIER_MODEL` — optional model override (defaults to `gpt-5.4-nano`).
+
 ## Useful Commands
 
 - `npm run dev`: start local development

@@ -73,6 +73,20 @@ export const articleCredits = sqliteTable("article_credits", {
   index("idx_article_credits_translation_order").on(table.translationId, table.sortOrder),
 ]);
 
+export const contentTypeRecommendations = sqliteTable("content_type_recommendations", {
+  storyId: text("story_id").primaryKey().references(() => newsCards.id, { onDelete: "cascade" }),
+  contentFingerprint: text("content_fingerprint").notNull(),
+  recommendedType: text("recommended_type", { enum: ["news", "opinion", "editorial", "press_release"] }).notNull(),
+  confidence: real("confidence").notNull(),
+  reason: text("reason").notNull(),
+  needsHumanReview: integer("needs_human_review", { mode: "boolean" }).notNull().default(true),
+  flags: text("flags", { mode: "json" }).notNull(),
+  languageRecommendations: text("language_recommendations", { mode: "json" }).notNull(),
+  provider: text("provider").notNull(),
+  model: text("model").notNull(),
+  generatedAt: integer("generated_at", { mode: "timestamp" }).notNull(),
+}, (table) => [index("idx_content_type_recommendations_generated").on(table.generatedAt)]);
+
 export const galleries = sqliteTable("galleries", {
   id: text("id").primaryKey(),
   topic: text("topic").notNull(),

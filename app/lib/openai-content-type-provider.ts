@@ -1,0 +1,15 @@
+import type{ClassifierStory,ContentTypeClassifierProvider}from"./content-type-classifier.ts";
+
+type ProviderEnv={OPENAI_API_KEY?:string;CONTENT_CLASSIFIER_MODEL?:string};
+const outputSchema={type:"object",additionalProperties:false,required:["recommendedType","confidence","reason","needsHumanReview","flags","languageRecommendations"],properties:{recommendedType:{type:"string",enum:["news","opinion","editorial","press_release"]},confidence:{type:"number",minimum:0,maximum:1},reason:{type:"string",maxLength:500},needsHumanReview:{type:"boolean"},flags:{type:"array",items:{type:"string"}},languageRecommendations:{type:"object",additionalProperties:false,required:["en","dv"],properties:{en:{type:["string","null"],enum:["news","opinion","editorial","press_release",null]},dv:{type:["string","null"],enum:["news","opinion","editorial","press_release",null]}}}}};
+const instructions=`Classify the journalistic format of the KuruFeetha article itself, not the opinions of quoted people. Use exactly news, opinion, editorial, or press_release. Neutral reporting of statements, decisions, events, data, or allegations is news even when a quoted person advocates strongly. Opinion is an identified contributor's own argument or analysis. Editorial is KuruFeetha's institutional position. Press release substantially reproduces or lightly adapts supplied external communication; an independently reported announcement is news. Read every complete supplied translation. Flag material bilingual differences and ambiguity, especially difficulty distinguishing news from press release. Return concise editorial reasoning, never private chain-of-thought.`;
+
+export class OpenAIContentTypeProvider implements ContentTypeClassifierProvider{
+  provider="openai";model:string;private key:string;
+  constructor(env:ProviderEnv){if(!env.OPENAI_API_KEY)throw new Error("AI classification is not configured");this.key=env.OPENAI_API_KEY;this.model=env.CONTENT_CLASSIFIER_MODEL||"gpt-5.4-nano"}
+  async classify(story:ClassifierStory){
+    const response=await fetch("https://api.openai.com/v1/responses",{method:"POST",headers:{authorization:`Bearer ${this.key}`,"content-type":"application/json"},body:JSON.stringify({model:this.model,store:false,instructions,input:JSON.stringify({storyId:story.storyId,categoryContext:story.category,translations:story.translations.map(({language,headline,summary,articleText})=>({language,headline,summary,articleText}))}),text:{format:{type:"json_schema",name:"content_type_recommendation",strict:true,schema:outputSchema}}})});
+    if(!response.ok){const detail=await response.json().catch(()=>null) as{error?:{message?:string}}|null;throw new Error(detail?.error?.message||`AI provider failed (${response.status})`)}
+    const data=await response.json() as{output_text?:string;output?:Array<{content?:Array<{type?:string;text?:string}>}>};const text=data.output_text||data.output?.flatMap(item=>item.content??[]).find(item=>item.type==="output_text")?.text;if(!text)throw new Error("AI provider returned no structured output");return JSON.parse(text);
+  }
+}
