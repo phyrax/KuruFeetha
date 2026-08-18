@@ -2,6 +2,7 @@ const CANONICAL_ORIGIN = "https://kurufeetha.com";
 const ARTICLE_CHUNK_SIZE = 10_000;
 const NEWS_FRESHNESS_WINDOW_MS = 2 * 24 * 60 * 60 * 1000;
 const NEWS_SITEMAP_LIMIT = 1_000;
+export const newsContentTypePolicy={eligible:["news","opinion","editorial"] as const,legacyNullEligible:true} as const;
 
 const ARTICLE_PUBLISH_WHERE = `c.status='published'
   AND t.review_status='published'
@@ -12,7 +13,7 @@ const ARTICLE_PUBLISH_WHERE = `c.status='published'
 
 type ArticleRow={id:string;language:"en"|"dv";modifiedAt:number|null};
 type NewsArticleRow={id:string;language:"en"|"dv";headline:string;publicationDate:number};
-type CategoryRow={slug:string};
+type CategoryRow={slug:string;language:"en"|"dv"};
 type QueryResult<T>={results:T[]};
 interface SeoStatement{bind(...values:unknown[]):SeoStatement;first<T>():Promise<T|null>;all<T>():Promise<QueryResult<T>>}
 export interface SeoDatabase{prepare(query:string):SeoStatement}
@@ -31,10 +32,12 @@ export async function sitemapIndex(db:SeoDatabase){
 }
 
 export async function publicSitemap(db:SeoDatabase){
-  const categories=await db.prepare("SELECT DISTINCT slug FROM categories WHERE enabled=1 AND slug IS NOT NULL AND trim(slug)<>'' ORDER BY sort_order,slug").all<CategoryRow>().catch(()=>({results:[] as CategoryRow[]}));
+  const categories=await db.prepare(`SELECT DISTINCT cat.slug,t.language FROM categories cat JOIN news_cards c ON c.category_id=cat.id JOIN news_card_translations t ON t.card_id=c.id
+    WHERE cat.enabled=1 AND cat.slug IS NOT NULL AND trim(cat.slug)<>'' AND ${ARTICLE_PUBLISH_WHERE}
+    ORDER BY cat.sort_order,cat.slug,t.language`).all<CategoryRow>().catch(()=>({results:[] as CategoryRow[]}));
   const entries=[urlEntry(`${CANONICAL_ORIGIN}/`),urlEntry(`${CANONICAL_ORIGIN}/advertise`),urlEntry(`${CANONICAL_ORIGIN}/advertising-policy`),urlEntry(`${CANONICAL_ORIGIN}/political-ads`),...['about','contact','editorial-standards','corrections'].map(page=>urlEntry(`${CANONICAL_ORIGIN}/en/${page}`))];
-  for(const category of categories.results){for(const language of ["en","dv"] as const)entries.push(urlEntry(`${CANONICAL_ORIGIN}/${language}/category/${encodeURIComponent(category.slug)}`))}
-  return xmlResponse(urlSet(entries),entries.length,`homepage:1,static:7,categories:${categories.results.length*2}`);
+  for(const category of categories.results)entries.push(urlEntry(`${CANONICAL_ORIGIN}/${category.language}/category/${encodeURIComponent(category.slug)}`));
+  return xmlResponse(urlSet(entries),entries.length,`homepage:1,static:7,categories:${categories.results.length}`);
 }
 
 export async function articleSitemap(db:SeoDatabase,chunk:number){
@@ -49,6 +52,8 @@ export async function articleSitemap(db:SeoDatabase,chunk:number){
 export async function newsSitemap(db:SeoDatabase,now=Date.now()){
   const freshnessThreshold=now-NEWS_FRESHNESS_WINDOW_MS;
   const result=await db.prepare(`SELECT c.id,t.language,t.headline,t.article_published_at AS publicationDate FROM news_cards c JOIN news_card_translations t ON t.card_id=c.id WHERE ${ARTICLE_PUBLISH_WHERE}
+    -- Transitional compatibility: legacy NULL remains eligible until editors classify existing articles.
+    AND (t.content_type IS NULL OR t.content_type IN (${newsContentTypePolicy.eligible.map(type=>`'${type}'`).join(",")}))
     AND t.article_published_at>=?
     AND t.article_published_at<=?
     ORDER BY t.article_published_at DESC,c.id,t.language

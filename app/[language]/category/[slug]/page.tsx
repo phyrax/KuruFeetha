@@ -4,7 +4,7 @@ import { env } from "cloudflare:workers";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {categoryArchivePath,getCategoryArchivePage,missingCategoryArchivePage,parseCategoryPage,type CrawlDatabase} from "../../../lib/crawl-discovery.ts";
+import {categoryArchivePath,categoryRobots,getCategoryArchivePage,getPopulatedCategoryLanguages,missingCategoryArchivePage,parseCategoryPage,type CrawlDatabase} from "../../../lib/crawl-discovery.ts";
 import {getPublicCategories,type PublicDatabase} from "../../../lib/public-feed";
 import { absoluteUrl,SITE_NAME } from "../../../lib/seo";
 
@@ -16,14 +16,16 @@ async function data(language:"en"|"dv",slug:string,page:number){
   const db=(env as unknown as{DB:PublicDatabase&CrawlDatabase}).DB;
   const categories=await getPublicCategories(db),category=categories.find(item=>item.slug===slug);
   if(!category)return null;
-  return{category,archive:await getCategoryArchivePage(db,language,slug,page)};
+  const[archive,availableLanguages]=await Promise.all([getCategoryArchivePage(db,language,slug,page),getPopulatedCategoryLanguages(db,slug)]);
+  return{category,archive,availableLanguages};
 }
 
 export async function generateMetadata({params,searchParams}:{params:Promise<Params>;searchParams:Promise<SearchParams>}):Promise<Metadata>{
   const[{language,slug},query]=await Promise.all([params,searchParams]),page=parseCategoryPage(query.page);if((language!=="en"&&language!=="dv")||page===null)return{robots:{index:false,follow:false}};
   const result=await data(language,slug,page);if(!result||missingCategoryArchivePage(page,result.archive.articles.length))return{title:`Category unavailable — ${SITE_NAME}`,robots:{index:false,follow:false}};
   const name=language==="dv"?result.category.nameDv:result.category.nameEn,path=categoryArchivePath(language,slug,page),title=`${name} news${page>1?` — Page ${page}`:""} — ${SITE_NAME}`,description=`Latest ${name} news and updates from KuruFeetha.`;
-  return{title,description,alternates:{canonical:absoluteUrl(path),languages:page===1?{en:absoluteUrl(categoryArchivePath("en",slug)),dv:absoluteUrl(categoryArchivePath("dv",slug))}:undefined},openGraph:{title,description,url:absoluteUrl(path),locale:language==="dv"?"dv_MV":"en_MV"},other:{"content-language":language}};
+  const languages=page===1&&result.archive.articles.length?Object.fromEntries(result.availableLanguages.map(available=>[available,absoluteUrl(categoryArchivePath(available,slug))])):undefined;
+  return{title,description,robots:categoryRobots(result.archive.articles.length),alternates:{canonical:absoluteUrl(path),languages},openGraph:{title,description,url:absoluteUrl(path),locale:language==="dv"?"dv_MV":"en_MV"},other:{"content-language":language}};
 }
 
 export default async function CategoryPage({params,searchParams}:{params:Promise<Params>;searchParams:Promise<SearchParams>}){

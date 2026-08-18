@@ -72,6 +72,19 @@ export async function getCategoryArchivePage(db:CrawlDatabase,language:CrawlLang
   return{articles:result.results.slice(0,CATEGORY_PAGE_SIZE).map(publicArticle),hasPrevious:page>1,hasNext:result.results.length>CATEGORY_PAGE_SIZE,page};
 }
 
+export async function getPopulatedCategoryLanguages(db:CrawlDatabase,slug:string):Promise<CrawlLanguage[]>{
+  const result=await db.prepare(`
+    SELECT DISTINCT t.language
+    FROM news_cards c
+    JOIN news_card_translations t ON t.card_id=c.id
+    JOIN categories cat ON cat.id=c.category_id
+    WHERE ${PUBLIC_ARTICLE_WHERE}
+      AND cat.slug=? AND t.language IN ('en','dv')
+    ORDER BY t.language
+  `).bind(slug).all<{language:CrawlLanguage}>();
+  return result.results.map(row=>row.language);
+}
+
 export function parseCategoryPage(value:string|string[]|undefined):number|null{
   if(value===undefined)return 1;
   if(Array.isArray(value)||!/^[1-9]\d*$/.test(value))return null;
@@ -86,4 +99,8 @@ export function categoryArchivePath(language:CrawlLanguage,slug:string,page=1):s
 
 export function missingCategoryArchivePage(page:number,articleCount:number):boolean{
   return page>1&&articleCount===0;
+}
+
+export function categoryRobots(articleCount:number):{index:boolean;follow:true}{
+  return{index:articleCount>0,follow:true};
 }
