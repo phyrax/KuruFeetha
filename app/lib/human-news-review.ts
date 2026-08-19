@@ -17,7 +17,7 @@ export const preferredFirstReviewStoryIds = [
   "7a70b520-ff58-426b-a60e-57fa50091686",
   "e0e0dab4-0750-4467-bfd1-d7323f6fb6d2",
   "f1e01752-32c1-4913-b712-3b5522c6b808",
-  "f0e01d8a-603b-4ad4-b16b-b252ce58cdb5",
+  "f0e01b7a-e6ad-4422-8dbe-45e20286eccc",
 ] as const;
 
 type Translation = { language: "en" | "dv"; contentType?: string | null };
