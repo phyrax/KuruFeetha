@@ -137,13 +137,22 @@ test("evaluation reports confusion, false News and threshold precision", () => {
 });
 
 test("production benchmark route is admin-only and cannot write editorial or recommendation data", async () => {
-  const route = await readFile(
-    new URL(
-      "../app/api/v1/admin/content-classification/benchmark/route.ts",
-      import.meta.url,
+  const [route, workspace] = await Promise.all([
+    readFile(
+      new URL(
+        "../app/api/v1/admin/content-classification/benchmark/route.ts",
+        import.meta.url,
+      ),
+      "utf8",
     ),
-    "utf8",
-  );
+    readFile(
+      new URL(
+        "../app/components/ContentClassificationWorkspace.tsx",
+        import.meta.url,
+      ),
+      "utf8",
+    ),
+  ]);
   assert.match(route, /requireAdmin\(request\)/);
   assert.match(route, /runBalancedBenchmark/);
   assert.doesNotMatch(
@@ -151,4 +160,7 @@ test("production benchmark route is admin-only and cannot write editorial or rec
     /analyzeClassifierStory|content_type_recommendations|UPDATE\s+news_card_translations|updateContentTypeOnly|method:\s*["']PATCH/i,
   );
   assert.doesNotMatch(route, /Analyze All|Bulk Approve/i);
+  assert.match(workspace, /Run balanced benchmark/);
+  assert.match(workspace, /content-type-balanced-v1/);
+  assert.match(workspace, /balanced-benchmark-report/);
 });

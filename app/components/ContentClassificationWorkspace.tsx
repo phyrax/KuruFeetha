@@ -93,7 +93,9 @@ export function ContentClassificationWorkspace({
       Partial<Record<Probe, ProbeResult>>
     >({}),
     [calibrating, setCalibrating] = useState(false),
-    [calibration, setCalibration] = useState<CalibrationResult[]>([]);
+    [calibration, setCalibration] = useState<CalibrationResult[]>([]),
+    [benchmarking, setBenchmarking] = useState(false),
+    [benchmarkReport, setBenchmarkReport] = useState<string | null>(null);
   const headers = { authorization: `Bearer ${token}` };
   async function load() {
     setLoading(true);
@@ -251,6 +253,29 @@ export function ContentClassificationWorkspace({
       setCalibrating(false);
     }
   }
+  async function runBalancedBenchmark() {
+    setBenchmarking(true);
+    setBenchmarkReport(null);
+    try {
+      const response = await fetch(
+          "/api/v1/admin/content-classification/benchmark",
+          {
+            method: "POST",
+            headers: { ...headers, "content-type": "application/json" },
+            body: JSON.stringify({ dataset: "content-type-balanced-v1" }),
+          },
+        ),
+        data = await response.json();
+      if (!response.ok)
+        throw new Error(data.error?.message || "Balanced benchmark failed");
+      setBenchmarkReport(JSON.stringify(data, null, 2));
+      notify(`${data.cases ?? 0} balanced benchmark cases analyzed`);
+    } catch (error) {
+      notify((error as Error).message);
+    } finally {
+      setBenchmarking(false);
+    }
+  }
   async function approveItem(item: Item, type: ContentType) {
     let updated = 0;
     for (const translation of item.translations.filter(
@@ -382,6 +407,9 @@ export function ContentClassificationWorkspace({
             <button disabled={calibrating} onClick={runCalibration}>
               {calibrating ? "Calibrating…" : "Run trusted Batch 1 calibration"}
             </button>
+            <button disabled={benchmarking} onClick={runBalancedBenchmark}>
+              {benchmarking ? "Benchmarking…" : "Run balanced benchmark"}
+            </button>
           </div>
           {Object.entries(probeResults).map(([name, value]) => (
             <small key={name} role="status">
@@ -393,6 +421,12 @@ export function ContentClassificationWorkspace({
           ))}
         </div>
       </div>
+      {benchmarkReport && (
+        <details className="classification-list" open>
+          <summary>Balanced benchmark report</summary>
+          <pre data-testid="balanced-benchmark-report">{benchmarkReport}</pre>
+        </details>
+      )}
       {calibration.length > 0 && (
         <div
           className="classification-list"
