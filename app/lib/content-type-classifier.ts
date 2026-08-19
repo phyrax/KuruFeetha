@@ -42,9 +42,9 @@ export async function loadClassifierStory(db:D1Database,storyId:string):Promise<
   return{storyId,category:(rows.results[0].category as string|null)??null,translations:rows.results.map(row=>({id:String(row.id),language:row.language as"en"|"dv",headline:String(row.headline),summary:String(row.summary),articleText:articleText(String(row.articleContent)),contentType:(row.contentType as ArticleContentType|null)??null,publishedAt:Number(row.publishedAt),articlePublishedAt:Number(row.articlePublishedAt),authors:JSON.parse(String(row.authors??"[]"))}))};
 }
 
-export async function analyzeClassifierStory(db:D1Database,provider:ContentTypeClassifierProvider,storyId:string,{force=false}:{force?:boolean}={}){
+export async function analyzeClassifierStory(db:D1Database,provider:ContentTypeClassifierProvider,storyId:string,{force=false,allowClassified=false}:{force?:boolean;allowClassified?:boolean}={}){
   const story=await loadClassifierStory(db,storyId);if(!story)throw new Error("Published detailed story not found");
-  if(!story.translations.some(item=>item.contentType===null))throw new Error("Story has no unclassified published translation");
+  if(!allowClassified&&!story.translations.some(item=>item.contentType===null))throw new Error("Story has no unclassified published translation");
   const fingerprint=await contentFingerprint(story);
   if(!force){const cached=await db.prepare("SELECT * FROM content_type_recommendations WHERE story_id=? AND content_fingerprint=?").bind(storyId,fingerprint).first<Record<string,unknown>>();if(cached)return recommendationRow(cached,true)}
   const result=validateClassifierResult(await provider.classify(story)),now=Date.now();
