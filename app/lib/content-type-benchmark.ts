@@ -151,7 +151,13 @@ export function evaluateBenchmark(results: BenchmarkCaseResult[]) {
       ];
     }),
   );
-  const genuineNews = results.filter((item) => item.expectedType === "news"),
+  const genuineNews = results.filter(
+      (item) =>
+        item.expectedType === "news" &&
+        Object.values(item.expectedLanguageRecommendations)
+          .filter((type): type is ClassifierType => type !== null)
+          .every((type) => type === "news"),
+    ),
     thresholds = Object.fromEntries(
       benchmarkThresholds.map((threshold) => {
         const approved = results.filter(
@@ -162,15 +168,20 @@ export function evaluateBenchmark(results: BenchmarkCaseResult[]) {
                 thresholdBlockingFlags.has(flag.code),
               ),
           ),
-          trueNews = approved.filter((item) => item.expectedType === "news"),
-          falseNews = approved.filter((item) => item.expectedType !== "news");
+          trueNews = approved.filter((item) => genuineNews.includes(item)),
+          falseNews = approved.filter((item) => !genuineNews.includes(item));
         return [
           threshold.toFixed(2),
           {
             newsPrecision: ratio(trueNews.length, approved.length),
             newsCoverage: ratio(trueNews.length, genuineNews.length),
             qualifyingNews: approved.length,
-            falseNewsApprovals: falseNews.map((item) => item.benchmarkId),
+            falseNewsApprovals: falseNews.map((item) => ({
+              benchmarkId: item.benchmarkId,
+              expectedType: item.expectedType,
+              expectedLanguageRecommendations:
+                item.expectedLanguageRecommendations,
+            })),
             manualReviewLoad: results.length - approved.length,
           },
         ];

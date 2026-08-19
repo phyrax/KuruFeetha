@@ -132,8 +132,46 @@ test("evaluation reports confusion, false News and threshold precision", () => {
   assert.equal(report.confusionMatrix.press_release.news, 1);
   assert.equal(report.overallAccuracy, 0.5);
   assert.equal(report.thresholds["0.95"].newsPrecision, 1);
-  assert.deepEqual(report.thresholds["0.93"].falseNewsApprovals, ["false-news"]);
+  assert.deepEqual(report.thresholds["0.93"].falseNewsApprovals, [
+    {
+      benchmarkId: "false-news",
+      expectedType: "press_release",
+      expectedLanguageRecommendations: { en: "press_release", dv: null },
+    },
+  ]);
   assert.deepEqual(report.falseNewsClassifications.map((item) => item.benchmarkId), ["false-news"]);
+});
+
+test("mixed-language formats never count as streamlined gold News", () => {
+  const mixed = {
+    benchmarkId: "mixed",
+    expectedType: "news",
+    expectedLanguageRecommendations: { en: "news", dv: "press_release" },
+    clarity: "ambiguous",
+    humanReviewShouldBeRequired: true,
+    rationale: "The language formats differ.",
+    source: "synthetic",
+    requestId: "mixed-request",
+    latencyMs: 10,
+    recommendation: structured(
+      "news",
+      0.96,
+      { en: "news", dv: "news" },
+      [
+        {
+          code: "ARTICLE_CONTENT_MISMATCH",
+          message: "The translations contain different material.",
+        },
+      ],
+    ),
+  };
+  const report = evaluateBenchmark([mixed]);
+  assert.equal(report.thresholds["0.95"].newsPrecision, 0);
+  assert.equal(report.thresholds["0.95"].newsCoverage, null);
+  assert.equal(
+    report.thresholds["0.95"].falseNewsApprovals[0].benchmarkId,
+    "mixed",
+  );
 });
 
 test("production benchmark route is admin-only and cannot write editorial or recommendation data", async () => {
