@@ -24,7 +24,7 @@ test("versioned balanced gold dataset has complete authoritative labels and bodi
   assert.equal(balancedBenchmark.model, "gpt-5.4-nano");
   assert.equal(
     balancedBenchmark.promptVersion,
-    "content-type-bilingual-safety-v3",
+    "content-type-bilingual-safety-v4",
   );
   assert.equal(balancedBenchmark.schemaVersion, "2.0");
   assert.ok(balancedBenchmark.cases.length >= 30);

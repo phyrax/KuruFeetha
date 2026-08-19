@@ -1,7 +1,7 @@
 {
   "version": "content-type-balanced-v1",
   "createdAt": "2026-08-19",
-  "promptVersion": "content-type-bilingual-safety-v3",
+  "promptVersion": "content-type-bilingual-safety-v4",
   "schemaVersion": "2.0",
   "model": "gpt-5.4-nano",
   "description": "Human-authored gold benchmark. Expected labels and review expectations are authoritative and must never be derived from classifier output.",

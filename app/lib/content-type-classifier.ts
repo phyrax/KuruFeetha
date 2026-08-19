@@ -19,7 +19,7 @@ export const classifierFlagCodes = [
   "OTHER_EDITORIAL_REVIEW",
 ] as const;
 export const classifierSchemaVersion = "2.0";
-export const classifierPromptVersion = "content-type-bilingual-safety-v3";
+export const classifierPromptVersion = "content-type-bilingual-safety-v4";
 export type ClassifierType = (typeof classifierTypes)[number];
 export type ClassifierFlagCode = (typeof classifierFlagCodes)[number];
 export type ClassifierFlag = { code: ClassifierFlagCode; message: string };

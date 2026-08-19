@@ -418,6 +418,8 @@ test("provider prompt applies editorial definitions to full translations without
   assert.match(provider, /KuruFeetha's institutional position/);
   assert.match(provider, /supplied external communication/);
   assert.match(provider, /Never copy one language recommendation/);
+  assert.match(provider, /Institutional first-person advocacy/);
+  assert.match(provider, /Never emit a flag with a message saying there is no/);
   assert.match(provider, /Reserve ARTICLE_CONTENT_MISMATCH for a material/);
   assert.match(provider, /articleText/);
   assert.match(provider, /store:\s*false/);
