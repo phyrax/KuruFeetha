@@ -13,7 +13,7 @@ export class OpenAIProviderError extends Error{diagnostic:ProviderDiagnostic;con
 export function providerDiagnostic(error:unknown){return error instanceof OpenAIProviderError?error.diagnostic:null}
 
 export class OpenAIContentTypeProvider implements ContentTypeClassifierProvider{
-  provider="openai";model:string;private key:string;
+  provider="openai";model:string;lastRequestId:string|null=null;private key:string;
   constructor(env:ProviderEnv){if(!env.OPENAI_API_KEY)throw new Error("AI classification is not configured");this.key=env.OPENAI_API_KEY;this.model=env.CONTENT_CLASSIFIER_MODEL||"gpt-5.4-nano"}
   private diagnostic(body:OpenAIErrorBody|null,httpStatus:number|null,requestId:string|null,message?:unknown):ProviderDiagnostic{return{diagnosticCode:"OPENAI_PROVIDER_FAILURE",provider:"openai",model:this.model,httpStatus,errorType:safeString(body?.error?.type),errorCode:safeString(body?.error?.code),message:sanitizeMessage(message??body?.error?.message,this.key),requestId,responseStatus:safeString(body?.status),incompleteReason:safeString(body?.incomplete_details?.reason)}}
   private async request(payload:Record<string,unknown>){
@@ -36,6 +36,6 @@ export class OpenAIContentTypeProvider implements ContentTypeClassifierProvider{
     return{probe:"classifier_schema",provider:this.provider,model:this.model,httpStatus:result.httpStatus,requestId:result.requestId,outputReceived:true,validationPassed:true,classifierResult}
   }
   async classify(story:ClassifierStory){
-    const input=JSON.stringify({storyId:story.storyId,categoryContext:story.category,translations:story.translations.map(({language,headline,summary,articleText})=>({language,headline,summary,articleText}))}),result=await this.request(this.structuredPayload(input,outputSchema,"content_type_recommendation",instructions));const text=this.outputText(result.body,result.requestId,result.httpStatus);try{return JSON.parse(text)}catch{throw new OpenAIProviderError(this.diagnostic(result.body,result.httpStatus,result.requestId,"OpenAI provider returned malformed structured output"))}
+    const input=JSON.stringify({storyId:story.storyId,categoryContext:story.category,translations:story.translations.map(({language,headline,summary,articleText})=>({language,headline,summary,articleText}))}),result=await this.request(this.structuredPayload(input,outputSchema,"content_type_recommendation",instructions));this.lastRequestId=result.requestId;const text=this.outputText(result.body,result.requestId,result.httpStatus);try{return JSON.parse(text)}catch{throw new OpenAIProviderError(this.diagnostic(result.body,result.httpStatus,result.requestId,"OpenAI provider returned malformed structured output"))}
   }
 }
