@@ -1,6 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { isStreamlinedNewsEligible } from "../lib/classification-eligibility";
+import {
+  canEnterHumanReviewedBatch,
+  humanReviewBatchBlockReason,
+  isHumanReviewNewsEligible,
+  preferredFirstReviewStoryIds,
+} from "../lib/human-news-review";
 
 type ContentType = "news" | "opinion" | "editorial" | "press_release";
 type Translation = {
@@ -87,6 +93,8 @@ export function ContentClassificationWorkspace({
     [loading, setLoading] = useState(true),
     [analyzing, setAnalyzing] = useState<Set<string>>(new Set()),
     [selected, setSelected] = useState<Set<string>>(new Set()),
+    [reviewedNews, setReviewedNews] = useState<Set<string>>(new Set()),
+    [humanBatch, setHumanBatch] = useState<Set<string>>(new Set()),
     [choices, setChoices] = useState<Record<string, ContentType>>({}),
     [approving, setApproving] = useState(false),
     [probing, setProbing] = useState<Probe | null>(null),
@@ -112,6 +120,8 @@ export function ContentClassificationWorkspace({
         );
       setItems(data.items ?? []);
       setSelected(new Set());
+      setReviewedNews(new Set());
+      setHumanBatch(new Set());
     } catch (error) {
       notify((error as Error).message);
     } finally {
@@ -134,6 +144,8 @@ export function ContentClassificationWorkspace({
         if (active) {
           setItems(data.items ?? []);
           setSelected(new Set());
+          setReviewedNews(new Set());
+          setHumanBatch(new Set());
         }
       })
       .catch((error) => {
@@ -350,6 +362,43 @@ export function ContentClassificationWorkspace({
       setApproving(false);
     }
   }
+  async function approveHumanReviewedNews() {
+    const approved = items.filter((item) =>
+      humanBatch.has(item.storyId) &&
+      canEnterHumanReviewedBatch(
+        item.storyId,
+        item.translations,
+        item.recommendation,
+        reviewedNews.has(item.storyId),
+        item.staleRecommendation,
+      ),
+    );
+    if (!approved.length)
+      return notify("Review and select at least one eligible News story");
+    const translations = approved.flatMap((item) =>
+      item.translations
+        .filter(({ contentType }) => contentType === null)
+        .map(({ language }) => language.toUpperCase()),
+    );
+    const message = [
+      `Approve ${approved.length} reviewed stories (${translations.length} translations)?`,
+      "Selected type: News",
+      `Story IDs: ${approved.map(({ storyId }) => storyId).join(", ")}`,
+      `Languages affected: ${translations.join(", ")}`,
+    ].join("\n\n");
+    if (!confirm(message)) return;
+    setApproving(true);
+    let updated = 0;
+    try {
+      for (const item of approved) updated += await approveItem(item, "news");
+      notify(`${updated} reviewed translations classified as News`);
+      await load();
+    } catch (error) {
+      notify((error as Error).message);
+    } finally {
+      setApproving(false);
+    }
+  }
   if (loading)
     return (
       <div className="classification-empty">
@@ -495,6 +544,109 @@ export function ContentClassificationWorkspace({
           Approve selected high-confidence News ({selected.size})
         </button>
       </div>
+      <section className="classification-human-lane" aria-labelledby="human-news-heading">
+        <div className="classification-toolbar">
+          <div>
+            <h2 id="human-news-heading">News — Human Review</h2>
+            <p>AI recommends News, but every story requires an explicit editorial review.</p>
+          </div>
+          <button
+            className="primary-action compact"
+            disabled={approving || humanBatch.size === 0}
+            onClick={approveHumanReviewedNews}
+          >
+            Approve reviewed News ({humanBatch.size})
+          </button>
+        </div>
+        <div className="classification-list">
+          {items
+            .filter((item) =>
+              isHumanReviewNewsEligible(item.translations, item.recommendation),
+            )
+            .sort((a, b) => {
+              const ai = preferredFirstReviewStoryIds.indexOf(
+                  a.storyId as (typeof preferredFirstReviewStoryIds)[number],
+                ),
+                bi = preferredFirstReviewStoryIds.indexOf(
+                  b.storyId as (typeof preferredFirstReviewStoryIds)[number],
+                );
+              return (ai < 0 ? 99 : ai) - (bi < 0 ? 99 : bi);
+            })
+            .map((item) => {
+              const recommendation = item.recommendation!,
+                reviewed = reviewedNews.has(item.storyId),
+                blockReason = humanReviewBatchBlockReason(
+                  item.storyId,
+                  recommendation,
+                ),
+                batchEligible = canEnterHumanReviewedBatch(
+                  item.storyId,
+                  item.translations,
+                  recommendation,
+                  reviewed,
+                  item.staleRecommendation,
+                ),
+                firstBatch = preferredFirstReviewStoryIds.includes(
+                  item.storyId as (typeof preferredFirstReviewStoryIds)[number],
+                );
+              return (
+                <article className="classification-card" key={`human-${item.storyId}`}>
+                  <div className="classification-card-head">
+                    <code>{item.storyId}</code>
+                    {firstBatch && <span>Suggested first review batch</span>}
+                    <span>{item.category || "Uncategorized"}</span>
+                  </div>
+                  <div className="classification-translations">
+                    {item.translations.map((translation) => (
+                      <section key={translation.id} dir={translation.language === "dv" ? "rtl" : "ltr"}>
+                        <strong>{translation.language.toUpperCase()}</strong>
+                        <h3>{translation.headline}</h3>
+                        <p>Current type: <b>{translation.contentType ? labels[translation.contentType] : "Not classified"}</b></p>
+                        <p>Published: {new Intl.DateTimeFormat("en-MV", { dateStyle: "medium", timeStyle: "short", timeZone: "Indian/Maldives" }).format(translation.articlePublishedAt)}</p>
+                        <a href={translation.articleUrl} target="_blank" rel="noopener noreferrer">Read complete article ↗</a>
+                      </section>
+                    ))}
+                  </div>
+                  <div className="classification-result">
+                    <div>
+                      <strong>News</strong>
+                      <span>{Math.round(recommendation.confidence * 100)}% confidence</span>
+                      <span>EN: {recommendation.languageRecommendations.en ? labels[recommendation.languageRecommendations.en] : "Unavailable"}</span>
+                      <span>DV: {recommendation.languageRecommendations.dv ? labels[recommendation.languageRecommendations.dv] : "Unavailable"}</span>
+                    </div>
+                    <p>{recommendation.reason}</p>
+                    {recommendation.flags.length > 0 && <ul>{recommendation.flags.map((flag) => <li key={flag.code}><b>{flag.code}</b>: {flag.message}</li>)}</ul>}
+                    {blockReason && <p className="review-required">Individual article-pair review required: {blockReason}</p>}
+                  </div>
+                  <div className="classification-actions">
+                    <label className="classification-select">
+                      <input
+                        type="checkbox"
+                        checked={reviewed}
+                        onChange={(event) => setReviewedNews((current) => {
+                          const next = new Set(current);
+                          if (event.target.checked) next.add(item.storyId);
+                          else { next.delete(item.storyId); setHumanBatch((batch) => { const updated = new Set(batch); updated.delete(item.storyId); return updated; }); }
+                          return next;
+                        })}
+                      />
+                      <span>Reviewed — approve as News</span>
+                    </label>
+                    <label className="classification-select">
+                      <input
+                        type="checkbox"
+                        disabled={!batchEligible}
+                        checked={humanBatch.has(item.storyId)}
+                        onChange={(event) => setHumanBatch((current) => { const next = new Set(current); if (event.target.checked) next.add(item.storyId); else next.delete(item.storyId); return next; })}
+                      />
+                      <span>Add to multi-story approval</span>
+                    </label>
+                  </div>
+                </article>
+              );
+            })}
+        </div>
+      </section>
       <div className="classification-list">
         {items.map((item) => {
           const recommendation = item.recommendation,
