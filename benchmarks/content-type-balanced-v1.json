@@ -1,0 +1,708 @@
+{
+  "version": "content-type-balanced-v1",
+  "createdAt": "2026-08-19",
+  "promptVersion": "content-type-confidence-v2",
+  "schemaVersion": "2.0",
+  "model": "gpt-5.4-nano",
+  "description": "Human-authored gold benchmark. Expected labels and review expectations are authoritative and must never be derived from classifier output.",
+  "cases": [
+    {
+      "benchmarkId": "real-news-1",
+      "source": "trusted_production_snapshot",
+      "productionStoryId": "49b8c904-1404-4243-8b88-23464565feaa",
+      "expectedType": "news",
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "news"
+      },
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Human-reviewed Batch 1 factual reporting; the article reports events or statements without adopting a contributor or institutional viewpoint.",
+      "category": null,
+      "translations": [
+        {
+          "language": "dv",
+          "headline": "އިންޝުއަރެންސް މައްސަލައިގައި މަޖިލީހުން އެލައިޑާއެކު ބޭއްވި ބައްދަލުވުން ސިއްރުކޮށްފި",
+          "summary": "ރާއްޖެއާއި ބޭރު ގައުމުތަކުން ފަރުވާ ހޯދުމުގައި މަޖިލިސް މެންބަރުންގެ ހެލްތު އިންޝުއަރެންސް ބޭނުންކުރަން ދަތިވާ ކަމަށް ބުނެ، އެލައިޑް އިންޝުއަރެންސް ހާޒިރުކުރި އާންމު ކޮމިޓީގެ ބައްދަލުވުން ނޫސްވެރިންނަށް ބަންދުކޮށް ސިއްރުކޮށްފިއެވެ. ކޮމިޓީގެ މުގައްރިރު މުޙައްމަދު ޝާހިދާއި މެންބަރު އިބްރާހީމް ދީދީ ވަނީ މީގެ ކުރީގެ ބައްދަލުވުމުގައި މެންބަރުން ދެއްކެވި ވާހަކަތައް ނޫސްތަކުން އޮޅުވާލައިގެން ރިޕޯޓުކުރި ކަމަށް ތުހުމަތުކުރައްވާފައެވެ. ބޮޑު މުސާރައާއި އިނާޔަތްތައް ލިބޭ މެންބަރުންގެ މަސައްކަތް މަދުވެ، ޖަލްސާތައް ކެންސަލްވާ މައްސަލައިގައި އާންމުންގެ ބޮޑެތި ފާޑުކިޔުންތަކެއް ވަނީ އަމާޒުވެފައެވެ.",
+          "articleText": "އިންޝުއަރެންސްގެ ދަތިތަކާ ހުރެ އެލައިޑް ހާޒިރުކުރި މަޖިލީހުގެ ކޮމިޓީ ބައްދަލުވުން ސިއްރުކޮށްފި\n\nރައްޔިތުންގެ މަޖިލީހުގެ މެންބަރުންގެ ހެލްތު އިންޝުއަރެންސް ބޭނުންކޮށްގެން ރާއްޖެއާއި ބޭރު ގައުމުތަކުގެ ހޮސްޕިޓަލްތަކުން ފަރުވާ ހޯދުމުގައި ދަތިތަކާ ކުރިމަތިވާ ކަމަށް ބުނެ، އެލައިޑް އިންޝުއަރެންސް ކުންފުނި ހާޒިރުކުރި އާންމު ކޮމިޓީގެ ބައްދަލުވުން ސިއްރުކޮށްފިއެވެ.\n\nމިއަދުގެ ބައްދަލުވުން ފެށްޓެވުމަށްފަހު ކޮމިޓީގެ މުގައްރިރު އަދި ހުޅުދޫ ދާއިރާގެ މެންބަރު މުޙައްމަދު ޝާހިދު ވަނީ، މިދިޔަ އަންގާރަ ދުވަހު އޮތް ކޮމިޓީ ބައްދަލުވުމުގައި މެންބަރުން ދެއްކެވި ވާހަކަތައް ނޫސްވެރިން ރިޕޯޓުކުރީ ހަގީގަތާ ހިލާފަށް ކަމަށް ވިދާޅުވެފައެވެ. އޭނާ ފާހަގަކުރެއްވި ގޮތުގައި މެންބަރުން ދެއްކެވީ ހޮސްޕިޓަލްތަކުން ޚިދުމަތް ހޯދުމުގައި ދިމާވާ ޑިލޭތަކާއި، އެއްބަސްވެފައިވާ ގޮތަށް ޚިދުމަތް ނުލިބުމުގެ ޝަކުވާއެވެ.\n\nކޮމިޓީ ބައްދަލުވުމުގައި ފޭދޫ ދެކުނު ދާއިރާގެ މެންބަރު އިބްރާހީމް ދީދީ (އައިބީ) ވަނީ، މެންބަރުންގެ ވާހަކަތައް ނޫސްތަކުގައި \"އޮޅުވައިލައިގެން\" ގެނެސްދީފައިވާ ކަމަށް ބުނެ، މިއަދުގެ ބައްދަލުވުން ސިއްރުކުރުމަށް ހުށަހަޅުއްވާފައެވެ. ހޮޅުދޫ ދާއިރާގެ މެންބަރު ޢަބްދުއްސައްތާރު މުޙައްމަދު ތާއީދުކުރެއްވި މި ހުށަހެޅުން ކޮމިޓީގެ އިއްތިފާގުން ފާސްވުމާއެކު، އެލައިޑާއެކު ބޭއްވި ބައްދަލުވުން ވަނީ ގަޑިއިރެއް ވަންދެން ސިއްރުކޮށްގެން ކުރިއަށް ގެންގޮސްފައެވެ.\n\nމެންބަރުންގެ ހެލްތު އިންޝުއަރެންސްގެ ޚިދުމަތާ މެދު ހިތްހަމަނުޖެހިގެން އެލައިޑް ހާޒިރުކުރިއިރު، މަޖިލިސް މެންބަރުންނަކީ ދައުލަތުން ބޮޑު މުސާރައާއި އިނާޔަތްތަކެއް ލިބޭ ބައެކެވެ. ނަމަވެސް، އެ މުސާރައާ އެކަށީގެންވާ ވަރަށް މަސައްކަތް ނުކުރާ ކަމުގެ ޝަކުވާ އާންމުން އަބަދުވެސް ކުރެއެވެ.\n\nޚާއްސަކޮށް، ފަހަކަށް އައިސް މަޖިލީހުގެ ރަސްމީ ޖަލްސާތައް ނުބޭއްވުމާއި، ކޮމިޓީ ބައްދަލުވުންތައް ކެންސަލްވާ މައްސަލައިގައި އާންމުންގެ ބޮޑެތި ފާޑުކިޔުންތަކެއް ވަނީ މަޖިލީހަށް އަމާޒުވެފައެވެ."
+        },
+        {
+          "language": "en",
+          "headline": "Secret Committee Meeting Called Over MPs' Insurance Delays",
+          "summary": "Frustrated by treatment delays at hospitals locally and abroad, Maldivian MPs summoned Allied Insurance to a parliamentary committee—and then immediately voted to seal the proceedings from the press. Committee Chair Mohamed Shahid and MP Ibrahim Dheedhi accused journalists of \"misrepresenting\" their previous complaints regarding health coverage friction. The secret hearing comes amid escalating public backlash against high-earning lawmakers over canceled committee meetings and poor legislative productivity.",
+          "articleText": "Parliamentary Committee Closes Meeting to Press Over MPs' Health Insurance Delays\n\nA parliamentary committee session convened to question Allied Insurance over service delays experienced by Members of Parliament at local and overseas hospitals was abruptly closed to the public and press following complaints over news coverage.\n\nThe General Purpose Committee had summoned representatives from Allied Insurance Company—the service provider managing the health insurance scheme for parliamentarians—to address operational hurdles faced by MPs seeking medical care.\n\nAt the start of the session, Committee Chair and Hulhudhoo constituency MP Mohamed Shahid expressed dissatisfaction with media coverage of a previous committee meeting held last Tuesday. Shahid clarified that lawmakers were addressing specific contractual delays and administrative difficulties encountered when presenting their insurance coverage at panel hospitals in the Maldives and abroad.\n\nEchoing these concerns, Feydhoo Dhekunu constituency MP Ibrahim Dheedhi asserted that news outlets had misrepresented and twisted the statements made by committee members during the prior proceedings. On these grounds, Dheedhi presented a formal motion to close the meeting to journalists.\n\nThe motion was seconded by Holhudhoo constituency MP Abdulla Saththar Mohamed and passed unanimously by attending committee members. Consequently, the committee conducted a closed-door session lasting one hour with Allied Insurance officials.\n\nThe decision to hold a secret session regarding personal health insurance perks comes amid heightened public scrutiny regarding the compensation and productivity of parliamentarians. Lawmakers receive substantial salaries and financial allowances, yet face persistent public criticism over low legislative output, frequent cancellations of committee meetings, and unheld parliamentary sittings."
+        }
+      ]
+    },
+    {
+      "benchmarkId": "real-news-2",
+      "source": "trusted_production_snapshot",
+      "productionStoryId": "902268ac-a9b5-4d31-9ffd-bab2a75447fe",
+      "expectedType": "news",
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "news"
+      },
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Human-reviewed Batch 1 factual reporting; the article reports events or statements without adopting a contributor or institutional viewpoint.",
+      "category": null,
+      "translations": [
+        {
+          "language": "dv",
+          "headline": "މާސާލީ ބޮޑު އިމްބެލެންސެއް: ސިންގަލް ކަރެންސީއަކަށް ބަދަލުވާން ފިރާގް ގޮވާލައްވައިފި",
+          "summary": "ރާއްޖޭގައި މަސައްކަތްކުރާ 280,000 އެއްހައި ބިދޭސީންގެ މުސާރަ ކޮންމެ މަހަކު ޑޮލަރަށް ބަދަލުކޮށްގެން ގައުމުން ބޭރުކުރުމާއި، ރިސޯޓު ދާއިރާ މުޅިން ޑޮލަރަށް ބިނާވެފައި އޮތުމުން އިގްތިސާދުގައި ބޮޑު އިންބެލެންސެއް އުފެދިފައިވާ ކަމަށް އިނާމޯލްޑިވްސްގެ ސީއީއޯ މުޙައްމަދު ފިރާގް ވިދާޅުވެއްޖެއެވެ. އޭނާ ވަނީ މިހާރު އޮތް \"ގަދީމީ\" ޑުއަލް ކަރަންސީ އިކޮނޮމީ ބަދަލުކޮށް، މަނިޓަރީ ސިޔާސަތު މުޅިން އޯވާހޯލްކޮށް ސިންގަލް ކަރެންސީ އިކޮނޮމީއަކަށް މައިގްރޭޓްވާން ގޮވާލައްވާފައެވެ.",
+          "articleText": "ރާއްޖޭގެ އިގްތިސާދު 'ސިންގަލް ކަރެންސީ' އަކަށް ބަދަލުކުރަން ފިރާގް ގޮވާލައްވައިފި\n\nރާއްޖޭގައި ފައިސާގެ މުއާމަލާތްކުރުމުގައި މިހާރު ގެންގުޅޭ \"ގަދީމީ\" އުސޫލުތައް މުޅިން ބަދަލުކޮށް، ރާއްޖޭގެ އިގްތިސާދު 'ސިންގަލް ކަރެންސީ އިކޮނޮމީ' އަކަށް ބަދަލުވާން ޖެހިފައިވާ ކަމަށް އިނާމޯލްޑިވްސްގެ ފައުންޑާ އަދި ސީއީއޯ މުޙައްމަދު ފިރާގް ވިދާޅުވެއްޖެއެވެ.\n\nއިކޮނޮމިކް މިނިސްޓްރީން ބޭއްވި 'އިގްތިސާދުގެ ދެފަރާތް' ޕްރޮގްރާމްގައި ވާހަކަދައްކަވަމުން ފިރާގް ވިދާޅުވީ، މިހާރު ރާއްޖޭގައި އޮތް ޑުއަލް ކަރަންސީ ސިސްޓަމުގެ ސަބަބުން އިގްތިސާދުގައި ބޮޑު އިންބެލެންސެއް އުފެދިފައިވާ ކަމަށެވެ. އެގޮތުން ރާއްޖޭގެ ރިސޯޓް އިންޑަސްޓްރީއަކީ މުޅިން ޑޮލަރުން މުއާމަލާތްކުރާ ދާއިރާއަކަށް ވާއިރު، ދިވެހިންގެ އާންމު ދިރިއުޅުމުގައި ބޭނުންކުރަނީ ދިވެހި ރުފިޔާއެވެ.\n\nމީގެ އިތުރުން، ރާއްޖޭގައި މަސައްކަތްކުރާ ގާތްގަނޑަކަށް 280,000 އެއްހައި ބިދޭސީންނަށް ދޭ މުސާރައާއި އެމީހުން ހޯދާ އިތުރު ފައިސާއަކީ ކޮންމެ މަހަކު ޑޮލަރަށް ބަދަލުވެގެން ރާއްޖެއިން ބޭރަށް ފޮނުވާ ފައިސާކަން އޭނާ ފާހަގަކުރެއްވިއެވެ. އެހެންކަމުން، މަނިޓަރީ ސިޔާސަތު ޒަމާނީ ގޮތަކަށް ބަދަލުކޮށް، އިންވެސްޓަރުންނަށް ނުރައްކާ ނުވާނެހެން ސިންގަލް ކަރެންސީ އިކޮނޮމީއަކަށް ބަދަލުވުމަކީ މުހިންމު ކަމެއް ކަމަށް އޭނާ ވިދާޅުވިއެވެ.\n\nބޭންކް އޭޓީއެމްތަކުން ކޮންމެ ދުވާލަކު ނަގާ ގިނަ އަދަދެއްގެ ފައިސާއަކީ ހަމައެކަނި ދިވެހިންގެ ބޭނުންތަކަށް ނަގާ ފައިސާ ނޫންކަމާއި، އޭގެ ތެރޭގައި ފައިސާ ބޭރުވާ ގިނަ ލިންކްތަކެއް ހިމެނޭކަން ފިރާގް ފާހަގަކުރެއްވިއެވެ. އަދި ރާއްޖޭގައި ނުގަވައިދުން ވިޔަފާރިކުރާ ބޭރުގެ ގިނަ ފަރާތްތަކެއް އުޅޭކަމީ ދިވެހިންގެ އަތުން ކައްސާލާފައިވާ ކަމެއް ކަމަށްވާތީ، މުޅި ފައިސާއަކީ އިކޮނޮމީގެ ތެރޭގައި ހިފެހެއްޓިގެން ވަކި ސިސްޓަމެއްގެ ތެރެއިން ދައުރުވާ އެއްޗަކަށް ހަދަންޖެހޭ ކަމަށް ވިދާޅުވިއެވެ.\n\nރާއްޖޭގެ އިގްތިސާދު ފުޅާވަމުންދާ މިންވަރަށް ގާނޫނުތައް ހެދިފައި ނެތުމުން، މިހާރު އޮތް މަނިޓަރީ ޕޮލިސީ މުޅިން 'އޯވާހޯލް' ކޮށް، ޒަމާނާ ގުޅޭ ގޮތަށް ބަދަލުކުރުމަކީ މިއަދު ކޮންމެހެން ކުރަންޖެހިފައިވާ ކަމެއް ކަމަށް ފިރާގް ވިދާޅުވިއެވެ."
+        },
+        {
+          "language": "en",
+          "headline": "280,000 Migrant Workers Driving Outflow Spurs Single-Currency Call",
+          "summary": "With roughly 280,000 foreign workers in the Maldives converting local earnings into dollars to transfer abroad every month, Inner Maldives CEO Mohamed Firaq has urged an immediate transition to a single-currency economy. Speaking on the Economic Ministry's \"Ightisaadhuge Dhefaraiy\" program, Firaq argued that the country's dual-currency model is an outdated system causing severe market imbalances, demanding a complete overhaul of current monetary policies to plug systemic capital flight.",
+          "articleText": "Transition to Single-Currency Economy Urged to Curb Capital Outflow Driven by 280,000 Foreign Workers\n\nThe Maldives must urgently overhaul its monetary policy and migrate to a single-currency economy to eliminate deep structural imbalances caused by its current dual-currency framework, Inner Maldives Founder and CEO Mohamed Firaq has urged.\n\nSpeaking on \"Ightisaadhuge Dhefaraiy,\" an economic forum organized by the Ministry of Economic Development and Trade, Firaq described the nation's reliance on both the US dollar and Maldivian Rufiyaa as an outdated system that fails to support a modernizing national economy.\n\nHighlighting a primary driver of domestic dollar shortages, Firaq pointed out that approximately 280,000 foreign nationals currently working in the Maldives receive wages and generate earnings locally that are routinely converted into US dollars every month before being remitted overseas. This constant outflow, combined with a resort sector operating entirely in foreign currency while everyday domestic transactions use Maldivian Rufiyaa, creates a significant economic distortion.\n\nFiraq emphasized that migrating to a single-currency economy would not mean enacting laws that threaten foreign investors. Instead, it represents a necessary maturation of the financial ecosystem to ensure capital remains within the domestic economy under regulated frameworks.\n\nAddressing related issues in the financial sector, Firaq noted that daily cash withdrawals from automated teller machines (ATMs) across the country extend beyond normal consumer needs, involving multiple informal links through which capital leaks out of the formal economy. He added that unregulated foreign-operated businesses have grown beyond local oversight, making it imperative to bring all financial transactions into a unified, traceable banking system.\n\nConcluding his remarks, Firaq asserted that national legal and regulatory frameworks have failed to keep pace with the expansion of the Maldivian economy. He called for a comprehensive overhaul of existing monetary policies to align with modern economic reality and safeguard national financial stability."
+        }
+      ]
+    },
+    {
+      "benchmarkId": "real-news-3",
+      "source": "trusted_production_snapshot",
+      "productionStoryId": "c8c7cc50-39a1-415c-93b7-4abbf4ecdb9b",
+      "expectedType": "news",
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "news"
+      },
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Human-reviewed Batch 1 factual reporting; the article reports events or statements without adopting a contributor or institutional viewpoint.",
+      "category": null,
+      "translations": [
+        {
+          "language": "dv",
+          "headline": "ބީއެމްއެލްއިން ބޭސްފަރުވާއަށް ދޫކުރާ ޑޮލަރު ތިން ގުނައަށް އިތުރުވެއްޖެ",
+          "summary": "ބޭންކް އޮފް މޯލްޑިވްސް (ބީއެމްއެލް) އިން ބޭސްފަރުވާއަށް މަހެއްގެ މައްޗަށް ދޫކުރާ ޑޮލަރުގެ އަދަދު ތިން މިލިއަނަށް ވުރެ މައްޗަށް ގޮސް، ތިން ގުނައަށް އިތުރުވެއްޖެއެވެ. \"އިގްތިސާދުގެ ދެފަރާތް\" ޕްރޮގްރާމްގައި ވާހަކަދައްކަވަމުން ބީއެމްއެލްގެ ހެޑް އޮފް ބްރޭންޑް އެންޑް މާކެޓިން ސްޓެރެޓަޖީ މުހައްމަދު ސައީދު ވަނީ ބޭންކުން ދުވާލަކު އެވްރެޖްކޮށް 2.7 މިލިއަން ޑޮލަރު ވިއްކަމުންދާކަން ހާމަކުރައްވާފައެވެ. މިއަހަރުގެ ފުރަތަމަ ހަ މަސްދުވަހު ޖުމްލަ 1.7 ބިލިއަން ޑޮލަރު ވަނީ ކަސްޓަމަރުންނަށް ވިއްކާފައެވެ.",
+          "articleText": "ބީއެމްއެލްއިން ބޭސްފަރުވާއަށް ދޫކުރާ ޑޮލަރު ތިން ގުނައަށް އިތުރުވެ، ޑޮލަރު ވިއްކި މިންވަރު 1.7 ބިލިއަނަށް\n\nބޭންކް އޮފް މޯލްޑިވްސް (ބީއެމްއެލް) އިން ބޭސްފަރުވާއަށް މަހެއްގެ މައްޗަށް ދޫކުރާ ޑޮލަރުގެ އަދަދު ތިން މިލިއަނަށް ވުރެ މައްޗަށް ގޮސް، މިދިޔަ އަހަރާ އަޅައިބަލާއިރު ތިން ގުނައަށް އިތުރުވެއްޖެއެވެ.\n\nރާއްޖޭގެ އިގްތިސާދީ ހާލަތާ ގުޅޭގޮތުން ބޭއްވި \"އިގްތިސާދުގެ ދެފަރާތް\" ޕްރޮގްރާމްގައި ވާހަކަދައްކަވަމުން ބީއެމްއެލްގެ ހެޑް އޮފް ބްރޭންޑް އެންޑް މާކެޓިން ސްޓެރެޓަޖީ މުހައްމަދު ސައީދު ވިދާޅުވީ، ބޭންކުން ޑޮލަރު ދޫކުރުމުގައި އެންމެ ބޮޑު އިސްކަމެއް ދެނީ ބޭސްފަރުވާއަށާއި ތައުލީމީ ކަންކަމަށް ކަމަށެވެ.\n\nސައީދު ހާމަކުރެއްވި ތަފާސްހިސާބުތަކަށް ބަލާއިރު، މިދިޔަ އަހަރު ބޭސްފަރުވާއަށް މަހަކު އެވްރެޖްކޮށް ދޫކޮށްފައިވަނީ އެއް މިލިއަން ޑޮލަރެވެ. ނަމަވެސް 2024 ވަނަ އަހަރުގެ ފުރަތަމަ ހަތް މަސްދުވަހުގެ ތެރޭގައި މި އަދަދު ވަނީ މަހަކު ތިން މިލިއަން ޑޮލަރަށް ވުރެ މައްޗަށް އުފުލިފައެވެ. އަނެއްކޮޅުން ތައުލީމީ ދާއިރާއަށް ޑޮލަރު ދޫކުރި މިންވަރު ފާއިތުވި ތިން އަހަރުވެސް އުޅެނީ އެއްވަރެއްގައެވެ. އެގޮތުން 2023 ވަނަ އަހަރު މަހަކު އެވްރެޖްކޮށް 3.8 މިލިއަން ޑޮލަރު ދޫކޮށްފައިވާއިރު، 2024 ގައި ދޫކޮށްފައިވަނީ މަހަކު އެވްރެޖްކޮށް 3.6 މިލިއަން ޑޮލަރެވެ.\n\nމީގެ އިތުރުން ކާޑު މުއާމަލާތްތަކާއި ޓީޓީ ހެއްދުން ހިމެނޭހެން ބީއެމްއެލްއިން މިހާރު ދުވާލެއްގެ މައްޗަށް އެވްރެޖްކޮށް 2.7 މިލިއަން ޑޮލަރު ވިއްކަމުންދާ ކަމަށް ސައީދު ވިދާޅުވިއެވެ. މިއަހަރުގެ ފުރަތަމަ ހަ މަސްދުވަހުގެ ތެރޭގައި އެކަނިވެސް 570 މިލިއަން ޑޮލަރު ވިއްކާފައިވާއިރު، ވިޔަފާރިތަކަށް ލޯނުގެ ގޮތުގައި 270 މިލިއަން ޑޮލަރު ވަނީ ދޫކޮށްފައެވެ.\n\nބޭންކުގެ ރެކޯޑުތަކުން ދައްކާގޮތުގައި 2024 ޖެނުއަރީން ޖޫންގެ ނިޔަލަށް ޖުމްލަ 1.7 ބިލިއަން ޑޮލަރު ކަސްޓަމަރުންނަށް ވިއްކާފައިވެއެވެ. މިއީ ޖުލައި 2021 އިން ޑިސެމްބަރު 2023 އާ ހަމައަށް ވިއްކާފައިވާ 957 މިލިއަން ޑޮލަރާ އަޅައިބަލާއިރު 77 އިންސައްތައިގެ ބޮޑު އިތުރުވުމެކެވެ."
+        },
+        {
+          "language": "en",
+          "headline": "Medical Foreign Exchange Demand Triples at BML",
+          "summary": "Bank of Maldives (BML) has reported a massive surge in medical foreign exchange allocations, with monthly figures tripling to over 3 million USD in the first seven months of 2024. Presenting data on the \"Ightisaadhuge Dhefaraiy\" program, BML Head of Brand and Marketing Strategy Mohamed Saeed confirmed daily dollar sales now average 2.7 million USD, with total dollar sales soaring by 77 percent to hit 1.7 billion USD.",
+          "articleText": "Bank of Maldives Reports Tripling of Monthly Medical Dollar Allocations Amid Soaring Foreign Exchange Demand\n\nThe Bank of Maldives (BML) has recorded a dramatic threefold increase in foreign exchange allocations for overseas medical treatment during the first seven months of 2024, reflecting surging national demand for essential foreign currency.\n\nSpeaking on the economic focus program \"Ightisaadhuge Dhefaraiy,\" BML Head of Brand and Marketing Strategy Mohamed Saeed emphasized that medical treatment and overseas education remain the primary priority sectors for the national bank's foreign exchange distribution.\n\nAccording to figures disclosed by Saeed, monthly dollar allocations for medical care surged from a monthly average of 1 million USD last year to over 3 million USD per month during the first seven months of 2024. In contrast, foreign exchange assistance for education has maintained a consistent trajectory over the past three years, with BML releasing an average of 3.8 million USD monthly in 2023 and 3.6 million USD per month so far in 2024.\n\nAcross all operations, BML is currently releasing an average of 2.7 million USD daily to meet domestic demand through card transactions and Telegraphic Transfers (TTs). During the first six months of 2024 alone, the bank sold 570 million USD to customers and disbursed an additional 270 million USD in foreign currency loans to support local businesses.\n\nTotal foreign currency sales to customers from January to June 2024 reached 1.7 billion USD. This represents a substantial 77 percent surge compared to the 957 million USD distributed over the two-and-a-half-year period from July 2021 to December 2023, underscoring unprecedented growth in local dollar liquidity demands managed by the bank."
+        }
+      ]
+    },
+    {
+      "benchmarkId": "real-news-4",
+      "source": "trusted_production_snapshot",
+      "productionStoryId": "bef82ee0-80f6-435b-8152-cb0dd32aa4b7",
+      "expectedType": "news",
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "news"
+      },
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Human-reviewed Batch 1 factual reporting; the article reports events or statements without adopting a contributor or institutional viewpoint.",
+      "category": null,
+      "translations": [
+        {
+          "language": "dv",
+          "headline": "ދެ ކިލޯގެ ރަން އަތުލި ލަންކާ މީހާ، ރާއްޖޭގައި ރަން ރިފައިން ނުކުރެވޭ މައްސަލަ ހައިކޯޓަށް",
+          "summary": "ސިއްރުން ރާއްޖެއަށް އެތެރެކުރުމުން ދައުލަތަށް ނެގި ދެ ކިލޯގެ ރަން އަނބުރާ ހަވާލުކޮށް، ޖަލަށްލާފައިވާ ލަންކާ މީހާ މިނިވަންކުރުމަށް ހައިކޯޓުގައި އެދެފިއެވެ. ދިވެއްސަކާ ކައިވެނިކޮށްގެން އުޅޭ މި މީހާގެ ފަރާތުން ހުށަހެޅި އިސްތިއުނާފީ ނުކުތާތަކުގެ ތެރޭގައި، ރާއްޖޭގައި ރަން ރިފައިން ކުރެވޭނެ ގޮތެއް ނެތި އެއީ ވަކި އެއްޗެއް ކަމަށް ނިންމުމާއި، ޗެއިން އޮފް ކަސްޓަޑީ ނުބެލެހެއްޓުން ހިމެނެއެވެ.",
+          "articleText": "ވަގަށް އެތެރެކުރި ދެ ކިލޯގެ ރަން އަނބުރާ ދިނުމަށާއި ލަންކާ މީހާ މިނިވަންކުރަން ހައިކޯޓުގައި އެދެފި\n\nސިއްރުން ރާއްޖެއަށް އެތެރެކުރުމުން ދައުލަތަށް ނަގާފައިވާ ދެ ކިލޯގެ ރަން، އަލުން އަނބުރާ ހަވާލުކޮށް، އެ މައްސަލައިގައި ޖަލަށްލާފައި ހުރި ސްރީ ލަންކާގެ ރައްޔިތެއް ކަމަށްވާ މުހައްމަދު ސުލައިމްހާން މިނިވަންކޮށްދިނުމަށް އޭނާގެ ފަރާތުން ހައިކޯޓުގައި އެދެފިއެވެ.\n\nމިއީ 2023 ވަނަ އަހަރު ދުބާއީއިން ރާއްޖޭގެ މަގުން ލަންކާއަށް ދަތުރު ކުރަނިކޮށް، އޭނާ ގެންދިޔަ ރަންތައް ދައުލަތަށް ނެގި މައްސަލައެވެ. މި މައްސަލައިގައި ރާއްޖެއަށް ސިއްރުން މުދާ އެތެރެ ކުރުމުގެ ކުށުގެ ދައުވާ ދައުލަތުން ސުލައިމްހާންގެ މައްޗަށް ކުރުމުން، މިދިޔަ އަހަރުގެ އޮކްޓޫބަރު މަހު ކޯޓުން ވަނީ އޭނާގެ މައްޗަށް އެއް އަހަރު ދުވަހުގެ ޖަލު ހުކުމެއް އިއްވައި، އެ ރަންތައް ދައުލަތަށް ނެގުމަށް ހުކުމްކޮށްފައެވެ.\n\nދިވެއްސަކާ ކައިވެނިކޮށްގެން އުޅޭ މި ލަންކާ މީހާގެ ފަރާތުން ހައިކޯޓުގައި އިސްތިއުނާފު ކުރި މައްސަލައިގެ އަޑުއެހުންތައް އާދިއްތަ ދުވަހު ފަށާފައިވާއިރު، ވަކީލުގެ އިތުރުން ތަރުޖަމާނެއް ވެސް ބައިވެރިވި މި ޝަރީއަތުގައި އޭނާގެ ފަރާތުން ވަނީ މައިގަނޑު ފަސް ނުކުތާއެއް ހުށަހަޅާފައެވެ.\n\nއޭގެ ތެރޭގައި، ރާއްޖޭގައި ރަން ރިފައިން ކުރެވޭނެ ގޮތެއް ނެތި އެއީ ވަކި އެއްޗެއް ކަމަށް ކޯޓުން ނިންމާފައިވާ ނިންމުމަށް ވަނީ ގޮންޖަހާފައެވެ. މީގެ އިތުރުން، ކުށުގެ އުންސުރު ފުރިހަމަ ނުވާ ދައުވާއެއް ކޮށްފައިވުމާއި، ތަކެތީގެ ޗެއިން އޮފް ކަސްޓަޑީ ބަލަހައްޓާފައި ނުވުމާއި، ކުރިން ކުށުގެ ރެކޯޑެއް ނެތީސް ރެކޯޑް އޮތް ކަމަށް ކަނޑައެޅުމުގެ އިތުރުން، މިފަދަ އެހެން މައްސަލަތަކުގައި ހިފަހައްޓާ މީހުންނާ މެދު އަމަލުކުރާ ގޮތާ ހިލާފަށް އޭނާއާމެދު ތަފާތުކޮށް އަމަލުކޮށްފައިވާ ކަމަށް އިސްތިއުނާފީ ނުކުތާތަކުގައި ފާހަގަކޮށްފައިވެއެވެ.\n\nއިސްތިއުނާފު ކުރި ލަންކާ މީހާގެ ފަރާތުން ހައިކޯޓުގައި އެދިފައިވަނީ އޭނާގެ މައްޗަށް އިއްވާފައިވާ ޖަލު ހުކުމް ބާތިލުކޮށް މިނިވަން ކުރުމަށާއި، އޭނާގެ އަތުން އަތުލި ދެ ކިލޯގެ ރަން ހަތް ދުވަހުގެ ތެރޭގައި އަނބުރާ ރައްދު ކުރުމަށް އަމުރުކޮށްދިނުމަށެވެ. މައްސަލަ ބަލާ ބެންޗުން ވަނީ އިސްތިއުނާފީ ނުކުތާތައް އަޑުއެހުމަށްފަހު، އިތުރު އަޑުއެހުމެއް ފަހުން ބާއްވާނެ ކަން އިއުލާންކޮށްފައެވެ."
+        },
+        {
+          "language": "en",
+          "headline": "Smuggled Gold Appeal Questions Lack of Refineries in Maldives",
+          "summary": "A Sri Lankan man serving a one-year prison sentence for smuggling two kilograms of gold has asked the High Court to free him and return his confiscated bullion within seven days. In his appeal, the convict—who is married to a Maldivian—argued that lower courts committed a fundamental error by declaring the seized item to be gold despite the total absence of gold-refine capabilities in the Maldives.",
+          "articleText": "Smuggled Gold Confiscation Challenged in High Court Over Lack of Local Refining Infrastructure\n\nA Sri Lankan national serving a one-year prison sentence for smuggling two kilograms of gold into the Maldives has requested the High Court to overturn his conviction and order the state to return the confiscated precious metal within seven days.\n\nThe legal challenge stems from an incident in 2023, when the appellant, Mohamed Sulaimhan, was intercepted transiting through the Maldives from Dubai to Sri Lanka. Following his arrest, the state charged him with smuggling goods into the country. In October last year, the lower court sentenced Sulaimhan to one year in prison and ordered the permanent forfeiture of the seized gold to the state.\n\nDuring the appeal hearing, which commenced with the presence of legal counsel and a language interpreter, the defense team presented five core arguments challenging the lower court's judgment. Chief among the points raised was that the lower court erred in formally classifying the seized substance as gold when the Maldives completely lacks the technical infrastructure required to refine and verify gold bullion locally.\n\nAdditionally, the defense argued that the state presented a charge lacking fundamental legal elements, failed to maintain a verifiable chain of custody for the seized items, and wrongfully asserted that the defendant had a prior criminal record. The appeal further highlighted discriminatory treatment, asserting that Sulaimhan, who is married to a Maldivian citizen, was subjected to unequal enforcement compared to individuals involved in similar cases.\n\nSulaimhan's defense requested the High Court to annul his conviction, release him from custody, and issue an order directing the government to return the two kilograms of gold within seven days. The High Court bench concluded the preliminary hearing after hearing the grounds of appeal and announced that subsequent sessions will be scheduled to proceed with the case."
+        }
+      ]
+    },
+    {
+      "benchmarkId": "real-news-5",
+      "source": "trusted_production_snapshot",
+      "productionStoryId": "454f967c-311e-49c9-9e45-dbc40021ef7b",
+      "expectedType": "news",
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "news"
+      },
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Human-reviewed Batch 1 factual reporting; the article reports events or statements without adopting a contributor or institutional viewpoint.",
+      "category": null,
+      "translations": [
+        {
+          "language": "dv",
+          "headline": "ރާއްޖޭގައި މަސައްކަތްކުރާ ޑޮކްޓަރުންގެ 60 ޕަސެންޓަކީ ބިދޭސީން",
+          "summary": "ރާއްޖޭގައި މަސައްކަތްކުރާ ޑޮކްޓަރުންގެ 60 އިންސައްތައަކީ ބިދޭސީން ކަމަށް ހެލްތު މިނިސްޓަރު ޤީލާ ޢަލީ މިއަދު ރައްޔިތުންގެ މަޖިލީހުގައި ވިދާޅުވެއްޖެއެވެ. ސިއްހީ ދާއިރާގައި މަސައްކަތްކުރާ 12,000 އަށްވުރެ ގިނަ މުވައްޒަފުންގެ ތެރެއިން 3,400 އަށްވުރެ ގިނަ މީހުންނަކީ ބިދޭސީންނެވެ. މިނިސްޓަރު ވިދާޅުވީ އަމާޒަކީ ދިވެހި ޚިދުމަތްތެރިން އިތުރުކުރުން ކަމަށާއި، އެގޮތުން ސްޕެޝަލިސްޓު ތަމްރީނަށްފަހު މިއަހަރު 16 ދިވެހި ޑޮކްޓަރަކު އައިޖީއެމްއެޗާ ގުޅިފައިވާ ކަމަށެވެ.",
+          "articleText": "ރާއްޖޭގައި މަސައްކަތްކުރާ ޑޮކްޓަރުންގެ 60 ޕަސެންޓަކީ ބިދޭސީން: ހެލްތު މިނިސްޓަރު\n\nރާއްޖޭގައި މަސައްކަތްކުރާ ޑޮކްޓަރުންގެ ތެރެއިން 60 އިންސައްތައަކީ ބިދޭސީ ޑޮކްޓަރުން ކަމަށް، ހެލްތު މިނިސްޓަރު ޤީލާ ޢަލީ މިއަދު ރައްޔިތުންގެ މަޖިލީހުގައި ވިދާޅުވެއްޖެއެވެ.\n\nރައްޔިތުންގެ މަޖިލީހުގެ މިއަދުގެ ޖަލްސާގައި، މައްޗަންގޯޅި މެދު ދާއިރާގެ މެންބަރު އަޙްމަދު ޟަމީރު ކުރެއްވި ސުވާލަކަށް ޖަވާބު ދެއްވަމުން މިނިސްޓަރު ޤީލާ ވިދާޅުވީ، ރާއްޖޭގެ ސިއްހީ ޚިދުމަތް މިހާރު ވެސް ފޯރުކޮށްދެމުންދަނީ ބޮޑު ބައެއް ބިދޭސީ ޚިދުމަތްތެރިންގެ މައްޗަށް ބިނާވެގެން ކަމަށެވެ. އެގޮތުން މިހާރު ޚިދުމަތުގައި ތިބި ޑޮކްޓަރުންގެ 60 ޕަސެންޓަކީ ބިދޭސީންކަން އޭނާ ފާހަގަކުރެއްވިއެވެ.\n\nސިއްހީ ދާއިރާގެ ތަފާސްހިސާބުތަކަށް އަލިއަޅުއްވަމުން މިނިސްޓަރު ވިދާޅުވީ، މުޅި ސިއްހީ ދާއިރާގައި 12,000 އަށްވުރެ ގިނަ މުވައްޒަފުން މަސައްކަތްކުރަމުން އަންނަ ކަމަށެވެ. މީގެ ތެރެއިން 7,000 އަށްވުރެ ގިނަ މުވައްޒަފުން އަތޮޅުތަކުގެ ރަށްރަށުގައި ހަރަކާތްތެރިވާއިރު، މާލޭ ސަރަހައްދުގައި 5,000 އަށްވުރެ ގިނަ މުވައްޒަފުން ވަނީ އާންމުވެފައެވެ. އަދި މުޅި ސިއްހީ ދާއިރާގައި މަސައްކަތްކުރާ ބިދޭސީންގެ ޖުމްލަ އަދަދު 3,400 އަށްވުރެ މަތި ކަމަށް ވެސް ވިދާޅުވިއެވެ.\n\nސަރުކާރުގެ އަމާޒަކީ ކުރިއަށް އޮތް ތަނުގައި ގިނަ ދިވެހި ޚިދުމަތްތެރިންނާއެކު ސިއްހީ ޚިދުމަތް ފޯރުކޮށްދިނުން ކަމަށް ޤީލާ ވިދާޅުވިއެވެ. މިކަމަށްޓަކައި ދިވެހިރާއްޖޭގެ ގައުމީ ޔުނިވާސިޓީ މެދުވެރިކޮށް ތަމްރީނުތައް ކުރިއަށްދާކަން އޭނާ ފާހަގަކުރެއްވިއެވެ.\n\nކޮންމެ އަހަރަކު ވެސް ތައުލީމު ނިންމައިގެން ގިނަ ދިވެހި ޑޮކްޓަރުން ސިއްހީ ޚިދުމަތާ ގުޅެމުންދާއިރު، މިއަހަރުގެ މިހާތަނަށް ސްޕެޝަލިސްޓު ތަމްރީނުތައް ނިންމުމަށްފަހު 16 ދިވެހި ޑޮކްޓަރަކު ވަނީ ދަރުމަވަންތަ ހޮސްޕިޓަލާއި އައިޖީއެމްއެޗާ ގުޅިވަޑައިގެންފައެވެ."
+        },
+        {
+          "language": "en",
+          "headline": "60 Percent of Doctors in the Maldives Are Foreigners",
+          "summary": "Sixty percent of doctors practicing in the Maldives are foreign nationals, Health Minister Keela Ali revealed in Parliament today. Responding to a query from MP Ahmed Dhameer, the minister highlighted the healthcare sector's heavy reliance on expatriate talent, noting that over 3,400 of the nation's 12,000 healthcare workers are foreigners. Efforts are underway to train more local practitioners, with 16 newly trained Maldivian specialists recently joining IGMH and Dharumavantha Hospital.",
+          "articleText": "60 Percent of Doctors in the Maldives Are Foreign Nationals, Health Minister Reveals in Parliament\n\nForeign medical professionals make up 60 percent of all doctors practicing in the Maldives, Health Minister Keela Ali disclosed during today's parliamentary session, underscoring the healthcare sector's ongoing reliance on expatriate expertise.\n\nResponding to an inquiry from Machhangolhi Medhu constituency MP Ahmed Dhameer, Minister Keela explained that the nation's healthcare delivery model remains heavily dependent on foreign workers across various specialties and regions.\n\nOfficial statistics cited by the Minister indicate that more than 12,000 healthcare personnel are currently employed across the country. This workforce includes over 7,000 professionals stationed in the outer islands and atolls, alongside more than 5,000 personnel based in the Greater Malé Region. Out of the total workforce, foreign nationals account for more than 3,400 positions.\n\nAddressing strategic efforts to build local capacity, Minister Keela expressed the administration's long-term objective to increase Maldivian representation across all medical fields. She highlighted ongoing training programs conducted at the Maldives National University (MNU) as a key pipeline for local talent.\n\nProgress is already visible within public tertiary institutions, with 16 Maldivian doctors joining Dharumavantha Hospital and Indira Gandhi Memorial Hospital (IGMH) so far this year following the completion of their specialized medical training."
+        }
+      ]
+    },
+    {
+      "benchmarkId": "clear-news-policy",
+      "expectedType": "news",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Independent neutral reporting of a ministerial policy announcement; the minister's advocacy is quoted rather than adopted.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Minister Announces Island Waste-Sorting Policy",
+          "summary": "A new sorting policy will begin in October.",
+          "articleText": "Environment Minister Mariyam Latheef announced on Monday that households on six islands must separate glass, metal and organic waste from October. The ministry said collection teams will visit each neighborhood twice a week. Latheef called the policy essential for reducing landfill use, while two island councillors said they would request more bins. KuruFeetha reviewed the published timetable and confirmed that the first phase covers 4,200 households. The ministry will report participation figures after three months."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-news-results",
+      "expectedType": "news",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "Neutral report that independently contextualizes a company's financial-results announcement.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Atoll Telecom Reports Higher Annual Profit",
+          "summary": "The company reported a 12 percent rise in profit.",
+          "articleText": "Atoll Telecom reported annual net profit of MVR 84 million, up 12 percent from the previous year, according to audited accounts released Thursday. Revenue rose 7 percent while network expenses increased 4 percent. Chief executive Fathimath Rasheed said new fiber customers drove growth. The filing also shows debt increased by MVR 20 million. Market analyst Ismail Waheed said the debt rise deserved attention despite the stronger profit. The company will hold its shareholder meeting next month."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-news-expert-advocacy",
+      "expectedType": "news",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": false,
+      "rationale": "A named expert advocates a position, but KuruFeetha neutrally reports and contextualizes the remarks.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Marine Scientist Calls for Seasonal Reef Closures",
+          "summary": "An expert urged seasonal limits at three dive sites.",
+          "articleText": "Marine scientist Dr Aishath Zahir urged authorities to close three heavily visited reef sites for two months each year, speaking at a university forum on Tuesday. She said survey data showed coral breakage had increased since 2023. Tourism operators questioned whether closures would shift pressure elsewhere, and the Environment Ministry said no decision had been made. KuruFeetha reviewed the survey summary, which covered 18 monitoring visits. The report presents the competing responses without endorsing Zahir's proposal."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-opinion-columnist-policy",
+      "expectedType": "opinion",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "A named columnist personally argues for a policy change.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Why Malé Needs Congestion Pricing Now",
+          "summary": "Columnist Adam Shareef argues for a road charge.",
+          "articleText": "By Adam Shareef. I believe Malé can no longer postpone congestion pricing. Every government has promised better traffic management, yet none has confronted the basic fact that scarce road space is free at the point of use. A weekday charge would encourage shared trips and fund reliable buses. Critics will call it unfair, but a targeted rebate can protect lower-income workers. The city should begin a one-year trial next January and publish the results."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "opinion",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-opinion-political-analysis",
+      "expectedType": "opinion",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "An identified contributor offers their own political interpretation.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "The Coalition's Real Test Comes After the Vote",
+          "summary": "Political analyst Leena Ahmed interprets the coalition's prospects.",
+          "articleText": "Analysis by Leena Ahmed. The coalition's election win disguises a fragile bargain. In my assessment, its leaders agree on patronage but not on economic reform. The first budget will expose that divide: one faction wants rapid subsidies while another fears the debt burden. Voters should watch cabinet appointments rather than victory speeches. If technocrats are sidelined, the alliance is likely to fracture before local council elections."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "opinion",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-opinion-housing",
+      "expectedType": "opinion",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "A signed writer advocates a specific housing policy.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Public Land Should Serve Renters First",
+          "summary": "Contributor Hawwa Najeeb argues for rental housing.",
+          "articleText": "Commentary by Hawwa Najeeb. I have spent ten years helping young families navigate Malé's rental market, and the lesson is clear: handing out more plots will not solve today's crisis. Government land should first support permanently affordable rental homes. I propose an independent housing trust, transparent waiting lists and rents tied to income. Home ownership can remain an option, but it should not consume every available public parcel."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "opinion",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-opinion-first-person-tourism",
+      "expectedType": "opinion",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "First-person commentary by a named tourism worker.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "What Resort Training Gets Wrong",
+          "summary": "By resort trainer Hassan Riyaz.",
+          "articleText": "By Hassan Riyaz. I train new resort employees, and I think our programs reward memorization instead of judgment. Staff learn scripts but are rarely trusted to solve a guest's problem. In my experience, three changes would help: paid mentoring, Dhivehi-language technical materials and promotion criteria that value practical decisions. Operators may resist the cost, but better training will reduce turnover and strengthen service."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "opinion",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-opinion-climate",
+      "expectedType": "opinion",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "A clearly identified contributor advances a personal policy argument.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Adaptation Funding Must Reach Island Councils",
+          "summary": "Economist Sara Ibrahim argues for direct grants.",
+          "articleText": "Opinion by Sara Ibrahim. Climate adaptation grants should go directly to island councils rather than being filtered through multiple ministries. Councils know which harbor walls fail and which drainage channels flood. I argue that central agencies should set safeguards and audit spending, not choose every project. Direct grants will not solve weak procurement overnight, but withholding authority guarantees delay. Parliament should establish the mechanism in this year's finance bill."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "opinion",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-editorial-accountability",
+      "expectedType": "editorial",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Explicit KuruFeetha institutional position and recommendation.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Parliament Must Publish Committee Attendance",
+          "summary": "Our institutional view on legislative transparency.",
+          "articleText": "KuruFeetha believes Parliament must publish a complete, machine-readable record of committee attendance every month. Citizens fund the legislature and deserve to know whether elected members are doing the work. The current summary tables are inconsistent and difficult to compare. Our view is that the Speaker should order a standardized register before the next session and correct errors publicly. Transparency here is not optional; it is a basic condition of accountability."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "editorial",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-editorial-safety",
+      "expectedType": "editorial",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Publication-level voice states KuruFeetha's institutional judgment.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Our View: Ferry Safety Cannot Wait",
+          "summary": "KuruFeetha calls for mandatory safety reporting.",
+          "articleText": "Our view is that the transport regulator has waited too long to require public reporting of ferry safety incidents. KuruFeetha believes every licensed operator should disclose mechanical failures, injuries and cancelled voyages in a common register. Operators deserve a fair process to correct errors, but secrecy leaves passengers unable to judge risk. The ministry should issue the rule within 60 days and enforce it consistently."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "editorial",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-editorial-corrections",
+      "expectedType": "editorial",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "The publication speaks collectively about newsroom standards.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Why Newsrooms Must Correct Errors Prominently",
+          "summary": "KuruFeetha's editorial position on corrections.",
+          "articleText": "KuruFeetha believes corrections should be as visible as the errors they repair. News organizations, including our own, weaken trust when they quietly replace inaccurate text without explaining what changed. We will continue to attach clear correction notes and urge other publishers to do the same. Our industry should adopt a shared minimum standard covering timing, placement and archived versions."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "editorial",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-editorial-procurement",
+      "expectedType": "editorial",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Institutional criticism and recommendation from KuruFeetha.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Secret Procurement Damages Public Trust",
+          "summary": "The publication calls for contract disclosure.",
+          "articleText": "KuruFeetha's position is straightforward: major public contracts should not remain hidden after they are awarded. Commercial confidentiality may protect narrow technical details, but it cannot justify concealing prices, owners and evaluation scores. We call on the Finance Ministry to publish the delayed contracts this week and establish an automatic disclosure portal. Public money requires public scrutiny."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "editorial",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-editorial-health",
+      "expectedType": "editorial",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Uses explicit collective publication voice to advocate policy.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Mental Health Care Belongs in Every Atoll",
+          "summary": "Our institutional recommendation for health services.",
+          "articleText": "Our view is that basic mental health care must be available in every atoll. KuruFeetha believes the current concentration of specialists in Malé imposes an unacceptable burden on families. The Health Ministry should fund rotating clinical teams while training permanent island-based counsellors. This will require sustained spending, but postponement carries a greater social cost."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "editorial",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-pr-ministry",
+      "expectedType": "press_release",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Substantially reproduces a ministry communication with no independent reporting.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Ministry Launches Green Islands Campaign",
+          "summary": "A supplied ministry announcement describing its campaign.",
+          "articleText": "The Ministry of Environment is pleased to announce the launch of the Green Islands Campaign, a transformative national initiative that will create cleaner and healthier communities. The campaign will distribute 10,000 reusable bags and conduct awareness sessions in every atoll. Minister Mariyam Latheef thanked President Ibrahim for his visionary leadership and invited all citizens to join this historic effort. For more information, contact the ministry's communications unit."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "press_release",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-pr-company",
+      "expectedType": "press_release",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Corporate promotional communication is reproduced in release style.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "OceanLink Unveils Next-Generation Mobile Network",
+          "summary": "Company-supplied product announcement.",
+          "articleText": "OceanLink today proudly unveiled its next-generation mobile network, delivering unmatched speed and reliability to customers across the Maldives. The milestone reflects OceanLink's unwavering commitment to innovation and customer excellence. Chief Executive Ameen Ali said the network will transform the digital future. Special launch packages are available from Friday through all OceanLink stores and the company website. Media inquiries should be directed to corporate communications."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "press_release",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-pr-ngo",
+      "expectedType": "press_release",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "NGO release is lightly formatted but not independently reported.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Island Aid Begins Youth Leadership Programme",
+          "summary": "NGO communication announcing its own program.",
+          "articleText": "Island Aid is delighted to announce the 2026 Youth Leadership Programme, supported by the Blue Future Foundation. Fifty young people will receive world-class training in community service, project design and advocacy. Island Aid Executive Director Reema Hassan described the programme as a landmark investment in the nation's future. Applications close on 30 September. Interested candidates may apply through Island Aid's online form."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "press_release",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-pr-party",
+      "expectedType": "press_release",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Political party statement is reproduced as issued.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Reform Party Condemns Proposed Tax Increase",
+          "summary": "Party-issued statement presented substantially unchanged.",
+          "articleText": "The Reform Party strongly condemns the government's reckless proposal to increase the general service tax. This unfair measure will punish families and small businesses while protecting wasteful spending. Party Leader Ibrahim Sameer calls on every member of Parliament to reject the bill and stand with the people. The Reform Party will hold a public rally on Thursday at 8 p.m. This statement was issued by the party secretariat."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "press_release",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "clear-pr-university",
+      "expectedType": "press_release",
+      "clarity": "clear",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Institutional achievement release uses promotional voice and contact language.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "National University Celebrates Research Ranking",
+          "summary": "University-supplied announcement about its ranking.",
+          "articleText": "Maldives National University is proud to announce its highest-ever position in the Regional Research Index. The achievement recognizes the dedication of our exceptional academics and the university's strategic commitment to excellence. Vice Chancellor Dr Naila Waheed congratulated staff and students on this remarkable milestone. A celebration ceremony will be held next week. Journalists may contact the university public relations office for interviews."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "press_release",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-government-announcement",
+      "expectedType": "news",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Mostly announcement-based but includes independent verification and outside response; gold label is News with human review warranted at the boundary.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Government Sets New Harbor Fee From January",
+          "summary": "The ministry announced a revised fee after cabinet approval.",
+          "articleText": "The Transport Ministry announced that harbor entry fees will rise by 15 percent from January after cabinet approval. Its statement said the revenue would fund maintenance, but did not publish a project list. KuruFeetha confirmed the new rates in the regulation gazette and compared them with the current schedule. Two cargo operators said the increase could raise island prices, while the ministry said exemptions would remain for emergency vessels."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-corporate-light-rewrite",
+      "expectedType": "press_release",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "A lightly rewritten corporate release retains supplied promotional framing and lacks independent reporting.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Lagoon Bank Opens Digital Service Centre",
+          "summary": "The bank announced a new service center.",
+          "articleText": "Lagoon Bank has opened what it described as a state-of-the-art Digital Service Centre in Malé. The new center will provide customers with faster, smarter and more convenient access to banking support, the bank said. Chief Executive Ali Nazeer called the opening an important milestone in Lagoon Bank's journey of innovation. Customers can visit from 8 a.m. to 8 p.m. No independent sources or comparative service data were included in the supplied material."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "press_release",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-politician-strong-view",
+      "expectedType": "news",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Neutral reporting of a politician's strong opinion, with response and context.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Opposition Leader Calls Budget 'A Betrayal'",
+          "summary": "The opposition leader attacked the proposed budget.",
+          "articleText": "Opposition Leader Mariyam Saleem called the proposed budget 'a betrayal of island communities' during a rally on Friday. She argued that capital spending favored Malé and urged MPs to reject the bill. Finance Minister Ahmed Rasheed disputed the claim, pointing to allocations for 23 island projects. Budget documents reviewed by KuruFeetha show outer-atoll capital spending is higher in nominal terms but lower as a share of the total than last year."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-expert-analysis",
+      "expectedType": "opinion",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Named expert analysis is published in the contributor's own interpretive voice rather than neutrally reported.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "What the New Currency Rules Mean for Small Firms",
+          "summary": "Economist Dr Sameera Ali analyzes the regulations.",
+          "articleText": "Analysis by Dr Sameera Ali. The new currency regulations appear technical, but in my view they shift too much exchange-rate risk onto small importers. The central bank is right to improve reporting, yet its deadlines are unrealistic for firms without dedicated compliance teams. I expect food importers to pass part of the cost to consumers. A phased start and a simplified form would preserve the policy's purpose without unnecessary disruption."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "opinion",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-unsigned-institutional",
+      "expectedType": "editorial",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Unsigned article uses collective institutional recommendations even though it lacks an explicit 'KuruFeetha believes' phrase.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "The Case for Open Council Meetings",
+          "summary": "An unsigned institutional argument for transparency.",
+          "articleText": "Closed council meetings should be the rare exception, not the routine. Public officials make decisions about land, budgets and services on behalf of residents, and residents deserve to observe that work. Councils must publish agendas in advance, stream meetings where practical and record every vote. Excuses about convenience cannot outweigh the public's right to scrutiny."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "editorial",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-promotional-news",
+      "expectedType": "news",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Independent report includes promotional source language but also verification, comparisons and criticism.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Resort Operator Announces Solar Expansion",
+          "summary": "The operator says a new array will cut diesel use.",
+          "articleText": "Blue Reef Resorts announced a 12-megawatt solar expansion, calling it a landmark for sustainable tourism. Company figures say the project will reduce diesel consumption by 18 percent. KuruFeetha reviewed the generation permit, which confirms the planned capacity but not the fuel-saving estimate. An energy consultant said battery limits could reduce the claimed benefit, while the operator said performance data would be published after the first year."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": null
+      }
+    },
+    {
+      "benchmarkId": "boundary-bilingual-framing",
+      "expectedType": "news",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "Both translations are News despite different emphasis and detail; framing difference should not become a type disagreement.",
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Council Delays Market Relocation",
+          "summary": "The council postponed relocation after vendor objections.",
+          "articleText": "The Hulhumeedhoo Council postponed the island market's relocation for 30 days after 18 vendors objected at a public meeting. Council President Ahmed Latheef said engineers would review drainage at the proposed site. Vendors welcomed the delay but asked the council to abandon the move. Minutes show the postponement passed by four votes to one."
+        },
+        {
+          "language": "dv",
+          "headline": "މާކެޓު ބަދަލުކުރުން 30 ދުވަހަށް ފަސްކޮށްފި",
+          "summary": "ވިޔަފާރިވެރިންގެ އިއުތިރާޒާއެކު ކައުންސިލުން މާކެޓު ބަދަލުކުރުން ފަސްކޮށްފި.",
+          "articleText": "ހުޅުމީދޫ ކައުންސިލުން ރަށުގެ މާކެޓު ބަދަލުކުރުން 30 ދުވަހަށް ފަސްކޮށްފިއެވެ. 18 ވިޔަފާރިވެރިން އާންމު ބައްދަލުވުމުގައި އިއުތިރާޒު ކުރިއިރު، އާ ތަނުގެ ޑްރެއިނޭޖް ބެލުމަށް އިންޖިނިއަރުން ފޮނުވާނެ ކަމަށް ކައުންސިލުން ބުނެފިއެވެ. ނިންމުން ފާސްވީ ހަތަރު ވޯޓުންނެވެ."
+        }
+      ],
+      "source": "synthetic",
+      "category": null,
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "news"
+      }
+    },
+    {
+      "benchmarkId": "boundary-bilingual-different-types",
+      "expectedType": "news",
+      "clarity": "ambiguous",
+      "humanReviewShouldBeRequired": true,
+      "rationale": "The EN translation is independently reported News while the DV version is a supplied party statement; language recommendations should disagree and force review.",
+      "expectedLanguageRecommendations": {
+        "en": "news",
+        "dv": "press_release"
+      },
+      "translations": [
+        {
+          "language": "en",
+          "headline": "Party Proposes Lower Import Duty",
+          "summary": "KuruFeetha reports a party proposal and government response.",
+          "articleText": "The Reform Party proposed cutting import duty on school supplies from 10 percent to zero. Party policy chief Aminath Hameed said the change would cost MVR 12 million annually. Finance Ministry figures reviewed by KuruFeetha put last year's revenue from the items at MVR 11.6 million. The ministry said it would study the proposal, while two stationery importers said retail prices would also depend on freight costs."
+        },
+        {
+          "language": "dv",
+          "headline": "ސްކޫލު ތަކެތީގެ ޑިއުޓީ ކަނޑާލުމަށް ރިފޯމް ޕާޓީން ގޮވާލައިފި",
+          "summary": "ރިފޯމް ޕާޓީގެ ބަޔާނެއް.",
+          "articleText": "ރިފޯމް ޕާޓީން ސްކޫލު ތަކެތީގެ 10 ޕަސެންޓު ޑިއުޓީ މުޅިން ކަނޑާލުމަށް ގޮވާލަމެވެ. މިއީ އާއިލާތަކަށް ލުއި ދިނުމަށް ޕާޓީން ހުށަހަޅާ އިންސާފުވެރި ސިޔާސަތެކެވެ. މެންބަރުން މި ހުށަހެޅުމަށް ތާއީދު ދިނުމަށް އަދި ރައްޔިތުން ޕާޓީގެ ކެމްޕެއިނަށް ގުޅުމަށް ގޮވާލަމެވެ. މި ބަޔާން ރިފޯމް ޕާޓީގެ ސެކްރެޓޭރިއެޓުން ނެރެފައެވެ."
+        }
+      ],
+      "source": "synthetic",
+      "category": null
+    }
+  ]
+}
