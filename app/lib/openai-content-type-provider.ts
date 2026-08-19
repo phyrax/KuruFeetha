@@ -94,7 +94,11 @@ Confidence means certainty that the selected content type is correct, not confid
 - below 0.60: the type cannot be determined reliably.
 Do not lower content-type confidence merely because attribution, provenance, or translation could be improved. Represent those concerns with the appropriate stable flag instead.
 
-Read every complete supplied translation. Recommend each available language separately. Use BILINGUAL_TYPE_DISAGREEMENT only when the types differ. Use CONTENT_TYPE_AMBIGUITY or NEWS_PRESS_RELEASE_UNCERTAINTY only when a competing type is genuinely plausible. Use INCOMPLETE_INPUT only when the supplied article is materially incomplete for classification. Flag other editorial-quality concerns with their specific stable code. Return concise editorial reasoning, not private chain-of-thought. Set schemaVersion to ${classifierSchemaVersion}. The application will deterministically calculate needsHumanReview from confidence, type, language agreement, and flag codes.`;
+Read every complete supplied translation and classify each available language independently. Never copy one language recommendation to the other merely because both concern the same event. If one translation is independently reported news while another substantially reproduces or lightly adapts supplied institutional communication, return news for the first and press_release for the second, emit BILINGUAL_TYPE_DISAGREEMENT, and emit NEWS_PRESS_RELEASE_UNCERTAINTY when the boundary itself is uncertain.
+
+Reserve ARTICLE_CONTENT_MISMATCH for a material cross-language mismatch: the translations cover meaningfully different events, or their advocacy, sourcing, omissions, additions, or framing change the journalistic format. It requires human review. Do not use it for wording, paragraph order, extra background, or small numerical context. Use BILINGUAL_FRAMING_DIFFERENCE when emphasis or framing differs but the journalistic type remains the same. TRANSLATION_ALIGNMENT is also informational and must not conceal a type disagreement.
+
+Use BILINGUAL_TYPE_DISAGREEMENT whenever the language-level types differ. Use CONTENT_TYPE_AMBIGUITY or NEWS_PRESS_RELEASE_UNCERTAINTY only when a competing type is genuinely plausible. Use INCOMPLETE_INPUT only when supplied article content is materially incomplete for classification. Flag other editorial-quality concerns with their specific stable code. Return concise editorial reasoning, not private chain-of-thought. Set schemaVersion to ${classifierSchemaVersion}. The application will deterministically calculate needsHumanReview from confidence, type, published-language completeness, language agreement, and flag codes.`;
 
 function safeString(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
@@ -343,7 +347,9 @@ export class OpenAIContentTypeProvider implements ContentTypeClassifierProvider 
     }
     let classifierResult;
     try {
-      classifierResult = validateClassifierResult(parsed);
+      classifierResult = validateClassifierResult(parsed, {
+        availableLanguages: ["en"],
+      });
     } catch {
       throw new OpenAIProviderError(
         this.diagnostic(

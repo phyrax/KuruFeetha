@@ -1,6 +1,4 @@
-import benchmarkData from "../../benchmarks/content-type-balanced-v1.json" with {
-  type: "json",
-};
+import benchmarkData from "../../benchmarks/content-type-balanced-v1.json" with { type: "json" };
 import {
   classifierTypes,
   validateClassifierResult,
@@ -16,6 +14,7 @@ const thresholdBlockingFlags = new Set<ClassifierFlagCode>([
   "CONTENT_TYPE_AMBIGUITY",
   "NEWS_PRESS_RELEASE_UNCERTAINTY",
   "BILINGUAL_TYPE_DISAGREEMENT",
+  "ARTICLE_CONTENT_MISMATCH",
   "INCOMPLETE_INPUT",
 ]);
 
@@ -31,7 +30,10 @@ export type BenchmarkCase = {
   source: "trusted_production_snapshot" | "synthetic";
   productionStoryId?: string;
   expectedType: ClassifierType;
-  expectedLanguageRecommendations: Record<BenchmarkLanguage, ClassifierType | null>;
+  expectedLanguageRecommendations: Record<
+    BenchmarkLanguage,
+    ClassifierType | null
+  >;
   clarity: "clear" | "ambiguous";
   humanReviewShouldBeRequired: boolean;
   rationale: string;
@@ -41,7 +43,10 @@ export type BenchmarkCase = {
 export type BenchmarkCaseResult = {
   benchmarkId: string;
   expectedType: ClassifierType;
-  expectedLanguageRecommendations: Record<BenchmarkLanguage, ClassifierType | null>;
+  expectedLanguageRecommendations: Record<
+    BenchmarkLanguage,
+    ClassifierType | null
+  >;
   clarity: "clear" | "ambiguous";
   humanReviewShouldBeRequired: boolean;
   rationale: string;
@@ -164,6 +169,14 @@ export function evaluateBenchmark(results: BenchmarkCaseResult[]) {
             (item) =>
               item.recommendation.recommendedType === "news" &&
               item.recommendation.confidence >= threshold &&
+              Object.entries(item.expectedLanguageRecommendations)
+                .filter(([, expected]) => expected !== null)
+                .every(
+                  ([language]) =>
+                    item.recommendation.languageRecommendations[
+                      language as BenchmarkLanguage
+                    ] === "news",
+                ) &&
               !item.recommendation.flags.some((flag) =>
                 thresholdBlockingFlags.has(flag.code),
               ),
@@ -256,8 +269,7 @@ export function evaluateBenchmark(results: BenchmarkCaseResult[]) {
     confusionMatrix,
     overallAccuracy: ratio(
       results.filter(
-        (item) =>
-          item.expectedType === item.recommendation.recommendedType,
+        (item) => item.expectedType === item.recommendation.recommendedType,
       ).length,
       results.length,
     ),
@@ -281,6 +293,9 @@ export async function runBalancedBenchmark(
     const started = Date.now(),
       recommendation = validateClassifierResult(
         await provider.classify(benchmarkStory(item)),
+        {
+          availableLanguages: item.translations.map(({ language }) => language),
+        },
       ),
       result = {
         benchmarkId: item.benchmarkId,

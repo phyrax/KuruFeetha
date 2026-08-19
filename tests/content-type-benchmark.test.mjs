@@ -22,7 +22,10 @@ const structured = (type, confidence, languageRecommendations, flags = []) => ({
 test("versioned balanced gold dataset has complete authoritative labels and bodies", () => {
   assert.equal(balancedBenchmark.version, "content-type-balanced-v1");
   assert.equal(balancedBenchmark.model, "gpt-5.4-nano");
-  assert.equal(balancedBenchmark.promptVersion, "content-type-confidence-v2");
+  assert.equal(
+    balancedBenchmark.promptVersion,
+    "content-type-bilingual-safety-v3",
+  );
   assert.equal(balancedBenchmark.schemaVersion, "2.0");
   assert.ok(balancedBenchmark.cases.length >= 30);
   const byType = Object.groupBy(
@@ -61,9 +64,17 @@ test("benchmark stories are test-only classifier inputs with no editorial identi
   const item = balancedBenchmark.cases[0],
     story = benchmarkStory(item);
   assert.equal(story.storyId, `benchmark:${item.benchmarkId}`);
-  assert.ok(story.translations.every((translation) => translation.contentType === null));
-  assert.ok(story.translations.every((translation) => translation.authors.length === 0));
-  assert.ok(story.translations.every((translation) => translation.articleText.length > 0));
+  assert.ok(
+    story.translations.every((translation) => translation.contentType === null),
+  );
+  assert.ok(
+    story.translations.every((translation) => translation.authors.length === 0),
+  );
+  assert.ok(
+    story.translations.every(
+      (translation) => translation.articleText.length > 0,
+    ),
+  );
 });
 
 test("benchmark runner uses provider classify and does not require a database", async () => {
@@ -139,7 +150,10 @@ test("evaluation reports confusion, false News and threshold precision", () => {
       expectedLanguageRecommendations: { en: "press_release", dv: null },
     },
   ]);
-  assert.deepEqual(report.falseNewsClassifications.map((item) => item.benchmarkId), ["false-news"]);
+  assert.deepEqual(
+    report.falseNewsClassifications.map((item) => item.benchmarkId),
+    ["false-news"],
+  );
 });
 
 test("mixed-language formats never count as streamlined gold News", () => {
@@ -153,25 +167,55 @@ test("mixed-language formats never count as streamlined gold News", () => {
     source: "synthetic",
     requestId: "mixed-request",
     latencyMs: 10,
-    recommendation: structured(
-      "news",
-      0.96,
-      { en: "news", dv: "news" },
-      [
-        {
-          code: "ARTICLE_CONTENT_MISMATCH",
-          message: "The translations contain different material.",
-        },
-      ],
-    ),
+    recommendation: structured("news", 0.96, { en: "news", dv: "news" }, [
+      {
+        code: "ARTICLE_CONTENT_MISMATCH",
+        message: "The translations contain different material.",
+      },
+    ]),
   };
   const report = evaluateBenchmark([mixed]);
-  assert.equal(report.thresholds["0.95"].newsPrecision, 0);
+  assert.equal(report.thresholds["0.95"].newsPrecision, null);
   assert.equal(report.thresholds["0.95"].newsCoverage, null);
-  assert.equal(
-    report.thresholds["0.95"].falseNewsApprovals[0].benchmarkId,
-    "mixed",
-  );
+  assert.deepEqual(report.thresholds["0.95"].falseNewsApprovals, []);
+  assert.equal(report.thresholds["0.95"].manualReviewLoad, 1);
+});
+
+test("translation-level recommendations and material mismatch block threshold approval", () => {
+  const base = {
+    benchmarkId: "bilingual-safety",
+    expectedType: "news",
+    expectedLanguageRecommendations: { en: "news", dv: "news" },
+    clarity: "clear",
+    humanReviewShouldBeRequired: false,
+    rationale: "Both published translations are News.",
+    source: "synthetic",
+    requestId: "safe-request",
+    latencyMs: 10,
+  };
+  const mixed = evaluateBenchmark([
+    {
+      ...base,
+      recommendation: structured("news", 0.99, {
+        en: "news",
+        dv: "press_release",
+      }),
+    },
+  ]);
+  assert.equal(mixed.thresholds["0.95"].qualifyingNews, 0);
+
+  const material = evaluateBenchmark([
+    {
+      ...base,
+      recommendation: structured("news", 0.99, { en: "news", dv: "news" }, [
+        {
+          code: "ARTICLE_CONTENT_MISMATCH",
+          message: "The journalistic formats materially differ.",
+        },
+      ]),
+    },
+  ]);
+  assert.equal(material.thresholds["0.95"].qualifyingNews, 0);
 });
 
 test("production benchmark route is admin-only and cannot write editorial or recommendation data", async () => {

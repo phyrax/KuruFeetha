@@ -10,6 +10,7 @@ import {
   loadClassifierStory,
   validateClassifierResult,
 } from "../app/lib/content-type-classifier.ts";
+import { isStreamlinedNewsEligible } from "../app/lib/classification-eligibility.ts";
 
 const read = (path) => readFile(new URL(path, import.meta.url), "utf8");
 class Statement {
@@ -121,6 +122,89 @@ test("quality-only flags do not force review when content type is unmistakable",
     );
     assert.equal(value.needsHumanReview, false, code);
   }
+});
+
+test("bilingual approval requires every published language to be News", () => {
+  const translations = [{ language: "en" }, { language: "dv" }];
+  const bothNews = validateClassifierResult(result("news", 0.97), {
+    availableLanguages: ["en", "dv"],
+  });
+  assert.equal(bothNews.needsHumanReview, false);
+  assert.equal(isStreamlinedNewsEligible(translations, bothNews), true);
+
+  for (const [en, dv] of [
+    ["news", "press_release"],
+    ["opinion", "news"],
+    ["editorial", "news"],
+  ]) {
+    const mixed = validateClassifierResult(
+      result("news", 0.99, {
+        languageRecommendations: { en, dv },
+      }),
+      { availableLanguages: ["en", "dv"] },
+    );
+    assert.equal(mixed.needsHumanReview, true, `${en}/${dv}`);
+    assert.equal(isStreamlinedNewsEligible(translations, mixed), false);
+    assert.ok(
+      mixed.flags.some((flag) => flag.code === "BILINGUAL_TYPE_DISAGREEMENT"),
+    );
+  }
+});
+
+test("missing recommendation for an available translation is incomplete and ineligible", () => {
+  const value = validateClassifierResult(
+    result("news", 0.99, {
+      languageRecommendations: { en: "news", dv: null },
+    }),
+    { availableLanguages: ["en", "dv"] },
+  );
+  assert.equal(value.needsHumanReview, true);
+  assert.equal(
+    value.flags.some((flag) => flag.code === "INCOMPLETE_INPUT"),
+    true,
+  );
+  assert.equal(
+    isStreamlinedNewsEligible([{ language: "en" }, { language: "dv" }], value),
+    false,
+  );
+});
+
+test("material mismatch and News/Press Release uncertainty are mandatory review flags", () => {
+  for (const code of [
+    "ARTICLE_CONTENT_MISMATCH",
+    "NEWS_PRESS_RELEASE_UNCERTAINTY",
+  ]) {
+    const value = validateClassifierResult(
+      result("news", 0.99, {
+        flags: [{ code, message: "Material format review is required." }],
+      }),
+      { availableLanguages: ["en", "dv"] },
+    );
+    assert.equal(value.needsHumanReview, true, code);
+  }
+});
+
+test("same-type bilingual framing differences remain eligible quality signals", () => {
+  const value = validateClassifierResult(
+    result("news", 0.97, {
+      flags: [
+        {
+          code: "BILINGUAL_FRAMING_DIFFERENCE",
+          message: "The emphasis differs but the journalistic type is News.",
+        },
+      ],
+    }),
+    { availableLanguages: ["en", "dv"] },
+  );
+  assert.equal(value.needsHumanReview, false);
+  assert.equal(
+    value.flags.some((flag) => flag.code === "BILINGUAL_TYPE_DISAGREEMENT"),
+    false,
+  );
+  assert.equal(
+    isStreamlinedNewsEligible([{ language: "en" }, { language: "dv" }], value),
+    true,
+  );
 });
 
 test("rejects legacy free-form flags, unknown codes and wrong schema versions", () => {
@@ -333,6 +417,8 @@ test("provider prompt applies editorial definitions to full translations without
   assert.match(provider, /identified contributor's own argument/);
   assert.match(provider, /KuruFeetha's institutional position/);
   assert.match(provider, /supplied external communication/);
+  assert.match(provider, /Never copy one language recommendation/);
+  assert.match(provider, /Reserve ARTICLE_CONTENT_MISMATCH for a material/);
   assert.match(provider, /articleText/);
   assert.match(provider, /store:\s*false/);
   assert.match(analyzeRoute, /requireAdmin\(request\)/);
@@ -344,6 +430,7 @@ test("provider prompt applies editorial definitions to full translations without
     /UPDATE\s+news_card_translations|updateContentTypeOnly|method:\s*"PATCH"/i,
   );
   assert.match(workspace, /expectedContentType:\s*null/);
+  assert.match(workspace, /isStreamlinedNewsEligible/);
   assert.match(workspace, /response\.status\s*===\s*409/);
   assert.match(workspace, /selected\.has/);
   assert.match(workspace, /confirm\(/);

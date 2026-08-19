@@ -19,7 +19,7 @@ export const classifierFlagCodes = [
   "OTHER_EDITORIAL_REVIEW",
 ] as const;
 export const classifierSchemaVersion = "2.0";
-export const classifierPromptVersion = "content-type-confidence-v2";
+export const classifierPromptVersion = "content-type-bilingual-safety-v3";
 export type ClassifierType = (typeof classifierTypes)[number];
 export type ClassifierFlagCode = (typeof classifierFlagCodes)[number];
 export type ClassifierFlag = { code: ClassifierFlagCode; message: string };
@@ -65,6 +65,7 @@ const mandatoryReviewCodes = new Set<ClassifierFlagCode>([
   "CONTENT_TYPE_AMBIGUITY",
   "NEWS_PRESS_RELEASE_UNCERTAINTY",
   "BILINGUAL_TYPE_DISAGREEMENT",
+  "ARTICLE_CONTENT_MISMATCH",
   "INCOMPLETE_INPUT",
 ]);
 function isType(value: unknown): value is ClassifierType {
@@ -90,7 +91,10 @@ function normalizedFlag(value: unknown): ClassifierFlag | null {
     ? { code: item.code, message }
     : null;
 }
-export function validateClassifierResult(value: unknown): ClassifierResult {
+export function validateClassifierResult(
+  value: unknown,
+  context: { availableLanguages?: Array<"en" | "dv"> } = {},
+): ClassifierResult {
   if (!value || typeof value !== "object")
     throw new Error("Classifier returned an invalid result");
   const item = value as Record<string, unknown>,
@@ -116,6 +120,7 @@ export function validateClassifierResult(value: unknown): ClassifierResult {
   )
     throw new Error("Classifier returned an invalid structured result");
   const typedFlags = flags as ClassifierFlag[],
+    availableLanguages = [...new Set(context.availableLanguages ?? [])],
     disagreement = Boolean(en && dv && en !== dv);
   if (
     disagreement &&
@@ -126,12 +131,28 @@ export function validateClassifierResult(value: unknown): ClassifierResult {
       message:
         "The English and Dhivehi translations received different content-type recommendations.",
     });
+  for (const language of availableLanguages) {
+    if ((language === "en" ? en : dv) !== null) continue;
+    if (!typedFlags.some((flag) => flag.code === "INCOMPLETE_INPUT"))
+      typedFlags.push({
+        code: "INCOMPLETE_INPUT",
+        message: `The published ${language.toUpperCase()} article did not receive a language-level recommendation.`,
+      });
+  }
   const deduplicated = [
     ...new Map(typedFlags.map((flag) => [flag.code, flag])).values(),
   ];
+  // The top-level recommendation remains a CMS summary. For bilingual input,
+  // translation-level recommendations are authoritative for approval safety.
+  const bilingualLanguageFailure =
+    availableLanguages.length > 1 &&
+    availableLanguages.some(
+      (language) => (language === "en" ? en : dv) !== "news",
+    );
   const needsHumanReview =
     confidence < 0.95 ||
     item.recommendedType !== "news" ||
+    bilingualLanguageFailure ||
     deduplicated.some((flag) => mandatoryReviewCodes.has(flag.code));
   return {
     schemaVersion: classifierSchemaVersion,
@@ -245,7 +266,9 @@ export async function analyzeClassifierStory(
       .first<Record<string, unknown>>();
     if (cached) return recommendationRow(cached, true);
   }
-  const result = validateClassifierResult(await provider.classify(story)),
+  const result = validateClassifierResult(await provider.classify(story), {
+      availableLanguages: story.translations.map((item) => item.language),
+    }),
     now = Date.now();
   await db
     .prepare(

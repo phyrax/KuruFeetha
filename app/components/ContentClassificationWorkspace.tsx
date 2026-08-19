@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { isStreamlinedNewsEligible } from "../lib/classification-eligibility";
 
 type ContentType = "news" | "opinion" | "editorial" | "press_release";
 type Translation = {
@@ -327,9 +328,7 @@ export function ContentClassificationWorkspace({
     const approved = items.filter(
       (item) =>
         selected.has(item.storyId) &&
-        item.recommendation?.recommendedType === "news" &&
-        item.recommendation.confidence >= 0.95 &&
-        !item.recommendation.needsHumanReview,
+        isStreamlinedNewsEligible(item.translations, item.recommendation),
     );
     if (!approved.length)
       return notify("Select at least one eligible News recommendation");
@@ -499,10 +498,10 @@ export function ContentClassificationWorkspace({
       <div className="classification-list">
         {items.map((item) => {
           const recommendation = item.recommendation,
-            eligible =
-              recommendation?.recommendedType === "news" &&
-              recommendation.confidence >= 0.95 &&
-              !recommendation.needsHumanReview,
+            eligible = isStreamlinedNewsEligible(
+              item.translations,
+              recommendation,
+            ),
             choice =
               choices[item.storyId] ||
               recommendation?.recommendedType ||
